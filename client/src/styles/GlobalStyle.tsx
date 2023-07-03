@@ -98,7 +98,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     color: black;
     background-color: transparent;
-    font-family:sans-serif;
+    font-family:'Noto Sans KR', sans-serif;
     }
     /* HTML5 display-role reset for older browsers */
     article,
@@ -151,6 +151,18 @@ const GlobalStyle = createGlobalStyle`
     --color-white: ##F4F2EF;
     --color-gray: #D9D9D9;
     }
+    
+    
+    @font-face {
+    font-family: 'Tenada';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    }
+    /* font-family: 'Noto Sans KR', sans-serif; */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+    /* font-family: 'NanumSquare', sans-serif; */
+    @import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
     `;
 
 export default GlobalStyle;
