@@ -23,23 +23,23 @@ const PageRouter = () => {
         <Route path="/" element={<Main />} />
         <Route path="/users/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/users/userInfo/{member-id}" element={<UserInfo />} />
-        <Route path="/users/mypage/{member-id}" element={<Mypage />} />
-        <Route path="/users/mypage/{member-id}/edit" element={<EditUserInfo />} />
-        <Route path="/questions/{question-id}/mate" element={<UserRating />} />
+        <Route path="/users/userInfo/:memberId" element={<UserInfo />} />
+        <Route path="/users/mypage/:memberId" element={<Mypage />} />
+        <Route path="/users/mypage/:memberId/edit" element={<EditUserInfo />} />
+        <Route path="/questions/:questionId/mate" element={<UserRating />} />
         <Route
-          path="/users/mypage/{member-id}/questions
+          path="/users/mypage/:memberId/questions
 "
           element={<MoreInfoWritings />}
         />
         <Route
-          path="/users/mypage/{member-id}/comments
+          path="/users/mypage/:memberId/comments
 "
           element={<MoreInfoComments />}
         />
         <Route path="/board" element={<Board />} /> {/* 추후 수정 필요 */}
-        <Route path="/board/questions/{question-id}" element={<BoardDetail />} />
-        <Route path="/board/questions/{question-id}/edit" element={<EditBoard />} />
+        <Route path="/board/questions/:questionId" element={<BoardDetail />} />
+        <Route path="/board/questions/:questionId/edit" element={<EditBoard />} />
         <Route path="/board/questions" element={<PostBoard />} />
         <Route path="/location" element={<Location />} /> {/* 추후 수정 필요 */}
       </Routes>
