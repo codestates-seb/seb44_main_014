@@ -49,18 +49,11 @@ const PageRouter = () => {
 
 const MainContainer = styled.main`
   width: 100%;
-  max-width: 1280px;
   margin: 50px auto 0;
-  padding: 0 1.875rem;
   box-sizing: border-box;
-
-  @media screen and (min-width: 768px) {
-    padding: 0 5rem;
-  }
 
   @media screen and (min-width: 1280px) {
     margin: 70px auto 0;
-    padding: 0 3.125rem;
   }
 `;
 
