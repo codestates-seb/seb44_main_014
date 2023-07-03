@@ -1,5 +1,11 @@
+// import { styled } from 'styled-components';
+
 const Board = () => {
-  return <div>BulletinBoard</div>;
+  return <>Board</>;
 };
+
+// const SeachSection = styled.section`
+//   background-color: beige;
+// `;
 
 export default Board;
