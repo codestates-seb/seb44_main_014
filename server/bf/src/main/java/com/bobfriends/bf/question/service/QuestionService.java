@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @Transactional
@@ -37,6 +39,21 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
+    /**
+     * 질문 삭제
+     * - 질문 관련 답글, 모임 등 삭제
+     */
+    public void deleteQuestion(long questionId){
+
+        Question findQuestion = findVerifiedQuestion(questionId);
+
+        // TODO : 로그인한 회원이 작성자인지 확인 (JWT)
+        long writerMemberId = findQuestion.getMember().getMemberId();
+
+        questionRepository.delete(findQuestion);
+    }
+
+
     /** 등록된 태그가 존재하는지 확인 **/
     private void verifyTag(Question question){
 
@@ -48,4 +65,16 @@ public class QuestionService {
             throw new BusinessLogicException(ExceptionCode.GENDERTAG_NOT_FOUND);
         }
     }
+
+    /** 질문이 등록된 질문인지 확인 **/
+    public Question findVerifiedQuestion(long questionId){
+
+        Optional<Question> findQuestion = questionRepository.findById(questionId);
+
+        Question question = findQuestion.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+
+        return question;
+    }
+
 }

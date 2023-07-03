@@ -12,7 +12,8 @@ public enum ExceptionCode {
     NOT_IMPLEMENTATION(501, "Not Implementation"),
     INVALID_MEMBER_STATUS(400, "Invalid member status"),
     FOODTAG_NOT_FOUND(400, "FoodTag not found"),
-    GENDERTAG_NOT_FOUND(400, "GenderTag not found");
+    GENDERTAG_NOT_FOUND(400, "GenderTag not found"),
+    QUESTION_NOT_FOUND(404, "Question not found");
 
     @Getter
     private int status;

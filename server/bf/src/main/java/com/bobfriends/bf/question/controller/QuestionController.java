@@ -7,10 +7,7 @@ import com.bobfriends.bf.question.service.QuestionService;
 import com.bobfriends.bf.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
 import java.net.URI;
@@ -40,6 +37,17 @@ public class QuestionController {
         URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, question.getQuestionId());
 
         return ResponseEntity.created(location).build();
-
     }
+
+
+    /** 질문 삭제 **/
+    @DeleteMapping("/questions/{question-id}")
+    public ResponseEntity deleteQuestion(@Positive @PathVariable("question-id") long questionId){
+
+        questionService.deleteQuestion(questionId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

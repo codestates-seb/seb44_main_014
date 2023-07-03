@@ -20,7 +20,7 @@ public class Mate {
     @Column(name = "mate_id")
     private Long mateId;
     private int mateNum;
-    @OneToMany(mappedBy = "mate")
+    @OneToMany(mappedBy = "mate", cascade = CascadeType.REMOVE)
     private List<MateMember> mateMembers = new ArrayList<>();
 
     @OneToOne
