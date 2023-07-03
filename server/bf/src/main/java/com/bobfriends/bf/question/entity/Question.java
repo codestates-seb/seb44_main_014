@@ -22,29 +22,48 @@ public class Question extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Long questionId;
+
     @Enumerated(value = EnumType.STRING)
     private categoryStatus category;
+
     @Column(nullable = false,length = 60)
     private String title;
+
     @Column(nullable = false,length = 300)
     private String content;
+
     private String image;
+
+    @Column(nullable = false)
     private String location;
+
     @Enumerated(value = EnumType.STRING)
-    private recruitStatus status=recruitStatus.RECRUITING;
+    private recruitStatus status = recruitStatus.RECRUITING;
+
     private int viewCount;
+
     private int commentCount;
-    @OneToOne(mappedBy = "question")
+
+    @OneToOne(mappedBy = "question", cascade = CascadeType.PERSIST)
     private Mate mate;
+
     @OneToMany(mappedBy = "question")
     private List<MemberStarRate> memberStarRates = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
     @OneToMany(mappedBy = "question")
     private List<Comment> comments = new ArrayList<>();
-    @OneToMany(mappedBy = "question")
-    private List<QuestionTag> questionTags = new ArrayList<>();
+
+    @OneToOne(mappedBy = "question", cascade = CascadeType.PERSIST)
+    private QuestionTag questionTag;
+
+    /** commentCount **/
+    public void setCommentCount(){
+        this.commentCount = comments.size();
+    }
 
     public enum categoryStatus {
         EATING("밥먹기"),
@@ -57,6 +76,7 @@ public class Question extends Auditable {
             this.status = status;
         }
     }
+
     public enum recruitStatus{
         RECRUITING("모집중"),
         COMPLETE("모집완료"),
@@ -67,6 +87,5 @@ public class Question extends Auditable {
         recruitStatus(String status) {
             this.status = status;
         }
-
     }
 }

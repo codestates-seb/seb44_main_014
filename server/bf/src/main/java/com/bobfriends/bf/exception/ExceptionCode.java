@@ -10,7 +10,9 @@ public enum ExceptionCode {
     ORDER_NOT_FOUND(404, "Order not found"),
     CANNOT_CHANGE_ORDER(403, "Order can not change"),
     NOT_IMPLEMENTATION(501, "Not Implementation"),
-    INVALID_MEMBER_STATUS(400, "Invalid member status");
+    INVALID_MEMBER_STATUS(400, "Invalid member status"),
+    FOODTAG_NOT_FOUND(400, "FoodTag not found"),
+    GENDERTAG_NOT_FOUND(400, "GenderTag not found");
 
     @Getter
     private int status;
