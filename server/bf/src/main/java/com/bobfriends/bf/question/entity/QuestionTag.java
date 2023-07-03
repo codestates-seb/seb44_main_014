@@ -19,7 +19,7 @@ public class QuestionTag {
     @Column(name = "question_tag_id")
     private Long questionTagId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
     @ManyToOne
