@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import reset from 'styled-reset';
+import { reset } from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -148,21 +148,12 @@ const GlobalStyle = createGlobalStyle`
     --color-orange : #F0930D;
     --color-black : #555555;
     --color-beige: #F4E9DF;
-    --color-white: ##F4F2EF;
+    --color-white: #F4F2EF;
     --color-gray: #D9D9D9;
+    --status-ing: #28CA6B;
+    --status-done: #FFD233;
+    --status-finished: #EE3D16;
     }
-    
-    
-    @font-face {
-    font-family: 'Tenada';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-    }
-    /* font-family: 'Noto Sans KR', sans-serif; */
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
-    /* font-family: 'NanumSquare', sans-serif; */
-    @import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
     `;
 
 export default GlobalStyle;
