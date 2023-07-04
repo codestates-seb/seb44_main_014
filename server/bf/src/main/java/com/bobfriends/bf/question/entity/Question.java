@@ -26,10 +26,10 @@ public class Question extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private categoryStatus category;
 
-    @Column(nullable = false,length = 60)
+    @Column(nullable = false ,length = 60)
     private String title;
 
-    @Column(nullable = false,length = 300)
+    @Column(nullable = false ,length = 300)
     private String content;
 
     private String image;
@@ -63,6 +63,11 @@ public class Question extends Auditable {
     /** commentCount **/
     public void setCommentCount(){
         this.commentCount = comments.size();
+    }
+
+    /** viewCount 증가 **/
+    public void addViewCount(int viewCount){
+        this.viewCount = viewCount + 1;
     }
 
     public enum categoryStatus {

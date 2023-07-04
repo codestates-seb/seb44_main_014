@@ -1,6 +1,7 @@
 package com.bobfriends.bf.question.mapper;
 
 import com.bobfriends.bf.mate.dto.MateDto;
+import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.mate.entity.Mate;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.question.dto.QuestionDto;
@@ -10,6 +11,9 @@ import com.bobfriends.bf.question.entity.QuestionTag;
 import com.bobfriends.bf.tag.entity.FoodTag;
 import com.bobfriends.bf.tag.entity.GenderTag;
 import org.mapstruct.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface QuestionMapper {
@@ -70,4 +74,63 @@ public interface QuestionMapper {
 
     // TODO : Mate 쪽으로 옮기기
     MateDto.PatchResponse MateToMatePatchResponseDto(Mate mate);
+
+
+    /** 일단 다 받아서 사용 **/
+    // TODO : memberResponse + comments 추가 해야함
+
+    default QuestionDto.DetailResponse QuestionToQuestionDetailResponseDto(Question question) {
+
+        QuestionDto.DetailResponse questionResponseDto =
+                QuestionDto.DetailResponse.builder()
+                .title(question.getTitle())
+                .content(question.getContent())
+                .image(question.getImage())
+                .createdAt(question.getCreatedAt())
+                .viewCount(question.getViewCount())
+                .commentCount(question.getCommentCount())
+                .location(question.getLocation())
+                .status(question.getStatus())
+                .category(question.getCategory())
+                .build();
+
+        /** QuestionTagDto.Response **/
+        if(question.getQuestionTag() != null){
+
+            QuestionTagDto.Response questionTagResponseDto =
+                    QuestionTagToQuestionTagResponseDto(question.getQuestionTag());
+
+            questionResponseDto.setQuestionTag(questionTagResponseDto);
+        }
+
+        /** MateDto.DetailResponse **/
+        if (question.getMate() != null){
+
+            MateDto.DetailResponse mateResponseDto =
+                    MateDto.DetailResponse.builder()
+                    .findNum(question.getMate().getMateMembers().size())
+                    .mateNum(question.getMate().getMateNum())
+                    .build();
+
+            questionResponseDto.setMate(mateResponseDto);
+        }
+
+        /** List<MateMemberDto.DetailResponse> **/
+        if (question.getMate().getMateMembers() != null){
+
+            List<MateMemberDto.DetailResponse> mateMembersDto =
+                    question.getMate().getMateMembers()
+                    .stream()
+                    .map(mateMember -> MateMemberDto.DetailResponse.builder()
+                            .mateMemberId(mateMember.getMateMemberId())
+                            .name(mateMember.getMember().getName())
+                            .build())
+                    .collect(Collectors.toList());
+
+            questionResponseDto.setMateMembers(mateMembersDto);
+        }
+
+
+        return questionResponseDto;
+    }
 }
