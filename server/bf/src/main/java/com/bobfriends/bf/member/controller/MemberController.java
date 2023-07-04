@@ -5,8 +5,10 @@ import com.bobfriends.bf.member.dto.LoginResponseDto;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.mapper.MemberMapper;
+import com.bobfriends.bf.member.repository.MemberRepository;
 import com.bobfriends.bf.member.service.MemberService;
 import com.bobfriends.bf.utils.UriCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.Optional;
 
 
 @RestController
@@ -31,8 +34,8 @@ public class MemberController {
         this.memberMapper = memberMapper;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity postMember (@Valid @RequestBody MemberDto.Post requestBody) {
+    @PostMapping("/signup") // 회원가입
+    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = memberMapper.memberPostDtoToMember(requestBody);
 
         Member createdMember = memberService.createMember(member);
@@ -41,21 +44,44 @@ public class MemberController {
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping("/login")
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @PostMapping("/login") // 로그인
     @ResponseStatus(HttpStatus.OK)
     public LoginResponseDto login(@RequestBody LoginPostDto loginPostDto) {
-        LoginResponseDto loginresponseDto = new LoginResponseDto();
-        return loginresponseDto;
+
+        // 제공된 이메일과 비밀번호를 사용하여 회원 정보 조회
+        String email = loginPostDto.getEmail();
+        String password = loginPostDto.getPassword();
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+
+            LoginResponseDto loginResponseDto = new LoginResponseDto();
+            loginResponseDto.setMemberId(member.getMemberId());
+            loginResponseDto.setName(member.getName());
+            loginResponseDto.setEmail(member.getEmail());
+            loginResponseDto.setLocation(member.getLocation());
+            loginResponseDto.setGender(member.getGender());
+
+            return loginResponseDto;
+        } else {
+            // 사용자 정보를 찾을 수 없는 경우 빈 객체 반환
+            return new LoginResponseDto();
+        }
     }
 
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@Positive @PathVariable("member-id") long memberId) {
-        Member member = memberService.findMember(memberId);
-        return new ResponseEntity<>(
-                new MemberDto.Response(memberMapper.memberTomemberResponseDtos(member)),
-                HttpStatus.OK);
+        @GetMapping("/mypage/{member-id}") // 회원 조회
+        public ResponseEntity<MemberDto.Response> getMember ( @Positive @PathVariable("member-id") long memberId){
+            Member member = memberService.findMember(memberId);
+
+            MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
-}
+
 
 
 // 모임종료가 아닌것만 mate에 보내기

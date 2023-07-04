@@ -4,6 +4,7 @@ import com.bobfriends.bf.audit.Auditable;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.mate.entity.MateMember;
 import com.bobfriends.bf.question.entity.Question;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,25 +38,30 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "questionMember")
     private List<MemberStarRate> questionMemberStarRates = new ArrayList<>();
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<MateMember> mateMembers = new ArrayList<>();
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<MemberTag> memberTags = new ArrayList<>();
-    public enum genderStatus{
+    public enum genderStatus {
         FEMALE("여성"),
         MALE("남성");
 
-        @Getter
         private String status;
 
-        genderStatus(String status){
-            this.status=status;
+        genderStatus(String status) {
+            this.status = status;
         }
 
+        public String getStatus() {
+            return status;
+        }
+    }
     }
 
-
-}

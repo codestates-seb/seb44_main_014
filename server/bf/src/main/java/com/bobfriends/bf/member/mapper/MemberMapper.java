@@ -2,6 +2,7 @@ package com.bobfriends.bf.member.mapper;
 
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.member.entity.MemberTag;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
@@ -37,16 +38,32 @@ public interface MemberMapper {
         return member;
     }
 
-    default MemberDto.Response memberTomemberResponseDtos(Member member) {
+    default MemberDto.Response memberToMemberResponseDto(Member member) {
+
         boolean eatStatus = member.isEatStatus();
+
+        String genderStatusString = member.getGender().getStatus();  // genderStatus 값을 String으로 가져옴
+        Member.genderStatus gender = null;
+
+        if (genderStatusString.equals(Member.genderStatus.FEMALE.getStatus())) {
+            gender = Member.genderStatus.FEMALE;
+        } else if (genderStatusString.equals(Member.genderStatus.MALE.getStatus())) {
+            gender = Member.genderStatus.MALE;
+        }
+
         MemberDto.Response response = new MemberDto.Response(
                 member.getMemberId(),
-                member.getEmail(),
                 member.getImage(),
-                member.getLocation(),
-                member.getGender(),
                 member.getName(),
-                member.isEatStatus());
+                member.getEmail(),
+                gender,  // String 값을 genderStatus 타입으로 변환한 변수를 사용
+                member.getLocation(),
+                eatStatus,
+                member.getAvgStarRate(),
+                member.getMemberTags()
+
+        );
+
 
         return response;
     }

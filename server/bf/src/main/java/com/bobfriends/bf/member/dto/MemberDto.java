@@ -1,6 +1,7 @@
 package com.bobfriends.bf.member.dto;
 
 import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.member.entity.MemberTag;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class MemberDto {
     @Getter
@@ -66,14 +68,34 @@ public class MemberDto {
     }
 
     @Getter
-    @AllArgsConstructor
     public static class Response {
         private long memberId;
+        private String image;
         private String name;
         private String email;
-        private String password;
         private Member.genderStatus gender;
         private String location;
         private boolean eatStatus;
+        private float avgStarRate;
+        private List<MemberTag> memberTagList;
+
+        public Response(long memberId, String image, String name, String email,
+                        Member.genderStatus gender, String location,
+                        boolean eatStatus, float avgStarRate,
+                        List<MemberTag> memberTagList) {
+            this.memberId = memberId;
+            this.image = image;
+            this.name = name;
+            this.email = email;
+            this.gender = gender;
+            this.location = location;
+            this.eatStatus = eatStatus;
+            this.avgStarRate = avgStarRate;
+            this.memberTagList = memberTagList;
+        }
+
+        public void updateMemberTagList(List<MemberTag> memberTagList) {
+            this.memberTagList = memberTagList;
+        }
     }
 }
