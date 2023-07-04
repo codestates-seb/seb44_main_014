@@ -30,6 +30,11 @@ public interface QuestionMapper {
         question.setLocation(post.getLocation());
         question.setStatus(Question.recruitStatus.RECRUITING);
 
+
+        // questionTag 생성
+        QuestionTag questionTag = new QuestionTag();
+        questionTag.setQuestion(question);
+
         GenderTag genderTag = new GenderTag();
         if(post.getGenderTag() != null){
             genderTag.setGenderTagId(post.getGenderTag().getGenderTagId());
@@ -38,19 +43,22 @@ public interface QuestionMapper {
             genderTag.setGenderTagId(3L);
         }
 
+        questionTag.setGenderTag(genderTag);
+
+        // 만약 카테고리가 SHOPPING이면 null
         FoodTag foodTag = new FoodTag();
-        if(post.getFoodTag() != null){
-            foodTag.setFoodTagId(post.getFoodTag().getFoodTagId());
+        if(post.getCategory() == Question.categoryStatus.SHOPPING){
+            questionTag.setFoodTag(null);
         }else {
-            // null이면 기본값 태그 5 입력
-            foodTag.setFoodTagId(5L);
+            if(post.getFoodTag() != null){
+                foodTag.setFoodTagId(post.getFoodTag().getFoodTagId());
+            }else {
+                // null이면 기본값 태그 5 입력
+                foodTag.setFoodTagId(5L);
+            }
+            questionTag.setFoodTag(foodTag);
         }
 
-        // questionTag 생성
-        QuestionTag questionTag = new QuestionTag();
-        questionTag.setQuestion(question);
-        questionTag.setFoodTag(foodTag);
-        questionTag.setGenderTag(genderTag);
 
         // Mate 생성
         Mate mate = new Mate();
