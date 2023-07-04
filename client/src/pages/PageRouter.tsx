@@ -52,7 +52,7 @@ const MainContainer = styled.main`
   margin: 50px auto 0;
   box-sizing: border-box;
 
-  @media screen and (min-width: 1280px) {
+  @media screen and (min-width: 1024px) {
     margin: 70px auto 0;
   }
 `;
