@@ -15,8 +15,8 @@ public enum ExceptionCode {
     GENDERTAG_NOT_FOUND(404, "GenderTag not found"),
     QUESTION_NOT_FOUND(404, "Question not found"),
     MATE_NOT_FOUND(404,"Mate not found"),
-    CANNOT_CHANGE_QUESTION(403, "Question can not change");
-
+    CANNOT_CHANGE_QUESTION(403, "Question can not change"),
+    COMMENT_NOT_FOUND(404, "Comment not found");
     @Getter
     private int status;
 
