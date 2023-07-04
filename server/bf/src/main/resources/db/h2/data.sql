@@ -59,7 +59,7 @@ VALUES
     (4,1),
     (5,1);
 
- -- 테이블명: mate_member (5)
+ -- 테이블명: mate_member (4)
 INSERT INTO mate_member (mate_id,member_id)
 VALUES
     (1,2),
@@ -67,8 +67,18 @@ VALUES
     (4,5),
     (5,4);
 
--- 테이블명: member_star_rate (5)
+-- 테이블명: member_star_rate (2)
 INSERT INTO member_star_rate (question_id,question_member_id,rate_member_id,star_rate)
 VALUES
     (1,1,2,4),
     (4,4,5,3);
+
+
+-- 테이블명: question_tag (5)
+INSERT INTO question_tag (food_tag_id, gender_tag_id, question_id)
+VALUES
+    (1,3,1),
+    (3,2,2),
+    (null,1,3),
+    (null,2,4),
+    (5,2,5);

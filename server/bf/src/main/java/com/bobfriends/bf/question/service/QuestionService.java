@@ -36,11 +36,10 @@ public class QuestionService {
 
     private final MateService mateService;
 
-    private final CustomBeanUtils<Question> beanUtils;
-
     /**
      * 질문 등록
-     * - 성별 태그 / 음식 태그 선택 (default : 상관없음(3), 기타(5))
+     * - [밥먹기] 성별 태그 / 음식 태그 선택 (default : 상관없음(3), 기타(5))
+     * - [장보기] 음식 태그 사용 X
      * - 등록 기본 status : 모집중
      * TODO : 이미지 , 위치
      */
@@ -48,7 +47,6 @@ public class QuestionService {
 
         // TODO : 회원이 존재하는 회원인지 조회
 
-        verifyTag(question);
         return questionRepository.save(question);
     }
 
@@ -90,7 +88,19 @@ public class QuestionService {
         }else {
             throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_QUESTION);
         }
+    }
 
+
+    /**
+     * 질문 상세 조회
+     * - 조회수 1 증가 +
+     */
+    public Question findQuestion(long questionId){
+
+        Question question = findVerifiedQuestion(questionId);
+        question.addViewCount(question.getViewCount());
+
+        return question;
     }
 
     /**

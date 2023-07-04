@@ -54,6 +54,16 @@ public class QuestionController {
     }
 
 
+    /** 질문 상세 조회 **/
+    @GetMapping("/questions/{question-id}")
+    public ResponseEntity getQuestion(@Positive @PathVariable("question-id") long questionId){
+
+        Question question = questionService.findQuestion(questionId);
+
+        return new ResponseEntity<>(questionMapper.QuestionToQuestionDetailResponseDto(question), HttpStatus.OK);
+    }
+
+
 
     /** 질문 삭제 **/
     @DeleteMapping("/questions/{question-id}")

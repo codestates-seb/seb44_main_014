@@ -22,9 +22,11 @@ public class QuestionTag {
     @OneToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
+
     @ManyToOne
     @JoinColumn(name = "FOOD_TAG_ID")
     private FoodTag foodTag;
+
     @ManyToOne
     @JoinColumn(name = "GENDER_TAG_ID")
     private GenderTag genderTag;
