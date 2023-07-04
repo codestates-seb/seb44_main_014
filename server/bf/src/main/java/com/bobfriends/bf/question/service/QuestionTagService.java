@@ -43,20 +43,46 @@ public class QuestionTagService {
     /** QuestionGenderTag update **/
     public QuestionTag updateQuestionGenderTag(Question question, QuestionTagDto.GenderTagPost post){
 
-        FoodTag foodTag = new FoodTag();
-        // 삭제 전 저장
-        foodTag.setFoodTagId(question.getQuestionTag().getFoodTag().getFoodTagId());
+        // 카테고리가 SHOPPING이면
+        if(question.getCategory() == Question.categoryStatus.SHOPPING){
 
-        // questionTag 삭제
-        questionTagRepository.deleteById(question.getQuestionTag().getQuestionTagId());
+            // questionTag 삭제
+            questionTagRepository.deleteById(question.getQuestionTag().getQuestionTagId());
 
-        GenderTag genderTag = new GenderTag();
-        genderTag.setGenderTagId(post.getGenderTagId());
+            GenderTag genderTag = new GenderTag();
+            genderTag.setGenderTagId(post.getGenderTagId());
 
-        // questionTag 다시 생성
-        QuestionTag questionTag = new QuestionTag(question, foodTag, genderTag);
-        questionTagRepository.save(questionTag);
+            // questionTag 다시 생성
+            QuestionTag questionTag = new QuestionTag(question, null, genderTag);
+            questionTagRepository.save(questionTag);
 
-        return questionTag;
+            return questionTag;
+        }else {
+            // 카테고리가 EATING이면
+
+            FoodTag foodTag = new FoodTag();
+            if(question.getQuestionTag().getFoodTag() == null){
+
+                // 기본값으로 설정
+                foodTag.setFoodTagId(5l);
+            }else{
+
+                // 삭제 전 저장
+                foodTag.setFoodTagId(question.getQuestionTag().getFoodTag().getFoodTagId());
+            }
+
+            // questionTag 삭제
+            questionTagRepository.deleteById(question.getQuestionTag().getQuestionTagId());
+
+            GenderTag genderTag = new GenderTag();
+            genderTag.setGenderTagId(post.getGenderTagId());
+
+            // questionTag 다시 생성
+            QuestionTag questionTag = new QuestionTag(question, foodTag, genderTag);
+            questionTagRepository.save(questionTag);
+
+            return questionTag;
+        }
+
     }
 }
