@@ -11,8 +11,11 @@ public enum ExceptionCode {
     CANNOT_CHANGE_ORDER(403, "Order can not change"),
     NOT_IMPLEMENTATION(501, "Not Implementation"),
     INVALID_MEMBER_STATUS(400, "Invalid member status"),
-    FOODTAG_NOT_FOUND(400, "FoodTag not found"),
-    GENDERTAG_NOT_FOUND(400, "GenderTag not found");
+    FOODTAG_NOT_FOUND(404, "FoodTag not found"),
+    GENDERTAG_NOT_FOUND(404, "GenderTag not found"),
+    QUESTION_NOT_FOUND(404, "Question not found"),
+    MATE_NOT_FOUND(404,"Mate not found"),
+    CANNOT_CHANGE_QUESTION(403, "Question can not change");
 
     @Getter
     private int status;

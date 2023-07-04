@@ -2,9 +2,7 @@ package com.bobfriends.bf.question.dto;
 
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.question.entity.Question;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -46,5 +44,70 @@ public class QuestionDto {
 
         @NotBlank
         private String location;
+    }
+
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Patch {
+
+        @Positive
+        private long questionId;
+
+        @Positive
+        private long memberId;
+
+        private Question.categoryStatus category;
+
+        private String title;
+
+        private String content;
+
+        private String image;
+
+        private QuestionTagDto.GenderTagPost genderTag;
+
+        private QuestionTagDto.FoodTagPost foodTag;
+
+        private MateDto.Post mate;
+
+        private String location;
+
+        private Question.recruitStatus status;
+
+        public void addQuestionId(long questionId){
+            this.questionId = questionId;
+        }
+    }
+
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class PatchResponse {
+
+        @Positive
+        private long questionId;
+
+        @Positive
+        private long memberId;
+
+        private Question.categoryStatus category;
+
+        private String title;
+
+        private String content;
+
+        private String image;
+
+        private QuestionTagDto.Response questionTag;
+
+        private MateDto.PatchResponse mate;
+
+        private String location;
+
+        private Question.recruitStatus status;
     }
 }
