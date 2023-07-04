@@ -86,7 +86,6 @@ public interface QuestionMapper {
 
     /** 일단 다 받아서 사용 **/
     // TODO : memberResponse + comments 추가 해야함
-
     default QuestionDto.DetailResponse QuestionToQuestionDetailResponseDto(Question question) {
 
         QuestionDto.DetailResponse questionResponseDto =
@@ -141,4 +140,11 @@ public interface QuestionMapper {
 
         return questionResponseDto;
     }
+
+    @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "member.name", target = "name")
+    @Mapping(source = "member.avgStarRate", target = "avgStarRate")
+    QuestionDto.Response QuestionToQuestionResponseDto(Question question);
+
+    List<QuestionDto.Response> QuestionsToQuestionResponseDtos(List<Question> questions);
 }

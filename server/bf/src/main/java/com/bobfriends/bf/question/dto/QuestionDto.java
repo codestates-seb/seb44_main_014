@@ -148,4 +148,38 @@ public class QuestionDto {
 
         // comments 가져오기
     }
+
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Response {
+
+        @Positive
+        private long questionId;
+
+        @Positive
+        private long memberId;
+
+        private String name;
+
+        private float avgStarRate;
+
+        private int viewCount;
+
+        private int commentCount;
+
+        private Question.recruitStatus status;
+
+        private Question.categoryStatus category;
+
+        private String title;
+
+        private LocalDateTime createdAt;
+
+        private String image;
+
+        private QuestionTagDto.Response questionTag;
+    }
 }
