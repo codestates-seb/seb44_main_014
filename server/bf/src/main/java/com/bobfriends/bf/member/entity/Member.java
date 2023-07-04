@@ -5,6 +5,8 @@ import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.mate.entity.MateMember;
 import com.bobfriends.bf.question.entity.Question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,31 +26,46 @@ public class Member extends Auditable {
     private Long memberId;
 
     private String image;
+
     private String name;
+
     @Column(nullable = false)
     private String email;
+
     private String password;
+
     @Enumerated(value = EnumType.STRING)
     private genderStatus gender;
+
     private String location;
+
     private float avgStarRate;
+
     private boolean eatStatus=false;
+
     @OneToMany(mappedBy = "rateMember")
     private List<MemberStarRate> rateMemberStarRates = new ArrayList<>();
+
+    @JsonIgnoreProperties("mate")
     @OneToMany(mappedBy = "questionMember")
     private List<MemberStarRate> questionMemberStarRates = new ArrayList<>();
+
     @OneToMany(mappedBy = "member")
-    @JsonIgnore
     private List<MateMember> mateMembers = new ArrayList<>();
+
     @OneToMany(mappedBy = "member")
-    @JsonIgnore
     private List<Question> questions = new ArrayList<>();
+
     @OneToMany(mappedBy = "member")
-    @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
+
     @OneToMany(mappedBy = "member")
-    @JsonIgnore
     private List<MemberTag> memberTags = new ArrayList<>();
+
+    public List<MemberTag> getMemberTags() {
+        return memberTags;
+    }
+
     public enum genderStatus {
         FEMALE("여성"),
         MALE("남성");

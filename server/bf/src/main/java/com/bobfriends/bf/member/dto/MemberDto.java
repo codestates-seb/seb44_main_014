@@ -34,7 +34,6 @@ public class MemberDto {
     }
 
     @Getter
-    @AllArgsConstructor
     public static class Patch {
 
         private long memberId;
@@ -52,12 +51,8 @@ public class MemberDto {
             this.memberId = memberId;
         }
 
-        @JsonCreator
-        public Patch(@JsonProperty("name") String name,
-                     @JsonProperty("memberId") long memberId,
-                     @JsonProperty("password") String password,
-                     @JsonProperty("location") String location,
-                     @JsonProperty("eatStatus") boolean eatStatus) {
+        public Patch(long memberId, String name, String password,
+                     String location, boolean eatStatus) {
 
             this.memberId = memberId;
             this.name = name;
@@ -81,8 +76,7 @@ public class MemberDto {
 
         public Response(long memberId, String image, String name, String email,
                         Member.genderStatus gender, String location,
-                        boolean eatStatus, float avgStarRate,
-                        List<MemberTag> memberTagList) {
+                        boolean eatStatus, float avgStarRate) {
             this.memberId = memberId;
             this.image = image;
             this.name = name;
@@ -91,7 +85,6 @@ public class MemberDto {
             this.location = location;
             this.eatStatus = eatStatus;
             this.avgStarRate = avgStarRate;
-            this.memberTagList = memberTagList;
         }
 
         public void updateMemberTagList(List<MemberTag> memberTagList) {

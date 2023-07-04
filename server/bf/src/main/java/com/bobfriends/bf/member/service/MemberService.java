@@ -2,10 +2,14 @@ package com.bobfriends.bf.member.service;
 
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
+import com.bobfriends.bf.member.dto.MemberDto;
+import com.bobfriends.bf.member.dto.MemberTagDto;
 import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.member.mapper.MemberTagMapper;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +30,7 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public Member updateMember(Member member) {
+    public Member updateMember(@Valid Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
 
         Optional.ofNullable(member.getName())
@@ -35,7 +39,6 @@ public class MemberService {
                 .ifPresent(password -> findMember.setPassword(password));
         Optional.ofNullable(member.getLocation())
                 .ifPresent(location -> findMember.setLocation(location));
-
 
         return memberRepository.save(findMember);
     }
@@ -72,5 +75,11 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    public List<MemberTagDto> getMemberTagResponseDto(Member member) {
+        List<MemberTagDto> memberTagDtos = MemberTagMapper.mapToDtoList(member.getMemberTags());
+
+        return memberTagDtos;
     }
 }

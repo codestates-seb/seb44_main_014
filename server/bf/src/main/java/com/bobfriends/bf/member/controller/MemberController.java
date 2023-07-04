@@ -80,7 +80,17 @@ public class MemberController {
             MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
-    }
+
+//    @PatchMapping("/mypage/{member-id}/edit")
+//    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
+//                                      @Valid @RequestBody MemberDto.Patch requestBody) {
+//        requestBody.setMemberId(memberId);
+//        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody));
+//
+//        return new ResponseEntity<>(memberMapper.memberToMemberResponse(updateMember), HttpStatus.OK);
+//    }
+
+}
 
 
 
