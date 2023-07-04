@@ -1,14 +1,15 @@
 package com.bobfriends.bf.question.mapper;
 
+import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.entity.Mate;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.question.dto.QuestionDto;
+import com.bobfriends.bf.question.dto.QuestionTagDto;
 import com.bobfriends.bf.question.entity.Question;
 import com.bobfriends.bf.question.entity.QuestionTag;
 import com.bobfriends.bf.tag.entity.FoodTag;
 import com.bobfriends.bf.tag.entity.GenderTag;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.*;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface QuestionMapper {
@@ -58,4 +59,15 @@ public interface QuestionMapper {
 
         return question;
     }
+
+
+    @Mapping(source = "member.memberId", target = "memberId")
+    QuestionDto.PatchResponse QuestionToQuestionPatchResponseDto(Question question);
+
+    @Mapping(source = "foodTag.foodTagId", target = "foodTagId")
+    @Mapping(source = "genderTag.genderTagId", target = "genderTagId")
+    QuestionTagDto.Response QuestionTagToQuestionTagResponseDto(QuestionTag questionTag);
+
+    // TODO : Mate 쪽으로 옮기기
+    MateDto.PatchResponse MateToMatePatchResponseDto(Mate mate);
 }

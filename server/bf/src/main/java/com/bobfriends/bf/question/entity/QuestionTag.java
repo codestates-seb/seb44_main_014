@@ -28,4 +28,10 @@ public class QuestionTag {
     @ManyToOne
     @JoinColumn(name = "GENDER_TAG_ID")
     private GenderTag genderTag;
+
+    public QuestionTag(Question question, FoodTag foodTag, GenderTag genderTag) {
+        this.question = question;
+        this.foodTag = foodTag;
+        this.genderTag = genderTag;
+    }
 }

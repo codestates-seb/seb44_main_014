@@ -44,20 +44,20 @@ public class Question extends Auditable {
 
     private int commentCount;
 
-    @OneToOne(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Mate mate;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<MemberStarRate> memberStarRates = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     private QuestionTag questionTag;
 
     /** commentCount **/
