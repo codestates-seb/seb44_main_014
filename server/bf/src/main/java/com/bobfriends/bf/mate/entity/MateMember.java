@@ -1,6 +1,7 @@
 package com.bobfriends.bf.mate.entity;
 
 import com.bobfriends.bf.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
