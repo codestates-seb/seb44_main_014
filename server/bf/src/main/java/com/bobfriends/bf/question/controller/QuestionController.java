@@ -6,6 +6,7 @@ import com.bobfriends.bf.question.mapper.QuestionMapper;
 import com.bobfriends.bf.question.service.QuestionService;
 import com.bobfriends.bf.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,20 @@ public class QuestionController {
 
         return ResponseEntity.created(location).build();
     }
+
+
+    /** 질문 수정 **/
+    @PatchMapping("/questions/{question-id}/edit")
+    public ResponseEntity patchQuestion(@Positive @PathVariable("question-id") long questionId,
+                                        @RequestBody QuestionDto.Patch patch){
+
+        patch.addQuestionId(questionId);
+
+        Question updateQuestion = questionService.updateQuestion(questionId, patch);
+
+        return new ResponseEntity<>(questionMapper.QuestionToQuestionPatchResponseDto(updateQuestion), HttpStatus.OK);
+    }
+
 
 
     /** 질문 삭제 **/

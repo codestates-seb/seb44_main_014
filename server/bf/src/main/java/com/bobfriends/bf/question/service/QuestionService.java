@@ -2,10 +2,17 @@ package com.bobfriends.bf.question.service;
 
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
+import com.bobfriends.bf.mate.entity.Mate;
+import com.bobfriends.bf.mate.service.MateService;
+import com.bobfriends.bf.question.dto.QuestionDto;
 import com.bobfriends.bf.question.entity.Question;
+import com.bobfriends.bf.question.entity.QuestionTag;
 import com.bobfriends.bf.question.repository.QuestionRepository;
+import com.bobfriends.bf.tag.entity.FoodTag;
+import com.bobfriends.bf.tag.entity.GenderTag;
 import com.bobfriends.bf.tag.repository.FoodRepository;
 import com.bobfriends.bf.tag.repository.GenderRepository;
+import com.bobfriends.bf.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +32,12 @@ public class QuestionService {
 
     private final GenderRepository genderRepository;
 
+    private final QuestionTagService questionTagService;
+
+    private final MateService mateService;
+
+    private final CustomBeanUtils<Question> beanUtils;
+
     /**
      * 질문 등록
      * - 성별 태그 / 음식 태그 선택 (default : 상관없음(3), 기타(5))
@@ -37,6 +50,47 @@ public class QuestionService {
 
         verifyTag(question);
         return questionRepository.save(question);
+    }
+
+
+    /**
+     * 질문 수정
+     */
+    public Question updateQuestion(long questionId, QuestionDto.Patch patch){
+
+        // TODO : 로그인한 회원이 작성자인지 확인 (JWT)
+
+        Question findQuestion = findVerifiedQuestion(questionId);
+
+        if(findQuestion.getMember().getMemberId() == patch.getMemberId()){
+
+            Optional.ofNullable(patch.getCategory()).ifPresent(category -> findQuestion.setCategory(category));
+            Optional.ofNullable(patch.getTitle()).ifPresent(title -> findQuestion.setTitle(title));
+            Optional.ofNullable(patch.getContent()).ifPresent(content -> findQuestion.setContent(content));
+            Optional.ofNullable(patch.getImage()).ifPresent(image -> findQuestion.setImage(image));
+            Optional.ofNullable(patch.getLocation()).ifPresent(location -> findQuestion.setLocation(location));
+            Optional.ofNullable(patch.getStatus()).ifPresent(status -> findQuestion.setStatus(status));
+
+            if(patch.getGenderTag() != null){
+                QuestionTag questionTag2 = questionTagService.updateQuestionGenderTag(findQuestion, patch.getGenderTag());
+                findQuestion.setQuestionTag(questionTag2);
+            }
+
+            if(patch.getFoodTag() != null){
+                QuestionTag questionTag1 = questionTagService.updateQuestionFoodTag(findQuestion, patch.getFoodTag());
+                findQuestion.setQuestionTag(questionTag1);
+            }
+
+            if(patch.getMate() != null){
+                mateService.updateMate(findQuestion, patch.getMate());
+            }
+
+            return questionRepository.save(findQuestion);
+
+        }else {
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_QUESTION);
+        }
+
     }
 
     /**
@@ -65,6 +119,7 @@ public class QuestionService {
             throw new BusinessLogicException(ExceptionCode.GENDERTAG_NOT_FOUND);
         }
     }
+
 
     /** 질문이 등록된 질문인지 확인 **/
     public Question findVerifiedQuestion(long questionId){
