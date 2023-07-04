@@ -4,16 +4,13 @@ import com.bobfriends.bf.comment.dto.CommentDto;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.mapper.CommentMapper;
 import com.bobfriends.bf.comment.service.CommentService;
-import com.bobfriends.bf.utils.UriCreator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 
 @RestController
 @RequestMapping("/board/questions/{question-id}/comments")
@@ -31,7 +28,8 @@ public class CommentController {
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
                                       @PathVariable("question-id") @Positive long questionId){
-        post.setQuestionId(questionId);
+        post.addQuestionId(questionId);
+
         Comment comment = commentMapper.commentPostToComment(post);
         Comment createdComment = commentService.createComment(comment);
         return new ResponseEntity<>(commentMapper.commentToCommentResponse(createdComment), HttpStatus.CREATED);
@@ -49,8 +47,8 @@ public class CommentController {
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
                                        @PathVariable("question-id")@Positive long questionId,
                                        @PathVariable("comment-id")@Positive long commentId){
-        patch.setQuestionId(questionId);
-        patch.setCommentId(commentId);
+        patch.addQuestionId(questionId);
+        patch.addCommentId(commentId);
         Comment comment = commentMapper.commentPatchToComment(patch);
         Comment response = commentService.updateComment(comment);
 
