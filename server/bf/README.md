@@ -9,3 +9,13 @@
 <br/>
 
 <br/>
+
+## 📎 Git
+
+### 🌲 Branch
+
+- `main` : 서비스 운영 브랜치
+- `develo` : 메인 브랜치 배포전 릴리즈 브랜치
+- `feat-fe` : FE 개발 환경 브랜치
+- `feat-be` : BE 개발 환경 브랜치
+- `feat/개발명` : 기능 개발 브랜치 ex) feat/mainPage
