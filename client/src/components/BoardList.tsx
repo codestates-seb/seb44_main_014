@@ -3,33 +3,38 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
 
-import { timeStamp } from '../util/commonFunction';
+import { timeStamp } from '../util/commonFunction.ts';
+import { IListData } from '../pages/Board.tsx';
+
+type ListProps = {
+  list: IListData;
+};
 
 interface IStyledProps {
   $statusColor: string;
 }
 
-const BoardList = ({ list }) => {
+const BoardList = ({ list }: ListProps) => {
   let genderTag: string;
   if (list.genderTag.genderTagId === 1) {
-    genderTag = '여자만';
+    genderTag = '# 여자만';
   } else if (list.genderTag.genderTagId === 2) {
-    genderTag = '남자만';
+    genderTag = '# 남자만';
   } else {
-    genderTag = '남녀노소';
+    genderTag = '# 남녀노소';
   }
 
   let foodTag: string;
   if (list.foodTag.foodTagId === 1) {
-    foodTag = '한식';
+    foodTag = '# 한식';
   } else if (list.foodTag.foodTagId === 2) {
-    foodTag = '중식';
+    foodTag = '# 중식';
   } else if (list.foodTag.foodTagId === 3) {
-    foodTag = '양식';
+    foodTag = '# 양식';
   } else if (list.foodTag.foodTagId === 4) {
-    foodTag = '일식';
+    foodTag = '# 일식';
   } else {
-    foodTag = '기타';
+    foodTag = '# 기타';
   }
 
   let statusColor: string;
@@ -51,8 +56,8 @@ const BoardList = ({ list }) => {
           <ListStatus $statusColor={statusColor}>{list.status}</ListStatus>
         </ListTitle>
         <div>
-          <ListTag># {foodTag}</ListTag>
-          <ListTag># {genderTag}</ListTag>
+          <ListTag>{foodTag}</ListTag>
+          <ListTag>{genderTag}</ListTag>
         </div>
         <ListFlex>
           <ListUserInfo>

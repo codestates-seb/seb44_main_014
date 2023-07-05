@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState /*, useEffect*/ } from 'react';
 import { Link } from 'react-router-dom';
+// import axios from 'axios';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faUtensils, faWheatAwn } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +8,34 @@ import { faMagnifyingGlass, faUtensils, faWheatAwn } from '@fortawesome/free-sol
 import BoardList from '../components/BoardList.tsx';
 // DummyData
 import { boardLists } from '../data/boardDummyData.ts';
+
+export interface IListData {
+  questionId: number;
+  memberId: number;
+  name: string;
+  avgStarRate: number;
+  viewCount: number;
+  commentCount: number;
+  status: string;
+  category: string;
+  title: string;
+  createdAt: string;
+  image?: string;
+  genderTag: {
+    genderTagId: number;
+  };
+  foodTag: {
+    foodTagId: number;
+  };
+}
+
+type Nullable<T> = T | null;
+
+interface IFilterInfo {
+  category: string;
+  search: Nullable<string>;
+  tag: Nullable<number>;
+}
 
 interface IStyledProps {
   $isActive: boolean;
@@ -20,10 +49,64 @@ const Board = () => {
   const [newer, setNewer] = useState<boolean>(true);
   const [mostViewed, setMostViewed] = useState<boolean>(!newer);
   // 태그 active 상태 체크
-  const [activeGender, setActiveGender] = useState<number | string>();
-  const [activeFood, setActiveFood] = useState<number | string>();
+  const [activeGender, setActiveGender] = useState<number | null>();
+  const [activeFood, setActiveFood] = useState<number | null>();
   // 리스트 정렬
-  const [lists, setLists] = useState(boardLists);
+  const [lists, setLists] = useState<IListData[]>(boardLists);
+  // 서버 전달 정보
+  const [filterInfo, setFilterInfo] = useState<IFilterInfo>({
+    category: '밥먹기',
+    search: '',
+    tag: null,
+  });
+
+  // useEffect(() => {
+  //   getTabMenuData();
+  // }, []);
+
+  // const getTabMenuData = () => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&category=${밥먹기}`)
+  //     .then((res) => {
+  //       console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+
+  // const postSearchData = () => {
+  //   axios
+  //     .post(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&keyword=${연남동}&category=${장보기}`)
+  //     .then((res) => {
+  //       console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+
+  // const postGenderTagData = () => {
+  //   axios
+  //     .post(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&genderTag=${1}&category=${장보기}`)
+  //     .then((res) => {
+  //       console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+
+  // const postFoodTagData = () => {
+  //   axios
+  //     .post(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&foodTag=${1}&category=${장보기}`)
+  //     .then((res) => {
+  //       console.log(res)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
   const genderTags = [
     { id: 1, text: '# 여자만' },
@@ -72,7 +155,14 @@ const Board = () => {
       <SeachSection>
         <InputArea>
           <Label htmlFor="search">검색</Label>
-          <InputSearch type="text" id="search" />
+          <InputSearch
+            type="text"
+            id="search"
+            value={filterInfo.search}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFilterInfo({ ...filterInfo, search: (e.target as HTMLInputElement).value })
+            }
+          />
           <ButtonSearch type="button">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </ButtonSearch>
@@ -84,7 +174,8 @@ const Board = () => {
                   className={activeGender === tag.id ? 'active' : ''}
                   onClick={() => {
                     setActiveGender(tag.id);
-                    setActiveFood('');
+                    setActiveFood(null);
+                    setFilterInfo({ ...filterInfo, tag: tag.id });
                   }}
                 >
                   {tag.text}
@@ -99,7 +190,8 @@ const Board = () => {
                     className={activeFood === tag.id ? 'active' : ''}
                     onClick={() => {
                       setActiveFood(tag.id);
-                      setActiveGender('');
+                      setActiveGender(null);
+                      setFilterInfo({ ...filterInfo, tag: tag.id });
                     }}
                   >
                     {tag.text}
@@ -115,10 +207,12 @@ const Board = () => {
         {/* 밥먹기, 장보기 탭메뉴 */}
         <TabMenu>
           <TabButton
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent<HTMLElement>) => {
               setTabLeft(true);
               setTabRight(false);
-              console.log(e.target.value);
+              setActiveGender(null);
+              setActiveFood(null);
+              setFilterInfo({ ...filterInfo, category: (e.target as HTMLButtonElement).value, search: '', tag: null });
             }}
             $isActive={tabLeft}
             value="밥먹기"
@@ -126,10 +220,12 @@ const Board = () => {
             <FontAwesomeIcon icon={faUtensils} /> 밥 먹기
           </TabButton>
           <TabButton
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent<HTMLElement>) => {
               setTabLeft(false);
               setTabRight(true);
-              console.log(e.target.value);
+              setActiveGender(null);
+              setActiveFood(null);
+              setFilterInfo({ ...filterInfo, category: (e.target as HTMLButtonElement).value, search: '', tag: null });
             }}
             $isActive={tabRight}
             value="장보기"
@@ -168,8 +264,8 @@ const Board = () => {
           </SortedArea>
           <BoardListsArea>
             {/* 게시글 mapping */}
-            {lists.map((list) => (
-              <BoardList key={list.questionId} list={list} />
+            {lists.map((list, idx) => (
+              <BoardList key={idx} list={list} />
             ))}
           </BoardListsArea>
         </ListsSection>
