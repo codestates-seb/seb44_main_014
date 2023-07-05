@@ -1,7 +1,7 @@
 package com.bobfriends.bf.tag.entity;
 
 import com.bobfriends.bf.member.entity.MemberTag;
-import com.bobfriends.bf.question.entity.QuestionTag;
+import com.bobfriends.bf.post.entity.PostTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,5 +25,5 @@ public class FoodTag {
     @OneToMany(mappedBy = "foodTag")
     private List<MemberTag> memberTags = new ArrayList<>();
     @OneToMany(mappedBy = "foodTag")
-    private List<QuestionTag> questionTags = new ArrayList<>();
+    private List<PostTag> postTags = new ArrayList<>();
 }

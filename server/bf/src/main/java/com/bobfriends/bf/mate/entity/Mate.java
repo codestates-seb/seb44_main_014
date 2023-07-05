@@ -1,7 +1,6 @@
 package com.bobfriends.bf.mate.entity;
 
-import com.bobfriends.bf.member.entity.Member;
-import com.bobfriends.bf.question.entity.Question;
+import com.bobfriends.bf.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +23,6 @@ public class Mate {
     private List<MateMember> mateMembers = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn(name = "QUESTION_ID")
-    private Question question;
+    @JoinColumn(name = "POST_ID")
+    private Post post;
 }
