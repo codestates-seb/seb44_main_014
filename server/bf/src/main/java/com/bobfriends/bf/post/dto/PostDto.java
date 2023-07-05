@@ -44,9 +44,6 @@ public class PostDto {
 
         @NotBlank
         private MateDto.Post mate;
-
-        @NotBlank
-        private String location;
     }
 
 
@@ -74,8 +71,6 @@ public class PostDto {
         private PostTagDto.FoodTagPost foodTag;
 
         private MateDto.Post mate;
-
-        private String location;
 
         private recruitStatus status;
 
@@ -109,8 +104,6 @@ public class PostDto {
 
         private MateDto.PatchResponse mate;
 
-        private String location;
-
         private recruitStatus status;
     }
 
@@ -132,8 +125,6 @@ public class PostDto {
         private int viewCount;
 
         private int commentCount;
-
-        private String location;
 
         private recruitStatus status;
 
