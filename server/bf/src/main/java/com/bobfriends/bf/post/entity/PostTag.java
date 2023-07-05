@@ -1,4 +1,4 @@
-package com.bobfriends.bf.question.entity;
+package com.bobfriends.bf.post.entity;
 
 import com.bobfriends.bf.tag.entity.FoodTag;
 import com.bobfriends.bf.tag.entity.GenderTag;
@@ -7,21 +7,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.lang.reflect.Member;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class QuestionTag {
+public class PostTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_tag_id")
-    private Long questionTagId;
+    @Column(name = "post_tag_id")
+    private Long postTagId;
 
     @OneToOne
-    @JoinColumn(name = "QUESTION_ID")
-    private Question question;
+    @JoinColumn(name = "POST_ID")
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "FOOD_TAG_ID")
@@ -31,8 +30,8 @@ public class QuestionTag {
     @JoinColumn(name = "GENDER_TAG_ID")
     private GenderTag genderTag;
 
-    public QuestionTag(Question question, FoodTag foodTag, GenderTag genderTag) {
-        this.question = question;
+    public PostTag(Post post, FoodTag foodTag, GenderTag genderTag) {
+        this.post = post;
         this.foodTag = foodTag;
         this.genderTag = genderTag;
     }
