@@ -3,10 +3,8 @@ package com.bobfriends.bf.member.entity;
 import com.bobfriends.bf.audit.Auditable;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.mate.entity.MateMember;
-import com.bobfriends.bf.question.entity.Question;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.bobfriends.bf.post.entity.Post;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,14 +45,14 @@ public class Member extends Auditable {
     private List<MemberStarRate> rateMemberStarRates = new ArrayList<>();
 
     @JsonIgnoreProperties("mate")
-    @OneToMany(mappedBy = "questionMember")
-    private List<MemberStarRate> questionMemberStarRates = new ArrayList<>();
+    @OneToMany(mappedBy = "postMember")
+    private List<MemberStarRate> postMemberStarRates = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<MateMember> mateMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<Question> questions = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();

@@ -1,7 +1,7 @@
 package com.bobfriends.bf.home.service;
 
-import com.bobfriends.bf.question.entity.Question;
-import com.bobfriends.bf.question.repository.QuestionRepository;
+import com.bobfriends.bf.post.entity.Post;
+import com.bobfriends.bf.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -16,16 +16,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeService {
 
-    private final QuestionRepository questionRepository;
+    private final PostRepository postRepository;
 
     /**
      * 홈화면 전체 게시글 조회 (최신 순)
      * **/
-    public List<Question> findQuestions(){
+    public List<Post> findPosts(){
 
         // 최신순 정렬
-        List<Question> questions = questionRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
 
-        return questions;
+        return posts;
     }
 }

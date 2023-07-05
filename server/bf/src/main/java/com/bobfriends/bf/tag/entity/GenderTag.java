@@ -1,6 +1,6 @@
 package com.bobfriends.bf.tag.entity;
 
-import com.bobfriends.bf.question.entity.QuestionTag;
+import com.bobfriends.bf.post.entity.PostTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,5 +22,5 @@ public class GenderTag {
     @Column(nullable = false)
     private String name;
     @OneToMany(mappedBy = "genderTag")
-    private List<QuestionTag> questionTags = new ArrayList<>();
+    private List<PostTag> postTags = new ArrayList<>();
 }

@@ -1,8 +1,8 @@
 package com.bobfriends.bf.home.controller;
 
 import com.bobfriends.bf.home.service.HomeService;
-import com.bobfriends.bf.question.entity.Question;
-import com.bobfriends.bf.question.mapper.QuestionMapper;
+import com.bobfriends.bf.post.entity.Post;
+import com.bobfriends.bf.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ import java.util.List;
 public class HomeController {
 
     private final HomeService homeService;
-    private final QuestionMapper mapper;
+    private final PostMapper mapper;
 
     @GetMapping
-    public ResponseEntity getQuestions(){
-        List<Question> questions = homeService.findQuestions();
+    public ResponseEntity getPosts(){
+        List<Post> posts = homeService.findPosts();
 
-        return new ResponseEntity<>(mapper.QuestionsToQuestionResponseDtos(questions), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.PostsToPostResponseDtos(posts), HttpStatus.OK);
     }
 }

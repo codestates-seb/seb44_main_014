@@ -1,12 +1,10 @@
-package com.bobfriends.bf.question.dto;
+package com.bobfriends.bf.post.dto;
 
-import com.bobfriends.bf.tag.entity.FoodTag;
-import com.bobfriends.bf.tag.entity.GenderTag;
 import lombok.*;
 
 import javax.validation.constraints.Positive;
 
-public class QuestionTagDto {
+public class PostTagDto {
 
     @Getter
     @AllArgsConstructor
@@ -33,7 +31,7 @@ public class QuestionTagDto {
     @Builder
     public static class Response {
 
-        private long questionTagId;
+        private long postTagId;
 
         private long foodTagId;
 
