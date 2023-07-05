@@ -4,9 +4,6 @@ import com.bobfriends.bf.audit.Auditable;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.mate.entity.MateMember;
 import com.bobfriends.bf.question.entity.Question;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,7 +43,6 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "rateMember")
     private List<MemberStarRate> rateMemberStarRates = new ArrayList<>();
 
-    @JsonIgnoreProperties("mate")
     @OneToMany(mappedBy = "questionMember")
     private List<MemberStarRate> questionMemberStarRates = new ArrayList<>();
 

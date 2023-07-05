@@ -1,6 +1,5 @@
 package com.bobfriends.bf.mate.entity;
 
-import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

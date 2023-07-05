@@ -2,7 +2,6 @@ package com.bobfriends.bf.member.service;
 
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
-import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.dto.MemberTagDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.mapper.MemberTagMapper;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
 
     public MemberService(MemberRepository memberRepository) {

@@ -2,7 +2,6 @@ package com.bobfriends.bf.member.entity;
 
 import com.bobfriends.bf.audit.Auditable;
 import com.bobfriends.bf.question.entity.Question;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
