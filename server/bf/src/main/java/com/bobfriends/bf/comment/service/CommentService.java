@@ -59,8 +59,8 @@ public class CommentService {
     private Comment findVerifiedComment(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         Comment findComment =
-            optionalComment.orElseThrow(() ->
-                    new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
+                optionalComment.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
         return findComment;
     }
