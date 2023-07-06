@@ -24,8 +24,7 @@ public class CommentService {
     }
 
     public Comment createComment(Comment comment){
-        // 존재하는 질문인지 확인
-        postService.findVerifiedPost(comment.getPost().getPostId());
+
         return commentRepository.save(comment);
     }
 
