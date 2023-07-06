@@ -100,7 +100,7 @@ public interface PostMapper {
                 .image(post.getImage())
                 .createdAt(post.getCreatedAt())
                 .viewCount(post.getViewCount())
-                .commentCount(post.getCommentCount())
+                .commentCount(post.getComments().size())
                 .status(post.getStatus())
                 .category(post.getCategory())
                 .build();
@@ -158,6 +158,7 @@ public interface PostMapper {
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.name", target = "name")
     @Mapping(source = "member.avgStarRate", target = "avgStarRate")
+    @Mapping(target = "commentCount", expression = "java(post.getComments().size())")
     PostDto.Response PostToPostResponseDto(Post post);
 
     List<PostDto.Response> PostsToPostResponseDtos(List<Post> posts);
