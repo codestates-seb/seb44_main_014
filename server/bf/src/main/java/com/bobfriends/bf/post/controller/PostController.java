@@ -84,8 +84,7 @@ public class PostController {
 
         return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);
     }
-
-
+    
 
     /** 질문 삭제 **/
     @DeleteMapping("/posts/{post-id}")
