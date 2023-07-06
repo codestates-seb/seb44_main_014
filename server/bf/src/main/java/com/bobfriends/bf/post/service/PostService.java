@@ -3,6 +3,7 @@ package com.bobfriends.bf.post.service;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.mate.service.MateService;
+import com.bobfriends.bf.member.service.MemberService;
 import com.bobfriends.bf.post.dto.PostDto;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.entity.PostTag;
@@ -11,6 +12,8 @@ import com.bobfriends.bf.tag.repository.FoodRepository;
 import com.bobfriends.bf.tag.repository.GenderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,8 @@ public class PostService {
 
     private final PostTagService postTagService;
 
+    private final MemberService memberService;
+
     private final MateService mateService;
 
     /**
@@ -37,11 +42,11 @@ public class PostService {
      * - [밥먹기] 성별 태그 / 음식 태그 선택 (default : 상관없음(3), 기타(5))
      * - [장보기] 음식 태그 사용 X
      * - 등록 기본 status : 모집중
-     * TODO : 이미지 , 위치
+     * TODO : 이미지
      */
     public Post createPost(Post requestBody){
 
-        // TODO : 회원이 존재하는 회원인지 조회
+        memberService.findVerifiedMember(requestBody.getMember().getMemberId());
 
         return postRepository.save(requestBody);
     }
@@ -96,6 +101,16 @@ public class PostService {
         post.addViewCount(post.getViewCount());
 
         return post;
+    }
+
+
+    /**
+     * 전체 질문 검색
+     * - 카테고리로 분류
+     * - 페이지 네이션
+     */
+    public Page<Post> searchPosts(Pageable pageable, String keyword, String category){
+        return postRepository.findBySearchOption(pageable, keyword, category);
     }
 
     /**

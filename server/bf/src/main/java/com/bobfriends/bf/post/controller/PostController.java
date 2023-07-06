@@ -1,17 +1,21 @@
 package com.bobfriends.bf.post.controller;
 
+import com.bobfriends.bf.dto.MultiResponseDto;
 import com.bobfriends.bf.post.dto.PostDto;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.mapper.PostMapper;
 import com.bobfriends.bf.post.service.PostService;
 import com.bobfriends.bf.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -61,6 +65,19 @@ public class PostController {
         Post post = postService.findPost(postId);
 
         return new ResponseEntity<>(postMapper.PostToPostDetailResponseDto(post), HttpStatus.OK);
+    }
+
+
+    /** 질문 검색 **/
+    @GetMapping("/search")
+    public ResponseEntity searchPost(Pageable pageable,
+                                     @RequestParam(required = false) String keyword,
+                                     @RequestParam(required = false) String category){
+
+        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category);
+        List<Post> posts = pagePosts.getContent();
+
+        return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);
     }
 
 

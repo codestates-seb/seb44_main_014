@@ -3,7 +3,9 @@ package com.bobfriends.bf.post.mapper;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.mate.entity.Mate;
+import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.member.mapper.MemberMapper;
 import com.bobfriends.bf.post.dto.PostDto;
 import com.bobfriends.bf.post.dto.PostTagDto;
 import com.bobfriends.bf.post.entity.Post;
@@ -11,12 +13,16 @@ import com.bobfriends.bf.post.entity.PostTag;
 import com.bobfriends.bf.tag.entity.FoodTag;
 import com.bobfriends.bf.tag.entity.GenderTag;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PostMapper {
+
+    MemberMapper memberMapper = Mappers.getMapper(MemberMapper.class);
+
 
     default Post PostPostToPost(PostDto.Post requestBody){
         Post post = new Post();
@@ -98,6 +104,16 @@ public interface PostMapper {
                 .status(post.getStatus())
                 .category(post.getCategory())
                 .build();
+
+        /** MemberDto.Response **/
+        if(post.getMember() != null){
+
+            MemberDto.Response memberResponseDto
+                    = memberMapper.memberToMemberResponseDto(post.getMember());
+
+            postResponseDto.setMember(memberResponseDto);
+        }
+
 
         /** QuestionTagDto.Response **/
         if(post.getPostTag() != null){
