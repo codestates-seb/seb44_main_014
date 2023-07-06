@@ -3,6 +3,7 @@ package com.bobfriends.bf.member.dto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
 import lombok.*;
+import org.springframework.util.Assert;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -32,6 +33,7 @@ public class MemberDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class Patch {
 
         private long memberId;
@@ -45,18 +47,11 @@ public class MemberDto {
 
         private boolean eatStatus;
 
-        public void setMemberId(long memberId) {
+        public Patch addMemberId(Long memberId) {
+            Assert.notNull(memberId, "member id must not be null.");
             this.memberId = memberId;
-        }
 
-        public Patch(long memberId, String name, String password,
-                     String location, boolean eatStatus) {
-
-            this.memberId = memberId;
-            this.name = name;
-            this.password = password;
-            this.location = location;
-            this.eatStatus = eatStatus;
+            return this;
         }
     }
 
