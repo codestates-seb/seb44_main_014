@@ -2,6 +2,7 @@ package com.bobfriends.bf.post.dto;
 
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
+import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.post.entity.Post.categoryStatus;
 import com.bobfriends.bf.post.entity.Post.recruitStatus;
 import lombok.*;
@@ -44,9 +45,6 @@ public class PostDto {
 
         @NotBlank
         private MateDto.Post mate;
-
-        @NotBlank
-        private String location;
     }
 
 
@@ -74,8 +72,6 @@ public class PostDto {
         private PostTagDto.FoodTagPost foodTag;
 
         private MateDto.Post mate;
-
-        private String location;
 
         private recruitStatus status;
 
@@ -109,8 +105,6 @@ public class PostDto {
 
         private MateDto.PatchResponse mate;
 
-        private String location;
-
         private recruitStatus status;
     }
 
@@ -133,13 +127,12 @@ public class PostDto {
 
         private int commentCount;
 
-        private String location;
-
         private recruitStatus status;
 
         private categoryStatus category;
 
-        // memberResponse 가져오기
+        // memberResponse 가져오기 (새로 만들기)
+        private MemberDto.Response member;
 
         private PostTagDto.Response postTag;
 

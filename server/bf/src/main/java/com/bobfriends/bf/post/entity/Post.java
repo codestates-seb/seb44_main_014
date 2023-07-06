@@ -34,9 +34,6 @@ public class Post extends Auditable {
 
     private String image;
 
-    @Column(nullable = false)
-    private String location;
-
     @Enumerated(value = EnumType.STRING)
     private recruitStatus status = recruitStatus.RECRUITING;
 
@@ -61,8 +58,22 @@ public class Post extends Auditable {
     private PostTag postTag;
 
     /** commentCount **/
-    public void setCommentCount(){
+    public void updateCommentCount(){
         this.commentCount = comments.size();
+    }
+
+    /** 댓글 추가 시 commentCount 업데이트 **/
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
+        updateCommentCount();
+    }
+
+    /** 댓글 삭제 시 commentCount 업데이트 **/
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setPost(null);
+        updateCommentCount();
     }
 
     /** viewCount 증가 **/

@@ -33,13 +33,13 @@ VALUES
     (5,5);
 
  -- 테이블명: post (5)
-INSERT INTO post (member_id,category,title,content,image,location,status,created_at,modified_at,view_count,comment_count)
+INSERT INTO post (member_id,category,title,content,image,status,created_at,modified_at,view_count,comment_count)
 VALUES
-    (1,'EATING','제목1','내용1','이미지1','서울','END','2022-04-16 10:30:00', '2022-06-19 10:35:00',3,0),
-    (2,'EATING','제목2','내용2','이미지2','경기','RECRUITING','2022-06-15 10:30:00', '2022-08-18 10:35:00',5,2),
-    (3,'SHOPPING','제목3','내용3','이미지3','부산','RECRUITING','2022-07-15 10:30:00', '2022-09-18 10:35:00',77,1),
-    (4,'SHOPPING','제목4','내용4','이미지4','울산','END','2022-08-15 10:30:00', '2022-10-18 10:35:00',4,1),
-    (5,'EATING','제목5','내용5','이미지5','대구','COMPLETE','2022-09-15 10:30:00', '2022-11-18 10:35:00',33,1);
+    (1,'EATING','제목1','내용1','이미지1','END','2022-04-16 10:30:00', '2022-06-19 10:35:00',3,0),
+    (2,'EATING','제목2','내용2','이미지2','RECRUITING','2022-06-15 10:30:00', '2022-08-18 10:35:00',5,2),
+    (3,'SHOPPING','제목3','내용3','이미지3','RECRUITING','2022-07-15 10:30:00', '2022-09-18 10:35:00',77,1),
+    (4,'SHOPPING','제목4','내용4','이미지4','END','2022-08-15 10:30:00', '2022-10-18 10:35:00',4,1),
+    (5,'EATING','제목5','내용5','이미지5','COMPLETE','2022-09-15 10:30:00', '2022-11-18 10:35:00',33,1);
 
  -- 테이블명: comment (5)
 INSERT INTO comment (member_id,post_id,content,created_at,modified_at)
