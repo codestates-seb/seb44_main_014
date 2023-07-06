@@ -34,7 +34,7 @@ public class CommentController {
         this.memberService=memberService;
     }
 
-    // 댓글 생성
+    /** 댓글 생성 **/
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
                                       @PathVariable("post-id") @Positive Long postId){
@@ -54,7 +54,7 @@ public class CommentController {
         return ResponseEntity.created(location).build();
     }
 
-    // 댓글 수정
+    /** 댓글 수정 **/
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
                                        @PathVariable("post-id")@Positive Long postId,
@@ -75,7 +75,7 @@ public class CommentController {
         return new ResponseEntity<>(commentMapper.commentToCommentResponse(response), HttpStatus.OK);
     }
 
-    // 댓글 조회
+    /** 댓글 조회 **/
     @GetMapping("/{comment-id}")
     public ResponseEntity getComment(@PathVariable("post-id")@Positive Long postId,
                                         @PathVariable("comment-id")@Positive Long commentId){
@@ -83,7 +83,7 @@ public class CommentController {
         return new ResponseEntity<>(new SingleResponseDto<>(commentMapper.commentToCommentResponse(response)),HttpStatus.OK);
     }
 
-    //댓글 삭제
+    /** 댓글 삭제 **/
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@PathVariable("post-id")@Positive Long postId,
                                         @PathVariable("comment-id")@Positive Long commentId){
