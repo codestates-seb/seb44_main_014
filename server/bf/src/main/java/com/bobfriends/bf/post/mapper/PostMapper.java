@@ -100,7 +100,7 @@ public interface PostMapper {
                 .image(post.getImage())
                 .createdAt(post.getCreatedAt())
                 .viewCount(post.getViewCount())
-                .commentCount(post.getCommentCount())
+                .commentCount(post.getComments().size())
                 .status(post.getStatus())
                 .category(post.getCategory())
                 .build();
@@ -108,10 +108,10 @@ public interface PostMapper {
         /** MemberDto.Response **/
         if(post.getMember() != null){
 
-            MemberDto.Response memberResponseDto
-                    = memberMapper.memberToMemberResponseDto(post.getMember());
+            MemberDto.DetailResponse memberDetailResponseDto
+                    = memberMapper.memberToMemberDetailResponseDto(post.getMember());
 
-            postResponseDto.setMember(memberResponseDto);
+            postResponseDto.setMember(memberDetailResponseDto);
         }
 
 
@@ -124,7 +124,9 @@ public interface PostMapper {
             postResponseDto.setPostTag(postTagResponseDto);
         }
 
-        /** MateDto.DetailResponse **/
+        /** MateDto.DetailResponse
+         *  TODO : MateMapper 에서 가져오기
+         * **/
         if (post.getMate() != null){
 
             MateDto.DetailResponse mateResponseDto =
@@ -136,7 +138,9 @@ public interface PostMapper {
             postResponseDto.setMate(mateResponseDto);
         }
 
-        /** List<MateMemberDto.DetailResponse> **/
+        /** List<MateMemberDto.DetailResponse>
+         *  TODO : MateMemberMapper 에서 가져오기
+         * **/
         if (post.getMate().getMateMembers() != null){
 
             List<MateMemberDto.DetailResponse> mateMembersDto =
@@ -158,6 +162,7 @@ public interface PostMapper {
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.name", target = "name")
     @Mapping(source = "member.avgStarRate", target = "avgStarRate")
+    @Mapping(target = "commentCount", expression = "java(post.getComments().size())")
     PostDto.Response PostToPostResponseDto(Post post);
 
     List<PostDto.Response> PostsToPostResponseDtos(List<Post> posts);

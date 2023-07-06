@@ -1,5 +1,6 @@
 package com.bobfriends.bf.member.dto;
 
+import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
 import lombok.*;
@@ -83,5 +84,19 @@ public class MemberDto {
         public void updateMemberTagList(List<MemberTag> memberTagList) {
             this.memberTagList = memberTagList;
         }
+    }
+
+
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DetailResponse {
+
+        private long memberId;
+        private String image;
+        private String name;
+        private Member.genderStatus gender;
+        private float avgStarRate;
+        private boolean eatStatus;
     }
 }
