@@ -68,7 +68,7 @@ public class PostController {
         return new ResponseEntity<>(postMapper.PostToPostDetailResponseDto(post), HttpStatus.OK);
     }
 
-
+    
     /** 질문 검색 (검색어, 태그) **/
     @GetMapping("/search")
     public ResponseEntity searchPost(PageRequest pageRequest,
