@@ -18,8 +18,7 @@ public class MemberStarRateDto {
         private Long postId;
         @Positive
         private Long rateMemberId;
-        @NotBlank
-        private float starRate;
+        private int starRate;
 
         public void addPostId(Long postId){
             this.postId = postId;
@@ -33,6 +32,6 @@ public class MemberStarRateDto {
         private Long memberStarRateId;
         private Long postMemberId;
         private Long rateMemberId;
-        private float starRate;
+        private int starRate;
     }
 }

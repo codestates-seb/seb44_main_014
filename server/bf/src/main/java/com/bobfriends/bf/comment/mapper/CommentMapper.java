@@ -18,7 +18,7 @@ public interface CommentMapper {
         member.setMemberId(post.getMemberId());
 
         Post post1 = new Post();
-        post.setPostId(post1.getPostId());
+        post1.setPostId(post.getPostId());
 
         comment.setMember(member);
         comment.setPost(post1);

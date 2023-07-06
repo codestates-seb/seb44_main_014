@@ -11,6 +11,7 @@ public class MemberStarRateService {
         this.memberStarRateRepository=memberStarRateRepository;
     }
     public MemberStarRate createMemberStarRate(MemberStarRate memberStarRate){
+
         return memberStarRateRepository.save(memberStarRate);
     }
 }
