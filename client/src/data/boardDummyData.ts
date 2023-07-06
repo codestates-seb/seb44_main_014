@@ -1,4 +1,70 @@
-export const boardLists: any[] = [
+import { IListData } from '../pages/Board.tsx';
+import { IDetailData } from '../pages/BoardDetail.tsx';
+
+export const BOARD_DETAIL: IDetailData = {
+  title: '삼겹살 집중 적으로 조질 분 구합니다!',
+  content:
+    '삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다! 삼겹살 집중 적으로 조질 분 구합니다!',
+  image: '',
+  createdAt: '2023-07-06T14:11:55.3304725',
+  viewCount: 3,
+  commentCount: 4,
+  status: 'RECRUITING',
+  category: 'SHOPPING',
+  member: {
+    memberId: 3,
+    image: '/img/background_grocery.jpg',
+    name: '끼룩갈메기',
+    gender: 'MALE',
+    avgStarRate: 3.0,
+    eatStatus: false,
+  },
+  postTag: {
+    postTagId: 3,
+    foodTagId: 0,
+    genderTagId: 1,
+  },
+  genderTag: {
+    genderTagId: 1,
+  },
+  foodTag: {
+    foodTagId: 1,
+  },
+  mate: {
+    findNum: 2,
+    mateNum: 4,
+  },
+  mateMembers: [
+    {
+      mateMemberId: 1,
+      name: '마포호랑이',
+    },
+    {
+      mateMemberId: 2,
+      name: '신촌코끼리',
+    },
+  ],
+  comments: [
+    {
+      commentId: 1,
+      content: 'rrefccxcxx',
+      memberId: 1,
+      avgStarRate: 2.5,
+      name: '마포호랑이',
+      createdAt: '2023-06-22T18:16:55.3304725',
+    },
+    {
+      commentId: 2,
+      content: 'adkfjl;adkjfl;dkaf',
+      memberId: 2,
+      avgStarRate: 5,
+      name: '신촌코끼리',
+      createdAt: '2023-06-22T18:16:55.3304725',
+    },
+  ],
+};
+
+export const BOARD_LISTS: IListData[] = [
   {
     questionId: 1,
     memberId: 1,

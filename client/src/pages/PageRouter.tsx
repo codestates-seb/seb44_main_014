@@ -38,9 +38,9 @@ const PageRouter = () => {
           element={<MoreInfoComments />}
         />
         <Route path="/board" element={<Board />} /> {/* 추후 수정 필요 */}
-        <Route path="/board/questions/:questionId" element={<BoardDetail />} />
-        <Route path="/board/questions/:questionId/edit" element={<EditBoard />} />
-        <Route path="/board/questions" element={<PostBoard />} />
+        <Route path="/board/posts/:postId" element={<BoardDetail />} />
+        <Route path="/board/posts/:postId/edit" element={<EditBoard />} />
+        <Route path="/board/posts" element={<PostBoard />} />
         <Route path="/location" element={<Location />} /> {/* 추후 수정 필요 */}
       </Routes>
     </MainContainer>
