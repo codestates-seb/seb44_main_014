@@ -59,4 +59,17 @@ public class CommentDto {
         private LocalDateTime modifiedAt;
 
     }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DetailResponse {
+
+        private long commentId;
+        private String content;
+        private long memberId;
+        private float avgStarRate;
+        private String name;
+        private LocalDateTime createdAt;
+    }
 }
