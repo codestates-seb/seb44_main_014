@@ -5,6 +5,7 @@ import com.bobfriends.bf.post.dto.PostDto;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.mapper.PostMapper;
 import com.bobfriends.bf.post.service.PostService;
+import com.bobfriends.bf.utils.PageRequest;
 import com.bobfriends.bf.utils.UriCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -68,13 +69,17 @@ public class PostController {
     }
 
 
-    /** 질문 검색 **/
+    /** 질문 검색 (검색어, 태그) **/
     @GetMapping("/search")
-    public ResponseEntity searchPost(Pageable pageable,
+    public ResponseEntity searchPost(PageRequest pageRequest,
                                      @RequestParam(required = false) String keyword,
-                                     @RequestParam(required = false) String category){
+                                     @RequestParam(required = false) String category,
+                                     @RequestParam(required = false) Long genderTag,
+                                     @RequestParam(required = false) Long foodTag){
 
-        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category);
+        // custom pageRequest
+        Pageable pageable = pageRequest.of();
+        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag);
         List<Post> posts = pagePosts.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);

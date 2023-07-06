@@ -24,9 +24,9 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
 
 
     @Override
-    public Page<Post> findBySearchOption(Pageable pageable, String keyword, String category) {
+    public Page<Post> findBySearchOption(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag) {
         JPQLQuery<Post> query = queryFactory.selectFrom(post)
-                .where(eqCategory(category), containTitleOrContent(keyword));
+                .where(eqCategory(category), containTitleOrContent(keyword), eqGenderTag(genderTag), eqFoodTag(foodTag));
 
         // page 처리 구현체 (페이징)
         List<Post> posts = this.getQuerydsl().applyPagination(pageable, query).fetch();
@@ -52,5 +52,17 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
                 .or(post.content.containsIgnoreCase(keyword));
     }
 
+    private BooleanExpression eqGenderTag(Long genderTag) {
+        if (genderTag == null || genderTag == 0L) {
+            return null;
+        }
+        return post.postTag.genderTag.genderTagId.eq(genderTag);
+    }
 
+    private BooleanExpression eqFoodTag(Long foodTag) {
+        if (foodTag == null || foodTag == 0L) {
+            return null;
+        }
+        return post.postTag.foodTag.foodTagId.eq(foodTag);
+    }
 }
