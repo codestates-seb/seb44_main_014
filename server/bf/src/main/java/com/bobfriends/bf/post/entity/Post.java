@@ -1,4 +1,4 @@
-package com.bobfriends.bf.question.entity;
+package com.bobfriends.bf.post.entity;
 
 import com.bobfriends.bf.audit.Auditable;
 import com.bobfriends.bf.comment.entity.Comment;
@@ -17,11 +17,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Question extends Auditable {
+public class Post extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id")
-    private Long questionId;
+    @Column(name = "post_id")
+    private Long postId;
 
     @Enumerated(value = EnumType.STRING)
     private categoryStatus category;
@@ -44,21 +44,21 @@ public class Question extends Auditable {
 
     private int commentCount;
 
-    @OneToOne(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Mate mate;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<MemberStarRate> memberStarRates = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
-    private QuestionTag questionTag;
+    @OneToOne(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+    private PostTag postTag;
 
     /** commentCount **/
     public void setCommentCount(){

@@ -5,7 +5,7 @@ import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.entity.Mate;
 import com.bobfriends.bf.mate.repository.MateRepository;
-import com.bobfriends.bf.question.entity.Question;
+import com.bobfriends.bf.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ public class MateService {
     private final MateRepository mateRepository;
 
     /** Mate update **/
-    public void updateMate(Question question, MateDto.Post post){
+    public void updateMate(Post post, MateDto.Post matePost){
 
-        Mate findMate = findVerifiedQuestion(question.getMate().getMateId());
-        findMate.setMateNum(post.getMateNum());
+        Mate findMate = findVerifiedPost(post.getMate().getMateId());
+        findMate.setMateNum(matePost.getMateNum());
     }
 
     /** Mate가 존재하는지 확인 **/
-    public Mate findVerifiedQuestion(long mateId){
+    public Mate findVerifiedPost(long mateId){
 
         Optional<Mate> optionalMate = mateRepository.findById(mateId);
 

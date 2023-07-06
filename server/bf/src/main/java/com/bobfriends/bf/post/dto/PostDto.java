@@ -1,8 +1,9 @@
-package com.bobfriends.bf.question.dto;
+package com.bobfriends.bf.post.dto;
 
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
-import com.bobfriends.bf.question.entity.Question;
+import com.bobfriends.bf.post.entity.Post.categoryStatus;
+import com.bobfriends.bf.post.entity.Post.recruitStatus;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class QuestionDto {
+public class PostDto {
 
     @Getter
     @AllArgsConstructor
@@ -21,7 +22,7 @@ public class QuestionDto {
         private long memberId;
 
         @NotBlank
-        private Question.categoryStatus category;
+        private categoryStatus category;
 
         @NotBlank
         private String title;
@@ -34,12 +35,12 @@ public class QuestionDto {
         /** 태그 하나만 등록 가능 (선택)
          *  - default : 상관없음
          */
-        private QuestionTagDto.GenderTagPost genderTag;
+        private PostTagDto.GenderTagPost genderTag;
 
         /** 태그 하나만 등록 가능 (선택)
          *  - default : 기타
          */
-        private QuestionTagDto.FoodTagPost foodTag;
+        private PostTagDto.FoodTagPost foodTag;
 
         @NotBlank
         private MateDto.Post mate;
@@ -55,12 +56,12 @@ public class QuestionDto {
     public static class Patch {
 
         @Positive
-        private long questionId;
+        private long postId;
 
         @Positive
         private long memberId;
 
-        private Question.categoryStatus category;
+        private categoryStatus category;
 
         private String title;
 
@@ -68,18 +69,18 @@ public class QuestionDto {
 
         private String image;
 
-        private QuestionTagDto.GenderTagPost genderTag;
+        private PostTagDto.GenderTagPost genderTag;
 
-        private QuestionTagDto.FoodTagPost foodTag;
+        private PostTagDto.FoodTagPost foodTag;
 
         private MateDto.Post mate;
 
         private String location;
 
-        private Question.recruitStatus status;
+        private recruitStatus status;
 
-        public void addQuestionId(long questionId){
-            this.questionId = questionId;
+        public void addPostId(long postId){
+            this.postId = postId;
         }
     }
 
@@ -91,12 +92,12 @@ public class QuestionDto {
     public static class PatchResponse {
 
         @Positive
-        private long questionId;
+        private long postId;
 
         @Positive
         private long memberId;
 
-        private Question.categoryStatus category;
+        private categoryStatus category;
 
         private String title;
 
@@ -104,13 +105,13 @@ public class QuestionDto {
 
         private String image;
 
-        private QuestionTagDto.Response questionTag;
+        private PostTagDto.Response postTag;
 
         private MateDto.PatchResponse mate;
 
         private String location;
 
-        private Question.recruitStatus status;
+        private recruitStatus status;
     }
 
 
@@ -134,13 +135,13 @@ public class QuestionDto {
 
         private String location;
 
-        private Question.recruitStatus status;
+        private recruitStatus status;
 
-        private Question.categoryStatus category;
+        private categoryStatus category;
 
         // memberResponse 가져오기
 
-        private QuestionTagDto.Response questionTag;
+        private PostTagDto.Response postTag;
 
         private MateDto.DetailResponse mate;
 
@@ -157,7 +158,7 @@ public class QuestionDto {
     public static class Response {
 
         @Positive
-        private long questionId;
+        private long postId;
 
         @Positive
         private long memberId;
@@ -170,9 +171,9 @@ public class QuestionDto {
 
         private int commentCount;
 
-        private Question.recruitStatus status;
+        private recruitStatus status;
 
-        private Question.categoryStatus category;
+        private categoryStatus category;
 
         private String title;
 
@@ -180,6 +181,6 @@ public class QuestionDto {
 
         private String image;
 
-        private QuestionTagDto.Response questionTag;
+        private PostTagDto.Response postTag;
     }
 }

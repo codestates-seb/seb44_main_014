@@ -13,9 +13,9 @@ public enum ExceptionCode {
     INVALID_MEMBER_STATUS(400, "Invalid member status"),
     FOODTAG_NOT_FOUND(404, "FoodTag not found"),
     GENDERTAG_NOT_FOUND(404, "GenderTag not found"),
-    QUESTION_NOT_FOUND(404, "Question not found"),
+    POST_NOT_FOUND(404, "Post not found"),
     MATE_NOT_FOUND(404,"Mate not found"),
-    CANNOT_CHANGE_QUESTION(403, "Question can not change");
+    CANNOT_CHANGE_POST(403, "Post can not change");
 
     @Getter
     private int status;
