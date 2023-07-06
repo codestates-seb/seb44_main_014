@@ -131,8 +131,7 @@ public class PostDto {
 
         private categoryStatus category;
 
-        // memberResponse 가져오기 (새로 만들기)
-        private MemberDto.Response member;
+        private MemberDto.DetailResponse member;
 
         private PostTagDto.Response postTag;
 

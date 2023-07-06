@@ -5,9 +5,9 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faUtensils, faWheatAwn } from '@fortawesome/free-solid-svg-icons';
 // Components
-import BoardList from '../components/BoardList.tsx';
-// DummyData
-import { boardLists } from '../data/boardDummyData.ts';
+import BoardList from '../components/Board/BoardList.tsx';
+// DUMMY DATA
+import { BOARD_LISTS } from '../data/boardDummyData.ts';
 
 export interface IListData {
   questionId: number;
@@ -52,7 +52,7 @@ const Board = () => {
   const [activeGender, setActiveGender] = useState<number | null>();
   const [activeFood, setActiveFood] = useState<number | null>();
   // 리스트 정렬
-  const [lists, setLists] = useState<IListData[]>(boardLists);
+  const [lists, setLists] = useState<IListData[]>(BOARD_LISTS);
   // 서버 전달 정보
   const [filterInfo, setFilterInfo] = useState<IFilterInfo>({
     category: '밥먹기',
@@ -75,9 +75,9 @@ const Board = () => {
   //     });
   // }
 
-  // const postSearchData = () => {
+  // const getSearchData = () => {
   //   axios
-  //     .post(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&keyword=${연남동}&category=${장보기}`)
+  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&keyword=${연남동}&category=${장보기}`)
   //     .then((res) => {
   //       console.log(res)
   //     })
@@ -86,9 +86,9 @@ const Board = () => {
   //     });
   // }
 
-  // const postGenderTagData = () => {
+  // const getGenderTagData = () => {
   //   axios
-  //     .post(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&genderTag=${1}&category=${장보기}`)
+  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&genderTag=${1}&category=${장보기}`)
   //     .then((res) => {
   //       console.log(res)
   //     })
@@ -97,9 +97,9 @@ const Board = () => {
   //     });
   // }
 
-  // const postFoodTagData = () => {
+  // const getFoodTagData = () => {
   //   axios
-  //     .post(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&foodTag=${1}&category=${장보기}`)
+  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&foodTag=${1}&category=${장보기}`)
   //     .then((res) => {
   //       console.log(res)
   //     })
@@ -158,7 +158,7 @@ const Board = () => {
           <InputSearch
             type="text"
             id="search"
-            value={filterInfo.search}
+            // value={filterInfo.search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setFilterInfo({ ...filterInfo, search: (e.target as HTMLInputElement).value })
             }
@@ -238,7 +238,7 @@ const Board = () => {
         <ListsSection>
           <ListTop>
             <ListH2>게시판</ListH2>
-            <Link to="/board/questions">글 작성</Link>
+            <Link to="/board/posts">글 작성</Link>
           </ListTop>
           <SortedArea>
             <SortedButton
