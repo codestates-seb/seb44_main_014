@@ -2,7 +2,6 @@ package com.bobfriends.bf.member.service;
 
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
-import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.dto.MemberTagDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.mapper.MemberTagMapper;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
 
     public MemberService(MemberRepository memberRepository) {
@@ -30,22 +29,22 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public Member updateMember(@Valid Member member) {
+    public Member updateMember(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
 
         Optional.ofNullable(member.getName())
-                .ifPresent(name -> findMember.setName(name));
+                .ifPresent(findMember::setName);
         Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(password));
+                .ifPresent(findMember::setPassword);
         Optional.ofNullable(member.getLocation())
-                .ifPresent(location -> findMember.setLocation(location));
+                .ifPresent(findMember::setLocation);
 
         return memberRepository.save(findMember);
     }
 
     // 모든 회원 정보 조회
     public List<Member> findMembers() {
-        return (List<Member>) memberRepository.findAll();
+        return memberRepository.findAll();
     }
 
     // 회원 정보 조회
@@ -64,10 +63,8 @@ public class MemberService {
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
-        Member findMember =
-                optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        return findMember;
+        return optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     // 이미 등록된 이메일인지 검증
@@ -78,8 +75,7 @@ public class MemberService {
     }
 
     public List<MemberTagDto> getMemberTagResponseDto(Member member) {
-        List<MemberTagDto> memberTagDtos = MemberTagMapper.mapToDtoList(member.getMemberTags());
 
-        return memberTagDtos;
+        return MemberTagMapper.mapToDtoList(member.getMemberTags());
     }
 }
