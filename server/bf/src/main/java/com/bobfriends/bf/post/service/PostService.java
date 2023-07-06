@@ -109,6 +109,7 @@ public class PostService {
      * - 카테고리로 분류
      * - 페이지 네이션
      */
+
     public Page<Post> searchPosts(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag){
         return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
     }

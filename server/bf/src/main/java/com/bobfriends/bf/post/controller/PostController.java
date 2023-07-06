@@ -80,11 +80,11 @@ public class PostController {
         // custom pageRequest
         Pageable pageable = pageRequest.of();
         Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag);
+
         List<Post> posts = pagePosts.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);
     }
-    
 
     /** 질문 삭제 **/
     @DeleteMapping("/posts/{post-id}")
