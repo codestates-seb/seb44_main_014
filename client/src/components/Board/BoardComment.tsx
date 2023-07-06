@@ -1,18 +1,48 @@
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import Comment from './Comment.tsx';
 
-const BoardComment = () => {
+import { IComments } from '../../pages/BoardDetail.tsx';
+
+const BoardComment = ({ commentInfo }: IComments[]) => {
+  const [commentContent, setCommentContent] = useState({
+    memberId: 1, // 사용자 멤버 아이디
+    content: '',
+  });
+
+  const postComment = () => {
+    // axios
+    //   .post(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setCommentContent({ ...commentContent, content: res.content });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
+
   return (
     <CommentSection>
-      <CommentForm>
+      <CommentForm onSubmit={postComment()}>
         <CommentTopArea>
           <TitleH3>댓글</TitleH3>
           <CommentButton type="submit">작성</CommentButton>
         </CommentTopArea>
-        <textarea placeholder="댓글을 작성해주세요." max-length={100} />
+        <textarea
+          value={commentContent.content}
+          onChange={(e) => {
+            setCommentContent({ ...commentContent, content: e.target.value });
+            console.log(commentContent);
+          }}
+          placeholder="댓글을 작성해주세요."
+          max-length={100}
+        />
       </CommentForm>
       <ul>
-        <Comment />
+        {commentInfo.map((comment, idx) => (
+          <Comment key={idx} commentInfo={comment} />
+        ))}
       </ul>
     </CommentSection>
   );

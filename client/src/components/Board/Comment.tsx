@@ -1,31 +1,103 @@
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-const Comment = () => {
+import { IComments } from '../../pages/BoardDetail.tsx';
+import { timeStamp } from '../../util/commonFunction.ts';
+
+const Comment = ({ commentInfo }: IComments) => {
+  const { name, content, createdAt, avgStarRate, memberId, commemtId } = commentInfo;
+
+  const [modifyComment, setModifyComment] = useState(false);
+  const [commentContent, setCommentContent] = useState({
+    memberId: memberId,
+    content: content,
+  });
+
+  const params = useParams();
+  const postId = Number(params.postId);
+
+  const newTime = timeStamp(new Date(createdAt));
+
+  // 임시 사용자 id
+  const userId = 1;
+
+  const patchComment = () => {
+    // axios
+    //   .patch(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setCommentContent({ ...commentContent, content: res.content });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
+
+  const deleteComment = () => {
+    // axios
+    //   .delete(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
+
   return (
     <CommentList>
       <WriterInfo>
         <div>
-          <WriterId>마포호랑이</WriterId>
+          <WriterId>{name}</WriterId>
           <WriterScore>
-            <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> 4.6
+            <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate}
           </WriterScore>
         </div>
-        <CommentTime>2분 전</CommentTime>
+        <CommentTime>{newTime}</CommentTime>
       </WriterInfo>
       {/* 기본 */}
-      <CommentContent>저요!!!!!!!!!!!</CommentContent>
-      {/* TODO: 작성자에게만 노출 */}
-      <ModifyButtons>
-        <button>수정</button>
-        <button>삭제</button>
-      </ModifyButtons>
+
+      {!modifyComment && (
+        <div>
+          <CommentContent>{commentContent.content}</CommentContent>
+          {/* TODO: 작성자에게만 노출 */}
+          {/* 사용자, 작성자 memberId 비교 분기 처리 */}
+          {userId === memberId && (
+            <ModifyButtons>
+              <button onClick={() => setModifyComment(!modifyComment)}>수정</button>
+              <button onClick={() => deleteComment()}>삭제</button>
+            </ModifyButtons>
+          )}
+        </div>
+      )}
       {/* 수정 모드 */}
-      {/* <CommentTextbox placeholder="댓글을 작성해주세요." max-length={100} />
-      <ModifyButtons>
-        <button>저장</button>
-      </ModifyButtons> */}
+      {modifyComment && (
+        <div>
+          <CommentTextbox
+            onChange={(e) => {
+              setCommentContent({ ...commentContent, content: e.target.value });
+              console.log(commentContent);
+            }}
+            value={commentContent.content}
+            placeholder="댓글을 작성해주세요."
+            max-length={100}
+          />
+          <ModifyButtons>
+            {/* patch 요청 함수 연결 */}
+            <button
+              onClick={() => {
+                setModifyComment(!modifyComment);
+                patchComment();
+              }}
+            >
+              저장
+            </button>
+          </ModifyButtons>
+        </div>
+      )}
     </CommentList>
   );
 };
@@ -82,4 +154,5 @@ const CommentTextbox = styled.textarea`
   border: 1px solid var(--color-gray);
   box-sizing: border-box;
 `;
+
 export default Comment;

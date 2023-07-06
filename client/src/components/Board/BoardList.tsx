@@ -50,7 +50,7 @@ const BoardList = ({ list }: ListProps) => {
 
   return (
     <ListContainer>
-      <Link to="/board/questions/:questionId">
+      <Link to={`/board/posts/${list.questionId}`}>
         <ListTitle>
           <ListH3>{list.title}</ListH3>
           <ListStatus $statusColor={statusColor}>{list.status}</ListStatus>
