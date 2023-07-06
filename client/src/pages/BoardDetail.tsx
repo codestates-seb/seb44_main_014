@@ -47,44 +47,49 @@ const BoardDetail = () => {
           <InfoTime>5분 전</InfoTime>
         </DetailInfoArea>
       </DetailHeader>
-      {/* 내용 영역 */}
-      <TextContainer>
-        <TextArea>
-          연남동 oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순!연남동 oo라멘 2인 선착순! 연남동
-          oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순!연남동 oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순! 연남동 oo라멘
-          2인 선착순!
-        </TextArea>
-        {/* TODO: 작성자에게만 보여아 함 */}
-        <ModifyButtons>
-          <Link to="/board/questions/:questionId/edit">수정</Link>
-          <button type="button">삭제</button>
-        </ModifyButtons>
-      </TextContainer>
-      {/* 참가 신청 영역 */}
-      <ParticipantContainer>
-        <ApplyParticipate>
-          모집인원 <span>1/2</span>
-          <button type="button">신청</button>
-        </ApplyParticipate>
-        {/* TODO: 참가자에게만 보여아 함 */}
-        <ParticipantId>참가자: 마포호랑이 끼룩갈메기</ParticipantId>
-      </ParticipantContainer>
-      {/* 작성자 프로필 영역 */}
-      <ProfileContainer>
-        <img src="/img/background_grocery.jpg" alt="" />
-        <ProfileInfo>
-          <InfoRow>
-            <InfoId>끼룩갈메기</InfoId>
-            <InfoScore>
-              <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> 4.6
-            </InfoScore>
-          </InfoRow>
-          <InfoRow>
-            <InfoGender>여성</InfoGender>
-            <InfoMode>조용히 밥만 먹어요</InfoMode>
-          </InfoRow>
-        </ProfileInfo>
-      </ProfileContainer>
+      <ContentsSection>
+        <ContentsWrapper>
+          {/* 내용 영역 */}
+          <TextContainer>
+            <TextArea>
+              연남동 oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순!연남동 oo라멘 2인 선착순!
+              연남동 oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순!연남동 oo라멘 2인 선착순! 연남동 oo라멘 2인 선착순!
+              연남동 oo라멘 2인 선착순!
+            </TextArea>
+            {/* TODO: 작성자에게만 보여아 함 */}
+            <ModifyButtons>
+              <Link to="/board/questions/:questionId/edit">수정</Link>
+              <button type="button">삭제</button>
+            </ModifyButtons>
+          </TextContainer>
+          {/* 참가 신청 영역 */}
+          <ParticipantContainer>
+            <ApplyParticipate>
+              모집인원 <span>1/2</span>
+              <button type="button">신청</button>
+            </ApplyParticipate>
+            {/* TODO: 참가자에게만 보여아 함 */}
+            <ParticipantId>참가자: 마포호랑이 끼룩갈메기</ParticipantId>
+          </ParticipantContainer>
+        </ContentsWrapper>
+        {/* 작성자 프로필 영역 */}
+        <ProfileContainer>
+          <img src="/img/background_grocery.jpg" alt="" />
+          <ProfileInfo>
+            <InfoRow>
+              <InfoId>끼룩갈메기</InfoId>
+              <InfoScore>
+                <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> 4.6
+              </InfoScore>
+            </InfoRow>
+            <InfoRow>
+              <InfoGender>여성</InfoGender>
+              <InfoMode>조용히 밥만 먹어요</InfoMode>
+            </InfoRow>
+          </ProfileInfo>
+        </ProfileContainer>
+      </ContentsSection>
+      {/* 댓글 영역 */}
       <BoardComment />
     </DetailContainer>
   );
@@ -92,22 +97,44 @@ const BoardDetail = () => {
 
 const DetailContainer = styled.section`
   width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
   padding: 1.875rem;
+  @media screen and (min-width: 768px) {
+    padding: 40px 80px;
+  }
+  @media screen and (min-width: 1024px) {
+    padding: 50px;
+  }
 `;
 
 // 상단 정보 영역
-const DetailHeader = styled.div``;
+const DetailHeader = styled.div`
+  @media screen and (min-width: 1024px) {
+    width: calc(100% - 220px);
+  }
+`;
 
 const DetailTitleArea = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (min-width: 768px) {
+    justify-content: flex-start;
+  }
 `;
 
 const TitleLeft = styled.div`
   display: flex;
   align-items: center;
   width: calc(100% - 70px);
+  @media screen and (min-width: 768px) {
+    width: auto;
+    max-width: calc(100% - 80px);
+  }
+  @media screen and (min-width: 1024px) {
+    max-width: calc(100% - 90px);
+  }
 `;
 
 const BackButton = styled.button`
@@ -116,9 +143,13 @@ const BackButton = styled.button`
   align-items: center;
   width: 1.875rem;
   height: 1.875rem;
+  @media screen and (min-width: 1024px) {
+    display: none;
+  }
 `;
 
 const TitleH2 = styled.h2`
+  width: calc(100% - 1.875rem);
   font-family: 'NanumSquare', sans-serif;
   font-size: 1rem;
   line-height: 1;
@@ -126,10 +157,15 @@ const TitleH2 = styled.h2`
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
+  @media screen and (min-width: 1024px) {
+    width: auto;
+    font-size: 1.25rem;
+  }
 `;
 
 const ListStatus = styled.span<IStyledProps>`
   position: relative;
+  margin-left: 1.75rem;
   font-size: 13px;
   z-index: -1;
   &::after {
@@ -144,6 +180,9 @@ const ListStatus = styled.span<IStyledProps>`
     background-color: ${(props) => props.$statusColor};
     border-radius: 5px;
   }
+  /* @media screen and (min-width: 768px) {
+    margin-left: 1.75rem;
+  } */
   @media screen and (min-width: 1024px) {
     font-size: 0.875rem;
     &::after {
@@ -157,6 +196,9 @@ const DetailInfoArea = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (min-width: 1024px) {
+    margin-top: 1.25rem;
+  }
 `;
 
 const InfoLeft = styled.div``;
@@ -164,6 +206,9 @@ const InfoLeft = styled.div``;
 const InfoTag = styled.span`
   font-size: 13px;
   font-weight: 700;
+  @media screen and (min-width: 1024px) {
+    font-size: 0.875rem;
+  }
 `;
 
 const InfoNum = styled.span`
@@ -178,6 +223,19 @@ const InfoNum = styled.span`
 const InfoTime = styled.span`
   color: var(--color-black);
   font-size: 13px;
+`;
+
+const ContentsSection = styled.section`
+  @media screen and (min-width: 1024px) {
+    display: flex;
+    align-items: flex-start;
+  }
+`;
+
+const ContentsWrapper = styled.div`
+  @media screen and (min-width: 1024px) {
+    width: calc(100% - 220px);
+  }
 `;
 
 // 본문 내용 영역
@@ -221,6 +279,18 @@ const ProfileContainer = styled.div`
     height: 50px;
     margin-right: 1.25rem;
     border-radius: 50%;
+    @media screen and (min-width: 1024px) {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    flex-direction: column;
+    width: 200px;
+    margin-top: 1.875rem;
+    margin-left: 20px;
+    padding: 1.875rem 1.25rem;
   }
 `;
 
@@ -235,10 +305,21 @@ const InfoRow = styled.div`
   font-size: 13px;
   &:last-of-type {
     margin-top: 0.625rem;
+    @media screen and (min-width: 1024px) {
+      flex-direction: column;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    justify-content: center;
+    margin-top: 1.25rem;
   }
 `;
 
-const InfoId = styled.span``;
+const InfoId = styled.span`
+  @media screen and (min-width: 1024px) {
+    margin-right: 0.625rem;
+  }
+`;
 
 const InfoScore = styled.span`
   color: var(--color-black);
@@ -269,6 +350,7 @@ const InfoMode = styled.span`
     border-radius: 5px;
   }
   @media screen and (min-width: 1024px) {
+    margin-top: 1.25rem;
     font-size: 0.875rem;
     &::after {
       left: -1rem;
@@ -276,6 +358,7 @@ const InfoMode = styled.span`
   }
 `;
 
+// 참가 신청 영역
 const ParticipantContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
