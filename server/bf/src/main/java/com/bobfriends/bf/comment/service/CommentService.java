@@ -1,11 +1,12 @@
 package com.bobfriends.bf.comment.service;
 
+
 import com.bobfriends.bf.comment.dto.CommentDto;
+
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.repository.CommentRepository;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
-import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.post.service.PostService;
 import org.springframework.stereotype.Service;
 
