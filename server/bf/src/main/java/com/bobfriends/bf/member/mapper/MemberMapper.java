@@ -22,20 +22,19 @@ public interface MemberMapper {
         return member;
     }
 
-//    default Member memberPatchToMember(MemberDto.Patch requestBody) {
-//        if (requestBody == null) {
-//            return null;
-//        }
-//
-//        Member member = new Member();
-//
-//        member.setName(requestBody.getName());
-//        member.setMemberId(requestBody.getMemberId());
-//        member.setPassword(requestBody.getPassword());
-//        member.setEmail(requestBody.getEmail());
-//
-//        return member;
-//    }
+    default Member memberPatchToMember(MemberDto.Patch requestBody) {
+        if (requestBody == null) {
+            return null;
+        }
+
+        Member member = new Member();
+
+        member.setName(requestBody.getName());
+        member.setMemberId(requestBody.getMemberId());
+        member.setPassword(requestBody.getPassword());
+
+        return member;
+    }
 
     default MemberDto.Response memberToMemberResponseDto(Member member) {
 

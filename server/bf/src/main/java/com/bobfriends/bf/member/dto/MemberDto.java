@@ -2,8 +2,6 @@ package com.bobfriends.bf.member.dto;
 
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.Email;

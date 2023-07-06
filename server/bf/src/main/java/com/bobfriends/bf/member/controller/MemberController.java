@@ -1,6 +1,7 @@
 package com.bobfriends.bf.member.controller;
 
 import com.bobfriends.bf.member.dto.LoginPostDto;
+import com.bobfriends.bf.response.SingleResponseDto;
 import com.bobfriends.bf.member.dto.LoginResponseDto;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
@@ -81,14 +82,23 @@ public class MemberController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
-//    @PatchMapping("/mypage/{member-id}/edit")
-//    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-//                                      @Valid @RequestBody MemberDto.Patch requestBody) {
-//        requestBody.setMemberId(memberId);
-//        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody));
-//
-//        return new ResponseEntity<>(memberMapper.memberToMemberResponse(updateMember), HttpStatus.OK);
-//    }
+        @PatchMapping("/mypage/{member-id}/edit") // 회원 수정
+        public ResponseEntity patchMember (@PathVariable("member-id") @Positive long memberId,
+                                           @Valid @RequestBody MemberDto.Patch requestBody) {
+            Member member =
+                    memberService.updateMember(memberMapper.memberPatchToMember(requestBody));
+
+            return new ResponseEntity<>(
+                    new SingleResponseDto<>(memberMapper.memberToMemberResponseDto(member)),
+                    HttpStatus.OK);
+        }
+
+        @DeleteMapping("/mypage/{member-id}/edit") // 회원 삭제
+        public ResponseEntity deleteMember (@PathVariable("member-id") @Positive long memberId) {
+        memberService.deleteMember(memberId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
 }
 
