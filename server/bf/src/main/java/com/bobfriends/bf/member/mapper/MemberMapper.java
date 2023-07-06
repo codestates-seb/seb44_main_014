@@ -33,4 +33,6 @@ public interface MemberMapper {
     @Mapping(source = "member.gender", target = "gender")
     MemberDto.Response memberToMemberResponseDto(Member member);
 
+    MemberDto.DetailResponse memberToMemberDetailResponseDto(Member member);
+
 }

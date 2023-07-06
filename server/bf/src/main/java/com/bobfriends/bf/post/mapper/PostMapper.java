@@ -108,10 +108,10 @@ public interface PostMapper {
         /** MemberDto.Response **/
         if(post.getMember() != null){
 
-            MemberDto.Response memberResponseDto
-                    = memberMapper.memberToMemberResponseDto(post.getMember());
+            MemberDto.DetailResponse memberDetailResponseDto
+                    = memberMapper.memberToMemberDetailResponseDto(post.getMember());
 
-            postResponseDto.setMember(memberResponseDto);
+            postResponseDto.setMember(memberDetailResponseDto);
         }
 
 
@@ -124,7 +124,9 @@ public interface PostMapper {
             postResponseDto.setPostTag(postTagResponseDto);
         }
 
-        /** MateDto.DetailResponse **/
+        /** MateDto.DetailResponse
+         *  TODO : MateMapper 에서 가져오기
+         * **/
         if (post.getMate() != null){
 
             MateDto.DetailResponse mateResponseDto =
@@ -136,7 +138,9 @@ public interface PostMapper {
             postResponseDto.setMate(mateResponseDto);
         }
 
-        /** List<MateMemberDto.DetailResponse> **/
+        /** List<MateMemberDto.DetailResponse>
+         *  TODO : MateMemberMapper 에서 가져오기
+         * **/
         if (post.getMate().getMateMembers() != null){
 
             List<MateMemberDto.DetailResponse> mateMembersDto =
