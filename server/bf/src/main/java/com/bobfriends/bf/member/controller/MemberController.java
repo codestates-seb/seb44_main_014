@@ -1,7 +1,7 @@
 package com.bobfriends.bf.member.controller;
 
+import com.bobfriends.bf.dto.SingleResponseDto;
 import com.bobfriends.bf.member.dto.LoginPostDto;
-import com.bobfriends.bf.response.SingleResponseDto;
 import com.bobfriends.bf.member.dto.LoginResponseDto;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
@@ -86,8 +86,7 @@ public class MemberController {
         public ResponseEntity patchMember (@PathVariable("member-id") @Positive long memberId,
                                            @Valid @RequestBody MemberDto.Patch requestBody) {
             Member member =
-                    memberService.updateMember(memberMapper.memberPatchToMember(requestBody));
-
+                    memberService.updateMember(memberMapper.memberPatchDtoToMember(requestBody.addMemberId(memberId)));
             return new ResponseEntity<>(
                     new SingleResponseDto<>(memberMapper.memberToMemberResponseDto(member)),
                     HttpStatus.OK);
