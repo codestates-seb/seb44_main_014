@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -7,8 +7,12 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { IComments } from '../../pages/BoardDetail.tsx';
 import { timeStamp } from '../../util/commonFunction.ts';
 
-const Comment = ({ commentInfo }: IComments) => {
-  const { name, content, createdAt, avgStarRate, memberId, commemtId } = commentInfo;
+type CommentInfoProps = {
+  commentInfo: IComments;
+};
+
+const Comment = ({ commentInfo }: CommentInfoProps) => {
+  const { name, content, createdAt, avgStarRate, memberId /*, commemtId*/ } = commentInfo;
 
   const [modifyComment, setModifyComment] = useState(false);
   const [commentContent, setCommentContent] = useState({
@@ -16,8 +20,8 @@ const Comment = ({ commentInfo }: IComments) => {
     content: content,
   });
 
-  const params = useParams();
-  const postId = Number(params.postId);
+  // const params = useParams();
+  // const postId = Number(params.postId);
 
   const newTime = timeStamp(new Date(createdAt));
 
@@ -77,8 +81,8 @@ const Comment = ({ commentInfo }: IComments) => {
       {modifyComment && (
         <div>
           <CommentTextbox
-            onChange={(e) => {
-              setCommentContent({ ...commentContent, content: e.target.value });
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+              setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
               console.log(commentContent);
             }}
             value={commentContent.content}

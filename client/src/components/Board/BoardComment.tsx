@@ -4,7 +4,11 @@ import Comment from './Comment.tsx';
 
 import { IComments } from '../../pages/BoardDetail.tsx';
 
-const BoardComment = ({ commentInfo }: IComments[]) => {
+type CommentInfoProps = {
+  commentInfo: IComments[];
+};
+
+const BoardComment = ({ commentInfo }: CommentInfoProps) => {
   const [commentContent, setCommentContent] = useState({
     memberId: 1, // 사용자 멤버 아이디
     content: '',
@@ -24,15 +28,15 @@ const BoardComment = ({ commentInfo }: IComments[]) => {
 
   return (
     <CommentSection>
-      <CommentForm onSubmit={postComment()}>
+      <CommentForm onSubmit={() => postComment()}>
         <CommentTopArea>
           <TitleH3>댓글</TitleH3>
           <CommentButton type="submit">작성</CommentButton>
         </CommentTopArea>
         <textarea
           value={commentContent.content}
-          onChange={(e) => {
-            setCommentContent({ ...commentContent, content: e.target.value });
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
             console.log(commentContent);
           }}
           placeholder="댓글을 작성해주세요."
@@ -40,7 +44,7 @@ const BoardComment = ({ commentInfo }: IComments[]) => {
         />
       </CommentForm>
       <ul>
-        {commentInfo.map((comment, idx) => (
+        {commentInfo.map((comment: IComments, idx: number) => (
           <Comment key={idx} commentInfo={comment} />
         ))}
       </ul>

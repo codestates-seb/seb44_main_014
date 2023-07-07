@@ -33,7 +33,7 @@ type Nullable<T> = T | null;
 
 interface IFilterInfo {
   category: string;
-  search: Nullable<string>;
+  search: string;
   tag: Nullable<number>;
 }
 
@@ -158,7 +158,7 @@ const Board = () => {
           <InputSearch
             type="text"
             id="search"
-            // value={filterInfo.search}
+            value={filterInfo.search}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setFilterInfo({ ...filterInfo, search: (e.target as HTMLInputElement).value })
             }
