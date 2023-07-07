@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
+import java.util.List;
+
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CommentMapper {
@@ -48,4 +50,11 @@ public interface CommentMapper {
     @Mapping(source = "member.avgStarRate", target = "avgStarRate")
     CommentDto.Response commentToCommentResponse(Comment comment);
 
+
+    @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "member.avgStarRate", target = "avgStarRate")
+    @Mapping(source = "member.name", target = "name")
+    CommentDto.DetailResponse commentToCommentDetailResponse(Comment comment);
+
+    List<CommentDto.DetailResponse> commentsToCommentDetailsResponse(List<Comment> comments);
 }
