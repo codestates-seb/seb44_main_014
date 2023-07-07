@@ -164,6 +164,75 @@ public class PostControllerTest {
                 ));
     }
 
+
+    @Test
+    @DisplayName("게시글 상세 조회 테스트")
+    public void getPostTest() throws Exception {
+
+        // given
+        long postId = 1L;
+        PostDto.DetailResponse response = StubData.MockPost.getDetailResponseBody();
+
+        given(postService.findPost(Mockito.anyLong())).willReturn(new Post());
+        given(postMapper.PostToPostDetailResponseDto(Mockito.any(Post.class))).willReturn(response);
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/board/posts/{post-id}", postId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions.andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("get-post",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("post-id").description("게시글 식별자")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문"),
+                                        fieldWithPath("image").type(JsonFieldType.STRING).description("이미지"),
+                                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글 생성날짜"),
+                                        fieldWithPath("viewCount").type(JsonFieldType.NUMBER).description("게시글 조회수"),
+                                        fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("게시글에 달린 댓글 수"),
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("모집 상태: RECRUITING(모집중), COMPLETE(모집완료), END(모임종료)"),
+                                        fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
+
+                                        fieldWithPath("member.memberId").type(JsonFieldType.NUMBER).description("작성자의 식별자"),
+                                        fieldWithPath("member.image").type(JsonFieldType.STRING).description("작성자 프로필 사진"),
+                                        fieldWithPath("member.name").type(JsonFieldType.STRING).description("작성자 이름"),
+                                        fieldWithPath("member.gender").type(JsonFieldType.STRING).description("성별: FEMALE(여성), MALE(남성)"),
+                                        fieldWithPath("member.avgStarRate").type(JsonFieldType.NUMBER).description("작성사 별점"),
+                                        fieldWithPath("member.eatStatus").type(JsonFieldType.BOOLEAN).description("조용히 밥만 먹어요 on off"),
+
+                                        fieldWithPath("postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에서 저장한 태그의 식별자"),
+                                        fieldWithPath("postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),
+                                        fieldWithPath("postTag.genderTagId").type(JsonFieldType.NUMBER).description("성별 태그의 식별자"),
+
+                                        fieldWithPath("mate.findNum").type(JsonFieldType.NUMBER).description("현재 구해진 인원 수"),
+                                        fieldWithPath("mate.mateNum").type(JsonFieldType.NUMBER).description("모집 인원 수"),
+
+                                        fieldWithPath("mateMembers").type(JsonFieldType.ARRAY).description("구해진 인원의 목록"),
+                                        fieldWithPath("mateMembers[].mateMemberId").type(JsonFieldType.NUMBER).description("구해진 인원의 식별자"),
+                                        fieldWithPath("mateMembers[].name").type(JsonFieldType.STRING).description("유저의 이름"),
+
+                                        fieldWithPath("comments").type(JsonFieldType.ARRAY).description("댓글 목록"),
+                                        fieldWithPath("comments[].commentId").type(JsonFieldType.NUMBER).description("댓글 식별자"),
+                                        fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("댓글 내용"),
+                                        fieldWithPath("comments[].memberId").type(JsonFieldType.NUMBER).description("댓글 작성자의 식별자"),
+                                        fieldWithPath("comments[].avgStarRate").type(JsonFieldType.NUMBER).description("댓글 작성자의 별점"),
+                                        fieldWithPath("comments[].name").type(JsonFieldType.STRING).description("댓글 작성자의 이름"),
+                                        fieldWithPath("comments[].createdAt").type(JsonFieldType.STRING).description("댓글 생성 날짜")
+                                )
+                        )
+                ));
+    }
+
+
     @Test
     @DisplayName("게시글 삭제 테스트")
     public void deletePostTest() throws Exception {
