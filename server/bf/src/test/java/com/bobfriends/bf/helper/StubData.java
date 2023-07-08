@@ -8,6 +8,10 @@ import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.post.dto.PostDto;
 import com.bobfriends.bf.post.dto.PostTagDto;
 import com.bobfriends.bf.post.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpMethod;
 
 import java.time.LocalDateTime;
@@ -78,6 +82,17 @@ public class StubData {
             return new ArrayList<>(List.of(post1,post2));
         }
 
+
+        public static Page<Post> getMultiPageResultPost() {
+            Post post1 = new Post(Post.categoryStatus.EATING, "제목1", "본문1", "이미지1", Post.recruitStatus.RECRUITING, 3);
+
+            Post post2 = new Post(Post.categoryStatus.SHOPPING, "제목2", "본문2", "이미지2", Post.recruitStatus.RECRUITING, 8);
+
+            return new PageImpl<>(List.of(post1, post2),
+                    PageRequest.of(0, 10, Sort.by("createdAt").descending()),
+                    2);
+        }
+
         public static List<PostDto.Response> getMultiResponseBody() {
             return List.of(
                     new PostDto.Response(
@@ -102,11 +117,11 @@ public class StubData {
                             8,
                             2,
                             Post.recruitStatus.RECRUITING,
-                            Post.categoryStatus.SHOPPING,
+                            Post.categoryStatus.EATING,
                             "제목2",
                             LocalDateTime.now(),
                             "이미지2",
-                            new PostTagDto.Response(2L, 0, 3L)
+                            new PostTagDto.Response(2L, 3L, 3L)
                     )
             );
         }
