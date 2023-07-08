@@ -1,4 +1,4 @@
-import { useState /*, useEffect*/ } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 // components
@@ -64,30 +64,32 @@ const BoardDetail = () => {
   const [detailData, setDetailData] = useState<IDetailData>(BOARD_DETAIL);
 
   const { content, mate, mateMembers, member, comments } = detailData;
-  const [updateMate, setUpdateMate] = useState({
-    mate: mate,
-    mateMembers: mateMembers,
-  });
+  // const [updateMate, setUpdateMate] = useState({
+  //   mate: mate,
+  //   mateMembers: mateMembers,
+  // });
 
   // 임시 사용자 id
   const userId = 3;
 
-  const showParticipant = updateMate.mateMembers.filter((member) => member.mateMemberId === userId).length;
+  const showParticipant = mateMembers.filter((member) => member.mateMemberId === userId).length;
 
-  // useEffect(() => {
-  //   getDetailData();
-  // }, []);
+  useEffect(() => {
+    getDetailData();
+  }, []);
 
-  // const getDetailData = () => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_API_URL}/board/posts/${postId}`)
-  //     .then((res) => {
-  //       console.log(res)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
+  const getDetailData = () => {
+    setDetailData(BOARD_DETAIL);
+    // axios
+    //   .get(`${process.env.REACT_APP_API_URL}/board/posts/${postId}`)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setDetailData(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
 
   // const applyData = {
   //   memberId: 1, //사용자 멤버 아이디
@@ -128,7 +130,7 @@ const BoardDetail = () => {
             {userId === member.memberId && (
               <ModifyButtons>
                 <Link to={`/board/posts/${postId}/edit`}>수정</Link>
-                <button type="button" onClick={deletepost()}>
+                <button type="button" onClick={() => deletepost()}>
                   삭제
                 </button>
               </ModifyButtons>
@@ -139,16 +141,22 @@ const BoardDetail = () => {
             <ApplyParticipate>
               모집인원
               <span>
-                {updateMate.mate.findNum} / {updateMate.mate.mateNum}
+                {mate.findNum} / {mate.mateNum}
               </span>
-              <button type="button" onClick={postApplyData()}>
+              <button
+                type="button"
+                onClick={() => {
+                  postApplyData();
+                  getDetailData();
+                }}
+              >
                 신청
               </button>
             </ApplyParticipate>
             {showParticipant !== 0 && (
               <ParticipantId>
                 <span>참가자: &nbsp;</span>
-                {updateMate.mateMembers.map((member, idx) => (
+                {mateMembers.map((member, idx) => (
                   <span key={idx}>&nbsp; {member.name}</span>
                 ))}
               </ParticipantId>

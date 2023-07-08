@@ -1,5 +1,8 @@
 package com.bobfriends.bf.post.mapper;
 
+import com.bobfriends.bf.comment.dto.CommentDto;
+import com.bobfriends.bf.comment.entity.Comment;
+import com.bobfriends.bf.comment.mapper.CommentMapper;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.mate.entity.Mate;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public interface PostMapper {
 
     MemberMapper memberMapper = Mappers.getMapper(MemberMapper.class);
+    CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
 
 
     default Post PostPostToPost(PostDto.Post requestBody){
@@ -107,20 +111,16 @@ public interface PostMapper {
 
         /** MemberDto.Response **/
         if(post.getMember() != null){
-
             MemberDto.DetailResponse memberDetailResponseDto
                     = memberMapper.memberToMemberDetailResponseDto(post.getMember());
-
             postResponseDto.setMember(memberDetailResponseDto);
         }
 
 
         /** QuestionTagDto.Response **/
         if(post.getPostTag() != null){
-
             PostTagDto.Response postTagResponseDto =
                     PostTagToPostTagResponseDto(post.getPostTag());
-
             postResponseDto.setPostTag(postTagResponseDto);
         }
 
@@ -155,6 +155,12 @@ public interface PostMapper {
             postResponseDto.setMateMembers(mateMembersDto);
         }
 
+        /** List<CommentDto.DetailResponse> **/
+        if (post.getComments() != null){
+            List<CommentDto.DetailResponse> commentDetailsResponseDtos
+                    = commentMapper.commentsToCommentDetailsResponse(post.getComments());
+            postResponseDto.setComments(commentDetailsResponseDtos);
+        }
 
         return postResponseDto;
     }

@@ -1,5 +1,6 @@
 package com.bobfriends.bf.post.dto;
 
+import com.bobfriends.bf.comment.dto.CommentDto;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.member.dto.MemberDto;
@@ -139,7 +140,7 @@ public class PostDto {
 
         private List<MateMemberDto.DetailResponse> mateMembers;
 
-        // comments 가져오기
+        private List<CommentDto.DetailResponse> comments;
     }
 
 

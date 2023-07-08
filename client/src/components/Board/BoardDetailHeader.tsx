@@ -5,11 +5,15 @@ import { faAngleLeft, faEye, faComment } from '@fortawesome/free-solid-svg-icons
 import { IDetailData } from '../../pages/BoardDetail.tsx';
 import { timeStamp } from '../../util/commonFunction.ts';
 
+type BoardInfoProps = {
+  boardInfo: IDetailData;
+};
+
 interface IStyledProps {
   $statusColor: string;
 }
 
-const BoardDetailHeader = ({ boardInfo }: IDetailData) => {
+const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
   const { title, status, genderTag, foodTag, viewCount, commentCount, createdAt } = boardInfo;
 
   let newGenderTag: string;

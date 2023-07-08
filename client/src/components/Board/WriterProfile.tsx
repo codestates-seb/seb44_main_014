@@ -2,20 +2,22 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
+type ProfileInfoProps = {
+  profileInfo: {
+    memberId: number;
+    image?: string;
+    name: string;
+    gender: string;
+    avgStarRate: number;
+    eatStatus: boolean;
+  };
+};
+
 interface IStyledProps {
   $isActive: boolean;
 }
 
-interface IMember {
-  memberId: number;
-  image: string;
-  name: string;
-  gender: string;
-  avgStarRate: number;
-  eatStatus: boolean;
-}
-
-const WriterProfile = ({ profileInfo }: IMember) => {
+const WriterProfile = ({ profileInfo }: ProfileInfoProps) => {
   const { name, gender, image, avgStarRate, eatStatus } = profileInfo;
 
   let userGender: string;
