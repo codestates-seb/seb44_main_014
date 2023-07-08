@@ -40,6 +40,6 @@ public class MemberStarRateController {
         memberStarRate.setPost(postService.findVerifiedPost(postId));
         MemberStarRate createdStarRate = service.createMemberStarRate(memberStarRate);
 
-        return new ResponseEntity<>(createdStarRate, HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MemberStarRateToMemberStarRateResponse(createdStarRate), HttpStatus.OK);
     }
 }
