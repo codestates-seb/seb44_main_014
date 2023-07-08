@@ -3,8 +3,8 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
 
-import { timeStamp } from '../util/commonFunction.ts';
-import { IListData } from '../pages/Board.tsx';
+import { timeStamp } from '../../util/commonFunction.ts';
+import { IListData } from '../../pages/Board.tsx';
 
 type ListProps = {
   list: IListData;
@@ -50,7 +50,7 @@ const BoardList = ({ list }: ListProps) => {
 
   return (
     <ListContainer>
-      <Link to="/board/questions/:questionId">
+      <Link to={`/board/posts/${list.questionId}`}>
         <ListTitle>
           <ListH3>{list.title}</ListH3>
           <ListStatus $statusColor={statusColor}>{list.status}</ListStatus>
@@ -105,7 +105,13 @@ const ListTitle = styled.div`
 `;
 
 const ListH3 = styled.h3`
+  width: calc(100% - 70px);
+  font-family: 'NanumSquare', sans-serif;
   font-size: 0.875rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
   @media screen and (min-width: 1024px) {
     font-size: 1rem;
   }
@@ -122,9 +128,10 @@ const ListTag = styled.span`
 const ListStatus = styled.span<IStyledProps>`
   position: relative;
   font-size: 0.75rem;
+  z-index: -1;
   &::after {
     position: absolute;
-    left: -0.5rem;
+    left: -0.75rem;
     top: 50%;
     transform: translateY(-50%);
     display: block;
