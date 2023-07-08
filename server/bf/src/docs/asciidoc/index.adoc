@@ -1,0 +1,29 @@
+= 밥친구 애플리케이션
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: 목차
+:source-highlighter: prettify
+
+v1.0.0, 2023.07.08 정민지
+
+
+***
+API 문서 개요
+
+  이 문서는 밥친구 애플리케이션 문서이다.
+
+***
+== Home
+=== 전체 게시물 조회
+최신순으로 전체 게시물들이 조회된다.
+
+.http-request
+include::{snippets}/home-post/http-request.adoc[]
+
+.http-response
+include::{snippets}/home-post/http-response.adoc[]
+
+.response-fields
+include::{snippets}/home-post/response-fields.adoc[]
+
