@@ -2,6 +2,7 @@ package com.bobfriends.bf.comment.service;
 
 
 import com.bobfriends.bf.comment.dto.CommentDto;
+
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.repository.CommentRepository;
 import com.bobfriends.bf.exception.BusinessLogicException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 import java.util.Optional;
 
 @Service
@@ -57,5 +59,6 @@ public class CommentService {
 
         return optionalComment.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
+
     }
 }
