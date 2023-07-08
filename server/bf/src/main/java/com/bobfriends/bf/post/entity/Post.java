@@ -55,6 +55,15 @@ public class Post extends Auditable {
     @OneToOne(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     private PostTag postTag;
 
+    public Post(categoryStatus category, String title, String content, String image, recruitStatus status, int viewCount) {
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.image = image;
+        this.status = status;
+        this.viewCount = viewCount;
+    }
+
     /** viewCount 증가 **/
     public void addViewCount(int viewCount){
         this.viewCount = viewCount + 1;
