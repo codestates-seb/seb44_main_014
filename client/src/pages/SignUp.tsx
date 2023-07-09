@@ -15,15 +15,15 @@ const SignUp: React.FC<SignUpProps> = () => {
 
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     return;
   };
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     return;
   };
-  const handleCopyPasswordChange = (e) => {
+  const handleCopyPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCopyPassword(e.target.value);
     return;
   };

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SignUpPost = async (email, password, copyPassword) => {
+const SignUpPost = async (email: string, password: string, copyPassword: string) => {
   try {
     const response = await axios.post('/users/signup', { email, password, copyPassword });
     return response.data;

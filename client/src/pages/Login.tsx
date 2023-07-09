@@ -3,12 +3,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import LoginPost from '../components/fetch/LoginPost.tsx';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailErrMsg, setEmailErrMsg] = useState('');
-  const [pwdErrMsg, setPwdErrMsg] = useState('');
-  const [userInfo, setUserInfo] = useState({});
+interface UserInfo {
+  gender: string;
+  memberId: string;
+}
+
+interface LoginProps {}
+
+const Login: React.FC<LoginProps> = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [emailErrMsg, setEmailErrMsg] = useState<string>('');
+  const [pwdErrMsg, setPwdErrMsg] = useState<string>('');
+  const [userInfo, setUserInfo] = useState<UserInfo>({ gender: '', memberId: '' });
 
   const navigate = useNavigate();
 
@@ -21,11 +28,11 @@ const Login = () => {
   // }
   // }, [UserInfo]);
 
-  const handleEmailChange = (e) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     return;
   };
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     return;
   };
