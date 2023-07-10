@@ -3,10 +3,11 @@ import { styled } from 'styled-components';
 type ChildrenProps = {
   children: string;
   type: string;
+  value: string;
   handleGetValue: () => void;
 };
 
-const InputRadio = ({ children, type, handleGetValue }: ChildrenProps) => {
+const InputRadio = ({ children, type, value, handleGetValue }: ChildrenProps) => {
   return (
     <InputLabel htmlFor={children}>
       {children}
@@ -14,7 +15,7 @@ const InputRadio = ({ children, type, handleGetValue }: ChildrenProps) => {
         type="radio"
         name={type}
         id={children}
-        value={children}
+        value={value}
         onClick={(e: React.MouseEvent<HTMLInputElement>) => handleGetValue(e)}
       />
       <Checkmark />

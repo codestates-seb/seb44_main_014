@@ -1,14 +1,61 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+// import axios from 'axios';
 
 import InputRadio from '../components/buttons/InputRadio.tsx';
 import TextEditor from '../components/TextEditor/TextEditor.tsx';
 import TagCheckbox from '../components/buttons/TagCheckbox.tsx';
 
+interface IPostInfo {
+  memberId: number;
+  category: string;
+  title: string;
+  content: string;
+  genderTag: {
+    genderTagId: number;
+  };
+  foodTag: {
+    foodTagId: number;
+  };
+  mate: {
+    mateNum: number;
+  };
+}
+
 const PostBoard = () => {
   const navigate = useNavigate();
+  const [htmlStr, setHtmlStr] = useState('');
+  const [info, setInfo] = useState<IPostInfo>({
+    memberId: 0, // 사용자 memberID
+    category: '',
+    title: '',
+    content: '', // onSubmit
+    genderTag: {
+      genderTagId: 0,
+    },
+    foodTag: {
+      foodTagId: 0,
+    },
+    mate: {
+      mateNum: 0,
+    },
+  });
+  console.log(htmlStr);
+
+  const postSubmitInfo = () => {
+    // axios
+    //   .post(`${process.env.REACT_APP_API_URL}/boardpost`, info)
+    //   .then((res) => {
+    //     console.log(res);
+    //     navigate(res.location);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
 
   const genderTags = [
     { id: 1, text: '# 여자만' },
@@ -35,8 +82,8 @@ const PostBoard = () => {
   };
 
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {
-    const test = getCheckedValue(e);
-    console.log(test);
+    const category = getCheckedValue(e);
+    setInfo({ ...info, category: category, foodTag: { foodTagID: 0 } });
   };
 
   const handleGenderTag = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -46,8 +93,8 @@ const PostBoard = () => {
         checkboxes[i].checked = false;
       }
     }
-    const test = getCheckedValue(e);
-    console.log(test);
+    const genderTag = getCheckedValue(e);
+    setInfo({ ...info, genderTag: { genderTagID: Number(genderTag) } });
   };
 
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -57,8 +104,13 @@ const PostBoard = () => {
         checkboxes[i].checked = false;
       }
     }
-    const test = getCheckedValue(e);
-    console.log(test);
+    const foodTag = getCheckedValue(e);
+    setInfo({ ...info, foodTag: { foodTagID: Number(foodTag) } });
+  };
+
+  const handleSubmitInfo = () => {
+    setInfo({ ...info, content: htmlStr });
+    postSubmitInfo();
   };
 
   return (
@@ -69,18 +121,20 @@ const PostBoard = () => {
           <FontAwesomeIcon icon={faXmark} />
         </CloseButton>
       </PostBoardTop>
-      <form>
+      <form onSubmit={() => handleSubmitInfo()}>
         <InfoDiv>
           <InfoTitle>카테고리 *</InfoTitle>
           <RadioFlex>
             <InputRadio
               type="category"
+              value="EATING"
               handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleCategoryType(e)}
             >
               밥 먹기
             </InputRadio>
             <InputRadio
               type="category"
+              value="SHOPPING"
               handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleCategoryType(e)}
             >
               장 보기
@@ -89,11 +143,16 @@ const PostBoard = () => {
         </InfoDiv>
         <InfoDiv>
           <InfoTitle>제목 *</InfoTitle>
-          <InputText type="text" />
+          <InputText
+            type="text"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setInfo({ ...info, title: (e.target as HTMLInputElement).value })
+            }
+          />
         </InfoDiv>
         <InfoDiv>
           <InfoTitle>내용 *</InfoTitle>
-          <TextEditor />
+          <TextEditor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
         </InfoDiv>
         <InfoDiv>
           <InfoTitle>성별 태그</InfoTitle>
@@ -110,28 +169,35 @@ const PostBoard = () => {
             ))}
           </TagFlex>
         </InfoDiv>
-        <InfoDiv>
-          <InfoTitle>음식 태그</InfoTitle>
-          <TagFlex>
-            {foodTags.map((tag) => (
-              <TagCheckbox
-                key={tag.id}
-                type="food"
-                value={tag.id}
-                handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleFoodTag(e)}
-              >
-                {tag.text}
-              </TagCheckbox>
-            ))}
-          </TagFlex>
-        </InfoDiv>
+        {info.category !== 'SHOPPING' && (
+          <InfoDiv>
+            <InfoTitle>음식 태그</InfoTitle>
+            <TagFlex>
+              {foodTags.map((tag) => (
+                <TagCheckbox
+                  key={tag.id}
+                  type="food"
+                  value={tag.id}
+                  handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleFoodTag(e)}
+                >
+                  {tag.text}
+                </TagCheckbox>
+              ))}
+            </TagFlex>
+          </InfoDiv>
+        )}
         <InfoDiv>
           <InfoTitle>모집 인원 *</InfoTitle>
           <div>
-            <InputNumber type="number" />
+            <InputNumber
+              type="number"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setInfo({ ...info, mate: { mateNum: Number((e.target as HTMLInputElement).value) } })
+              }
+            />
           </div>
         </InfoDiv>
-        <SubmitButton>등록</SubmitButton>
+        <SubmitButton type="submit">등록</SubmitButton>
       </form>
     </PostBoardContainer>
   );
@@ -171,6 +237,9 @@ const CloseButton = styled.button`
   svg {
     width: 1.25rem;
     height: 1.25rem;
+  }
+  @media screen and (min-width: 1024px) {
+    display: none;
   }
 `;
 
@@ -216,7 +285,7 @@ const SubmitButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 19.6875rem;
+  width: 100%;
   height: 2.5rem;
   margin-top: 2.5rem;
   background-color: var(--color-orange);
@@ -227,6 +296,11 @@ const SubmitButton = styled.button`
   &:hover,
   &:active {
     background-color: #d8820a;
+  }
+
+  @media screen and (min-width: 1024px) {
+    width: 160px;
+    margin-left: auto;
   }
 `;
 

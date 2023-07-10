@@ -22,8 +22,7 @@ const TagCheckbox = ({ children, type, handleGetValue, value }: ChildrenProps) =
 };
 
 const InputLabel = styled.label`
-  input[type='checkbox']:checked ~ span,
-  &:hover {
+  input[type='checkbox']:checked ~ span {
     background-color: var(--color-orange);
     color: #ffffff;
     border-radius: 0.3125rem;
@@ -46,11 +45,14 @@ const TagSpan = styled.span`
   padding: 5px;
   background-color: #ffffff;
   border-radius: 0.3125rem;
-  /* filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.25)); */
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.25);
   color: #000000;
   font-size: 0.875rem;
   font-weight: 700;
+  &:hover {
+    background-color: var(--color-orange);
+    color: #ffffff;
+  }
 `;
 
 export default TagCheckbox;
