@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-const Button = () => {
-  return <BtnComponent type="button">저장</BtnComponent>;
+const Button = ({ children }) => {
+  return <BtnComponent type="button">{children}</BtnComponent>;
 };
 
 const BtnComponent = styled.button`
