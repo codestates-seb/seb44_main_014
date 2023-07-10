@@ -131,6 +131,7 @@ const PostBoard = () => {
             <InputNumber type="number" />
           </div>
         </InfoDiv>
+        <SubmitButton>등록</SubmitButton>
       </form>
     </PostBoardContainer>
   );
@@ -205,8 +206,28 @@ const InputText = styled.input`
 const InputNumber = styled.input`
   width: 4rem;
   height: 2.25rem;
+  padding: 0.625rem;
   border: 1px solid var(--color-gray);
   border-radius: 5px;
+  box-sizing: border-box;
+`;
+
+const SubmitButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 19.6875rem;
+  height: 2.5rem;
+  margin-top: 2.5rem;
+  background-color: var(--color-orange);
+  border-radius: 0.3125rem;
+  color: #fff;
+  font-size: 1rem;
+
+  &:hover,
+  &:active {
+    background-color: #d8820a;
+  }
 `;
 
 export default PostBoard;

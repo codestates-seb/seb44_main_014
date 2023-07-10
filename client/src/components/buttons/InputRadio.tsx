@@ -5,6 +5,7 @@ type ChildrenProps = {
   type: string;
   handleGetValue: () => void;
 };
+
 const InputRadio = ({ children, type, handleGetValue }: ChildrenProps) => {
   return (
     <InputLabel htmlFor={children}>
