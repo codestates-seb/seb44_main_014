@@ -1,7 +1,6 @@
 package com.bobfriends.bf.post.mapper;
 
 import com.bobfriends.bf.comment.dto.CommentDto;
-import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.mapper.CommentMapper;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
@@ -93,8 +92,6 @@ public interface PostMapper {
     MateDto.PatchResponse MateToMatePatchResponseDto(Mate mate);
 
 
-    /** 일단 다 받아서 사용 **/
-    // TODO : memberResponse + comments 추가 해야함
     default PostDto.DetailResponse PostToPostDetailResponseDto(Post post) {
 
         PostDto.DetailResponse postResponseDto =
