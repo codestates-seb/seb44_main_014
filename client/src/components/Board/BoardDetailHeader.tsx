@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +15,7 @@ interface IStyledProps {
 }
 
 const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
+  const navigate = useNavigate();
   const { title, status, genderTag, foodTag, viewCount, commentCount, createdAt } = boardInfo;
 
   let newGenderTag: string;
@@ -57,7 +59,7 @@ const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
     <DetailHeader>
       <DetailTitleArea>
         <TitleLeft>
-          <BackButton>
+          <BackButton onClick={() => navigate(-1)}>
             <FontAwesomeIcon icon={faAngleLeft} />
           </BackButton>
           <TitleH2>{title}</TitleH2>

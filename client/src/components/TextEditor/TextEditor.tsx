@@ -88,5 +88,13 @@ export default TextEditor;
 
 // style
 const CustomReactQuill = styled(ReactQuill)`
-  height: 100px;
+  .ql-toolbar {
+    border-radius: 5px 5px 0 0;
+  }
+  .ql-container {
+    border-radius: 0 0 5px 5px;
+  }
+  .ql-editor {
+    height: 100px;
+  }
 `;
