@@ -1,5 +1,5 @@
 import { useState /*, useEffect*/ } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,6 +42,7 @@ interface IStyledProps {
 }
 
 const Board = () => {
+  const navigate = useNavigate();
   // tabMenu active 상태 체크
   const [tabLeft, setTabLeft] = useState<boolean>(true);
   const [tabRight, setTabRight] = useState<boolean>(!tabLeft);
@@ -149,6 +150,17 @@ const Board = () => {
     );
   };
 
+  // TODO: 임시. 사용자 로그인 상태 가져올 것
+  const isLoggedIn = true;
+  const handleNavigate = () => {
+    if (!isLoggedIn) {
+      alert('로그인 후 작성 가능합니다.');
+      navigate('/login');
+    } else {
+      navigate('/board/posts');
+    }
+  };
+
   return (
     <>
       {/* 상단 검색, 태그 영역 */}
@@ -238,7 +250,7 @@ const Board = () => {
         <ListsSection>
           <ListTop>
             <ListH2>게시판</ListH2>
-            <Link to="/board/posts">글 작성</Link>
+            <button onClick={() => handleNavigate()}>글 작성</button>
           </ListTop>
           <SortedArea>
             <SortedButton
@@ -397,7 +409,7 @@ const ListsSection = styled.section`
 const ListTop = styled.div`
   display: flex;
   justify-content: space-between;
-  a {
+  button {
     padding: 0.5rem;
     background-color: var(--color-white);
     border-radius: 5px;

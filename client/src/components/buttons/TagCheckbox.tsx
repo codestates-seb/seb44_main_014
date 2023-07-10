@@ -4,7 +4,7 @@ type ChildrenProps = {
   children: string;
   type: string;
   value: number;
-  handleGetValue: () => void;
+  handleGetValue: (e: React.MouseEvent<HTMLInputElement>) => void;
 };
 const TagCheckbox = ({ children, type, handleGetValue, value }: ChildrenProps) => {
   return (

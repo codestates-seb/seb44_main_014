@@ -4,7 +4,7 @@ type ChildrenProps = {
   children: string;
   type: string;
   value: string;
-  handleGetValue: () => void;
+  handleGetValue: (e: React.MouseEvent<HTMLInputElement>) => void;
 };
 
 const InputRadio = ({ children, type, value, handleGetValue }: ChildrenProps) => {
