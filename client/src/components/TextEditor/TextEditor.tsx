@@ -5,13 +5,17 @@ import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { RangeStatic } from 'quill';
+import { IPostInfo } from '../../pages/PostBoard.tsx';
 
 interface IEditor {
-  htmlStr: string;
-  setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
+  // htmlStr: string;
+  // setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
+  info: IPostInfo;
+  setInfo: React.Dispatch<React.SetStateAction<IPostInfo>>;
 }
 
-const TextEditor = ({ htmlStr, setHtmlStr }: IEditor) => {
+// const TextEditor = ({ htmlStr, setHtmlStr }: IEditor) => {
+const TextEditor = ({ info, setInfo }: IEditor) => {
   const quillRef = React.useRef<ReactQuill>(null);
 
   // 이미지 업로드 핸들러, modules 설정보다 위에 있어야 정상 적용
@@ -32,7 +36,12 @@ const TextEditor = ({ htmlStr, setHtmlStr }: IEditor) => {
       // file 데이터 담아서 서버에 전달하여 이미지 업로드
       const res = await axios.post(
         'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/img',
-        formData
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
       );
       console.log(res);
 
@@ -73,9 +82,11 @@ const TextEditor = ({ htmlStr, setHtmlStr }: IEditor) => {
       theme="snow"
       modules={modules}
       formats={formats}
-      value={htmlStr}
+      // value={htmlStr}
+      value={info.content}
       placeholder="내용을 입력하세요."
-      onChange={(content, delta, source, editor) => setHtmlStr(editor.getHTML())}
+      onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
+      // onChange={(content, delta, source, editor) => setHtmlStr(editor.getHTML())}
     />
   );
 };

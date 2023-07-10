@@ -9,41 +9,42 @@ import InputRadio from '../components/buttons/InputRadio.tsx';
 import TextEditor from '../components/TextEditor/TextEditor.tsx';
 import TagCheckbox from '../components/buttons/TagCheckbox.tsx';
 
-interface IPostInfo {
+type Nullable<T> = T | null;
+
+export interface IPostInfo {
   memberId: number;
   category: string;
   title: string;
   content: string;
   genderTag: {
-    genderTagId: number;
+    genderTagId: Nullable<number>;
   };
   foodTag: {
-    foodTagId: number;
+    foodTagId: Nullable<number>;
   };
   mate: {
-    mateNum: number;
+    mateNum: Nullable<number>;
   };
 }
 
 const PostBoard = () => {
   const navigate = useNavigate();
-  const [htmlStr, setHtmlStr] = useState('');
   const [info, setInfo] = useState<IPostInfo>({
     memberId: 0, // 사용자 memberID
     category: '',
     title: '',
-    content: '', // onSubmit
+    content: '',
     genderTag: {
-      genderTagId: 0,
+      genderTagId: 3,
     },
     foodTag: {
-      foodTagId: 0,
+      foodTagId: null,
     },
     mate: {
       mateNum: 0,
     },
   });
-  console.log(htmlStr);
+  console.log(info);
 
   const postSubmitInfo = () => {
     // axios
@@ -90,27 +91,42 @@ const PostBoard = () => {
     const checkboxes = document.getElementsByName('gender');
     for (let i = 0; i < checkboxes.length; i++) {
       if (checkboxes[i] !== e.target) {
-        checkboxes[i].checked = false;
+        (checkboxes[i] as HTMLInputElement).checked = false;
       }
     }
     const genderTag = getCheckedValue(e);
-    setInfo({ ...info, genderTag: { genderTagID: Number(genderTag) } });
+    setInfo({ ...info, genderTag: { genderTagId: Number(genderTag) } });
   };
 
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
     const checkboxes = document.getElementsByName('food');
     for (let i = 0; i < checkboxes.length; i++) {
       if (checkboxes[i] !== e.target) {
-        checkboxes[i].checked = false;
+        (checkboxes[i] as HTMLInputElement).checked = false;
       }
     }
     const foodTag = getCheckedValue(e);
-    setInfo({ ...info, foodTag: { foodTagID: Number(foodTag) } });
+    setInfo({ ...info, foodTag: { foodTagId: Number(foodTag) } });
   };
 
   const handleSubmitInfo = () => {
-    setInfo({ ...info, content: htmlStr });
-    postSubmitInfo();
+    if (!info.category) {
+      alert('카테고리를 체크해주세요.');
+    } else if (!info.title) {
+      alert('제목을 작성해주세요.');
+    } else if (!info.content) {
+      alert('내용을 작성해주세요.');
+    } else if (!info.mate.mateNum) {
+      alert('원하는 인원 수를 작성해주세요.');
+    } else {
+      if (!info.genderTag.genderTagId) {
+        setInfo({ ...info, genderTag: { genderTagId: 3 } });
+      }
+      if (!info.foodTag.foodTagId) {
+        setInfo({ ...info, foodTag: { foodTagId: null } });
+      }
+      postSubmitInfo();
+    }
   };
 
   return (
@@ -121,22 +137,14 @@ const PostBoard = () => {
           <FontAwesomeIcon icon={faXmark} />
         </CloseButton>
       </PostBoardTop>
-      <form onSubmit={() => handleSubmitInfo()}>
+      <form>
         <InfoDiv>
           <InfoTitle>카테고리 *</InfoTitle>
           <RadioFlex>
-            <InputRadio
-              type="category"
-              value="EATING"
-              handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleCategoryType(e)}
-            >
+            <InputRadio type="category" value="EATING" handleGetValue={handleCategoryType}>
               밥 먹기
             </InputRadio>
-            <InputRadio
-              type="category"
-              value="SHOPPING"
-              handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleCategoryType(e)}
-            >
+            <InputRadio type="category" value="SHOPPING" handleGetValue={handleCategoryType}>
               장 보기
             </InputRadio>
           </RadioFlex>
@@ -152,18 +160,13 @@ const PostBoard = () => {
         </InfoDiv>
         <InfoDiv>
           <InfoTitle>내용 *</InfoTitle>
-          <TextEditor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
+          <TextEditor info={info} setInfo={setInfo} />
         </InfoDiv>
         <InfoDiv>
           <InfoTitle>성별 태그</InfoTitle>
           <TagFlex>
             {genderTags.map((tag) => (
-              <TagCheckbox
-                key={tag.id}
-                type="gender"
-                value={tag.id}
-                handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleGenderTag(e)}
-              >
+              <TagCheckbox key={tag.id} type="gender" value={tag.id} handleGetValue={handleGenderTag}>
                 {tag.text}
               </TagCheckbox>
             ))}
@@ -174,12 +177,7 @@ const PostBoard = () => {
             <InfoTitle>음식 태그</InfoTitle>
             <TagFlex>
               {foodTags.map((tag) => (
-                <TagCheckbox
-                  key={tag.id}
-                  type="food"
-                  value={tag.id}
-                  handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleFoodTag(e)}
-                >
+                <TagCheckbox key={tag.id} type="food" value={tag.id} handleGetValue={handleFoodTag}>
                   {tag.text}
                 </TagCheckbox>
               ))}
@@ -197,7 +195,9 @@ const PostBoard = () => {
             />
           </div>
         </InfoDiv>
-        <SubmitButton type="submit">등록</SubmitButton>
+        <SubmitButton type="button" onClick={() => handleSubmitInfo()}>
+          등록
+        </SubmitButton>
       </form>
     </PostBoardContainer>
   );
