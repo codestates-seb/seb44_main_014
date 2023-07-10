@@ -8,11 +8,11 @@ spring:
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create  # (1) 스키마 자동 생성
-    show-sql: true      # (2) SQL 쿼리 출력
+      ddl-auto: create  # 스키마 자동 생성
+    show-sql: true      # SQL 쿼리 출력
     properties:
       hibernate:
-        format_sql: true  # (3) SQL pretty print
+        format_sql: true  # SQL pretty print
 
   sql:
     init:
@@ -26,8 +26,25 @@ logging:
           jpa: DEBUG
 server:
   servlet:
+    multipart:    # 파일 크기 지정
+      max-file-size: 20MB
+      max-request-size: 20MB
     encoding:
       force-response: true
+
+#AWS S3
+#cloud:
+#  aws:
+#    credentials:
+#      accessKey: ${AWS_ACCESS_KEY}
+#      secretKey: ${AWS_SECRET_ACCESS_KEY}
+#    s3:
+#      bucket: 버킷 이름 # 버킷 이름 수정
+#    stack:
+#      auto-: false
+#    region:
+#      static: ap-northeast-2
+
 mail:
   address:
     admin: admin@gmail.com    # jwt 사용할때 필요

@@ -35,7 +35,7 @@ public class PostDto {
         private String image;
 
         /** 태그 하나만 등록 가능 (선택)
-         *  - default : 상관없음
+         *  - default : 남녀노소
          */
         private PostTagDto.GenderTagPost genderTag;
 

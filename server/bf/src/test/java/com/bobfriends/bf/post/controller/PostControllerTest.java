@@ -8,11 +8,13 @@ import com.bobfriends.bf.post.service.PostService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,6 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -31,8 +35,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -229,6 +232,74 @@ public class PostControllerTest {
                                         fieldWithPath("comments[].createdAt").type(JsonFieldType.STRING).description("댓글 생성 날짜")
                                 )
                         )
+                ));
+    }
+
+
+    @Test
+    @DisplayName("게시물 검색 테스트")
+    public void searchPostTest() throws Exception {
+
+        // given
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("page", "1");
+        queryParams.add("keyword", "제목");
+
+        Page<Post> posts = StubData.MockPost.getMultiPageResultPost();
+        List<PostDto.Response> responses = StubData.MockPost.getMultiResponseBody();
+
+        given(postService.searchPosts(Mockito.any(),Mockito.anyString(),Mockito.eq(null),Mockito.eq(null),Mockito.eq(null))).willReturn(posts);
+        given(postMapper.PostsToPostResponseDtos(Mockito.anyList())).willReturn(responses);
+
+        // ,Mockito.anyString(),Mockito.anyString(),Mockito.anyLong(),Mockito.anyLong()
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/board/search")
+                        .params(queryParams)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions.andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("search-post",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestParameters(
+                                parameterWithName("page").description("페이지 번호").optional(),
+                                parameterWithName("keyword").description("검색어").optional(),
+                                parameterWithName("category").description("카테고리: EATING(밥먹기), SHOPPING(장보기)").optional(),
+                                parameterWithName("genderTag").description("성별 태그 (1, 2, 3)").optional(),
+                                parameterWithName("foodTag").description("음식 태그 (1, 2, 3, 4, 5)").optional()
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data").type(JsonFieldType.ARRAY).description("게시글 목록"),
+                                        fieldWithPath("data[].postId").type(JsonFieldType.NUMBER).description("게시글의 식별자"),
+                                        fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("게시글을 작성한 작성자의 식별자"),
+                                        fieldWithPath("data[].name").type(JsonFieldType.STRING).description("게시글 작성자의 이름"),
+                                        fieldWithPath("data[].avgStarRate").type(JsonFieldType.NUMBER).description("작성자의 별점"),
+                                        fieldWithPath("data[].viewCount").type(JsonFieldType.NUMBER).description("게시글의 조회수"),
+                                        fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("게시글의 댓글수"),
+                                        fieldWithPath("data[].status").type(JsonFieldType.STRING).description("모집 상태: RECRUITING(모집중), COMPLETE(모집완료), END(모임종료)"),
+                                        fieldWithPath("data[].category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
+                                        fieldWithPath("data[].title").type(JsonFieldType.STRING).description("게시글 제목"),
+                                        fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜"),
+                                        fieldWithPath("data[].image").type(JsonFieldType.STRING).description("게시글 이미지"),
+
+                                        fieldWithPath("data[].postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에서 저장한 태그의 식별자"),
+                                        fieldWithPath("data[].postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),
+                                        fieldWithPath("data[].postTag.genderTagId").type(JsonFieldType.NUMBER).description("성별 태그의 식별자"),
+
+                                        fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이지 정보"),
+                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("페이지 번호"),
+                                        fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 질문 수"),
+                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                                )
+                        )
+
                 ));
     }
 

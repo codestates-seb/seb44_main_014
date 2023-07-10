@@ -52,9 +52,7 @@ public class PostService {
     }
 
 
-    /**
-     * 게시글 수정
-     */
+    /** 게시글 수정 **/
     public Post updatePost(long postId, PostDto.Patch patch){
 
         // TODO : 로그인한 회원이 작성자인지 확인 (JWT)
@@ -91,10 +89,7 @@ public class PostService {
     }
 
 
-    /**
-     * 질문 상세 조회
-     * - 조회수 1 증가 +
-     */
+    /** 질문 상세 조회 **/
     public Post findPost(long postId){
 
         Post post = findVerifiedPost(postId);
@@ -104,20 +99,12 @@ public class PostService {
     }
 
 
-    /**
-     * 전체 질문 검색
-     * - 카테고리로 분류
-     * - 페이지 네이션
-     */
-
+    /** 전체 질문 검색 **/
     public Page<Post> searchPosts(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag){
         return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
     }
 
-    /**
-     * 질문 삭제
-     * - 질문 관련 답글, 모임 등 삭제
-     */
+    /** 질문 삭제 **/
     public void deletePost(long postId){
 
         Post findPost = findVerifiedPost(postId);
