@@ -33,17 +33,17 @@ server:
       force-response: true
 
 #AWS S3
-#cloud:
-#  aws:
-#    credentials:
-#      accessKey: ${AWS_ACCESS_KEY}
-#      secretKey: ${AWS_SECRET_ACCESS_KEY}
-#    s3:
-#      bucket: 버킷 이름 # 버킷 이름 수정
-#    stack:
-#      auto-: false
-#    region:
-#      static: ap-northeast-2
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: bobimage # 버킷 이름 수정
+    stack:
+      auto-: false
+    region:
+      static: ap-northeast-2
 
 mail:
   address:
