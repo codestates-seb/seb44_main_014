@@ -1,7 +1,9 @@
 package com.bobfriends.bf.member.mapper;
 
+import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.post.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -25,13 +27,16 @@ public interface MemberMapper {
         return member;
     }
 
-    Member memberPatchDtoToMember(MemberDto.Patch requestBody);
+    MemberDto.PatchResponse memberPatchDtoToMember(Member member);
 
-    @Mapping(source = "member.memberId", target = "memberId")
-    @Mapping(source = "member.name", target = "name")
-    @Mapping(source = "member.avgStarRate", target = "avgStarRate")
-    @Mapping(source = "member.gender", target = "gender")
+    MemberDto.PatchInfoResponse memberPatchInfoToMember(Member member);
+
+
     MemberDto.Response memberToMemberResponseDto(Member member);
+
+    List<MemberDto.MemberPostResponseDto> memberPostResponseDtos(List<Post> memberPosts);
+
+    List<MemberDto.MemberCommentResponseDto> memberCommentResponseDtos(List<Comment> memberComments);
 
     MemberDto.DetailResponse memberToMemberDetailResponseDto(Member member);
 

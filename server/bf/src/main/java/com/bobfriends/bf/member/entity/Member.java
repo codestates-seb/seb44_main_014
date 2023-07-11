@@ -57,11 +57,11 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<MemberTag> memberTags = new ArrayList<>();
+    @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
+    private MemberTag memberTag;
 
-    public List<MemberTag> getMemberTags() {
-        return memberTags;
+    public MemberTag getMemberTag() {
+        return memberTag;
     }
 
     public enum genderStatus {

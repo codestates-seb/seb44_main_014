@@ -10,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberDto {
@@ -46,7 +47,11 @@ public class MemberDto {
 
         private String location;
 
+        private String image;
+
         private boolean eatStatus;
+
+        private MemberTagDto.FoodTagMember foodTag;
 
         public Patch addMemberId(Long memberId) {
             Assert.notNull(memberId, "member id must not be null.");
@@ -56,7 +61,50 @@ public class MemberDto {
         }
     }
 
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PatchResponse {
+        private long memberId;
+        private String image;
+        private String name;
+        private String password;
+        private String location;
+        private MemberTag memberTag;
+    }
+
     @Getter
+    @AllArgsConstructor
+    public static class PatchInfo {
+        private long memberId;
+        private String name;
+        private String image;
+        private Member.genderStatus gender;
+        private String location;
+        private MemberTagDto.FoodTagMember foodTag;
+
+        public PatchInfo addMemberId(Long memberId){
+            Assert.notNull(memberId, "member id must not be null.");
+            this.memberId = memberId;
+
+            return this;
+        }
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PatchInfoResponse {
+        private long memberId;
+        private String name;
+        private Member.genderStatus gender;
+        private String location;
+        private String image;
+        private MemberTag memberTag;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class Response {
         private long memberId;
         private String image;
@@ -66,24 +114,7 @@ public class MemberDto {
         private String location;
         private boolean eatStatus;
         private float avgStarRate;
-        private List<MemberTag> memberTagList;
-
-        public Response(long memberId, String image, String name, String email,
-                        Member.genderStatus gender, String location,
-                        boolean eatStatus, float avgStarRate) {
-            this.memberId = memberId;
-            this.image = image;
-            this.name = name;
-            this.email = email;
-            this.gender = gender;
-            this.location = location;
-            this.eatStatus = eatStatus;
-            this.avgStarRate = avgStarRate;
-        }
-
-        public void updateMemberTagList(List<MemberTag> memberTagList) {
-            this.memberTagList = memberTagList;
-        }
+        private MemberTag memberTag;
     }
 
 
@@ -98,5 +129,27 @@ public class MemberDto {
         private Member.genderStatus gender;
         private float avgStarRate;
         private boolean eatStatus;
+    }
+
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemberPostResponseDto {
+        private long memberId;
+        private long postId;
+        private String title;
+        private String content;
+        private LocalDateTime createdAt;
+        private com.bobfriends.bf.post.entity.Post.recruitStatus status;
+    }
+
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemberCommentResponseDto {
+        private long memberId;
+        private long commentId;
+        private String content;
+        private String postTitle;
     }
 }
