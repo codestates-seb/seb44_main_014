@@ -85,7 +85,7 @@ const Mypage = () => {
       <UserContainer className={'PostsContainer'}>
         <UserContentsContainer>
           <UserContentsTitle>작성한 댓글</UserContentsTitle>
-          <Link to="/users/mypage/:memberId/questions">
+          <Link to="/users/mypage/:memberId/comments">
             <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
           </Link>
         </UserContentsContainer>
