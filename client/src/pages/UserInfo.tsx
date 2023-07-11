@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
-import Button from '../components/buttons/Button.tsx';
-import InputRadio from '../components/buttons/InputRadio.tsx';
-import TagCheckbox from '../components/buttons/TagCheckbox.tsx';
+import Button from '../components/UI/Button.tsx';
+import InputRadio from '../components/UI/InputRadio.tsx';
+import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 import { useState } from 'react';
 
 // login, signup, userinfo에서 모두 버튼을 누르면 다 validate해야하는데 하나의 컴포넌트로 묶을 수는 없을까?? 뭔가 form, input같은걸로 태그달면 할 수 있을 것 같은데
