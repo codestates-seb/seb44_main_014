@@ -1,5 +1,9 @@
 package com.bobfriends.bf.upload.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,13 +22,18 @@ import java.util.UUID;
 @Component
 public class S3Uploader {
 
-    //private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3Client;
 
-    //@Value("${cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+
+    public String[] upload(MultipartFile file) throws IOException {
+        return new String[]{uploadFiles(file, "bob-friends"), bucket};
+    }
+
     /** MultipartFile을 전달받아 File로 전환한 후 S3에 업로드 **/
-    /*
+
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
 
         File uploadFile = convert(multipartFile)
@@ -32,9 +41,9 @@ public class S3Uploader {
         return upload(uploadFile, dirName);
     }
 
-     */
 
-    /*
+
+
     private String upload(File uploadFile, String dirName) {
         String fileName = dirName + "/" + UUID.randomUUID() + "." + uploadFile.getName();
 
@@ -47,21 +56,21 @@ public class S3Uploader {
         return uploadImageUrl;
     }
 
-     */
+
 
     /** S3 버킷에 이미지 업로드 **/
-    /*
+
     private String putS3(File uploadFile, String fileName) {
 
         amazonS3Client.putObject(
                 new PutObjectRequest(bucket, fileName, uploadFile)
                         // PublicRead 권한으로 업로드됨
-                        .withCannedAcl(CannedAcessControlList.PublicRead)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
         );
 
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
-     */
+
 
 
     /** 로컬에 있는 이미지 삭제 **/
@@ -78,7 +87,8 @@ public class S3Uploader {
     private Optional<File> convert (MultipartFile file) throws IOException {
 
         // 작업 디렉토리 경로/파일 원본 이름
-        File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
+        // System.getProperty("user.dir") + "/" +
+        File convertFile = new File(file.getOriginalFilename());
 
         // 파일이 존재하지 않는 경우 새로운 파일을 생성
         if(convertFile.createNewFile()) {
