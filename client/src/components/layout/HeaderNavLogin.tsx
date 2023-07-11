@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faTableList, faUser, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faTableList, faUser, faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
-const HeaderNavLogout = () => {
+const HeaderNavLogin = () => {
   return (
     <HeaderNavContainer>
       <HeaderNavContents>
@@ -17,11 +17,11 @@ const HeaderNavLogout = () => {
         </HeaderNavItems>
         <HeaderNavItems>
           <HeaderNavIcons icon={faUser} />
-          <Link to="/users/mypage/:memberId">마이페이지</Link>
+          <Link to="/users/signup">회원가입</Link>
         </HeaderNavItems>
         <HeaderNavItems>
-          <HeaderNavIcons icon={faArrowRightFromBracket} />
-          <Link to="/">로그아웃</Link>
+          <HeaderNavIcons icon={faArrowRightToBracket} />
+          <Link to="/login">로그인</Link>
         </HeaderNavItems>
       </HeaderNavContents>
     </HeaderNavContainer>
@@ -68,4 +68,4 @@ const HeaderNavIcons = styled(FontAwesomeIcon)`
   color: #000;
 `;
 
-export default HeaderNavLogout;
+export default HeaderNavLogin;

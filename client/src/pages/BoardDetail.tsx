@@ -107,7 +107,7 @@ const BoardDetail = () => {
     //   });
   };
 
-  const deletepost = () => {
+  const deletePost = () => {
     // axios
     //   .delete(`${process.env.REACT_APP_API_URL}/board/posts/${postId}`)
     //   .then((res) => {
@@ -130,7 +130,7 @@ const BoardDetail = () => {
             {userId === member.memberId && (
               <ModifyButtons>
                 <Link to={`/board/posts/${postId}/edit`}>수정</Link>
-                <button type="button" onClick={() => deletepost()}>
+                <button type="button" onClick={() => deletePost()}>
                   삭제
                 </button>
               </ModifyButtons>

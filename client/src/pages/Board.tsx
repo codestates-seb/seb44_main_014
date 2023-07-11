@@ -8,7 +8,9 @@ import { faMagnifyingGlass, faUtensils, faWheatAwn } from '@fortawesome/free-sol
 import BoardList from '../components/Board/BoardList.tsx';
 // DUMMY DATA
 import { BOARD_LISTS } from '../data/boardDummyData.ts';
+import { GENDER_TAGS, FOOD_TAGS } from '../constant/constant.ts';
 
+//네이밍 수정 후 디렉토리 분리 관리
 export interface IListData {
   questionId: number;
   memberId: number;
@@ -109,19 +111,6 @@ const Board = () => {
   //     });
   // }
 
-  const genderTags = [
-    { id: 1, text: '# 여자만' },
-    { id: 2, text: '# 남자만' },
-    { id: 3, text: '# 남녀노소' },
-  ];
-  const foodTags = [
-    { id: 1, text: '# 한식' },
-    { id: 2, text: '# 중식' },
-    { id: 3, text: '# 양식' },
-    { id: 4, text: '# 일식' },
-    { id: 5, text: '# 기타' },
-  ];
-
   const handleSortByDate = () => {
     setLists(
       lists.sort((a, b) => {
@@ -180,7 +169,7 @@ const Board = () => {
           </ButtonSearch>
           <TagsArea>
             <TagsRow>
-              {genderTags.map((tag) => (
+              {GENDER_TAGS.map((tag) => (
                 <button
                   key={tag.id}
                   className={activeGender === tag.id ? 'active' : ''}
@@ -196,7 +185,7 @@ const Board = () => {
             </TagsRow>
             {tabLeft && (
               <TagsRow>
-                {foodTags.map((tag) => (
+                {FOOD_TAGS.map((tag) => (
                   <button
                     key={tag.id}
                     className={activeFood === tag.id ? 'active' : ''}
