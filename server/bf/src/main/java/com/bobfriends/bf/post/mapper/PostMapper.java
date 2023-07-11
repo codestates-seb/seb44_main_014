@@ -67,7 +67,6 @@ public interface PostMapper {
             postTag.setFoodTag(foodTag);
         }
 
-
         // Mate 생성
         Mate mate = new Mate();
         mate.setMateNum(requestBody.getMate().getMateNum());

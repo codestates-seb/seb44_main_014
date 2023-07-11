@@ -54,7 +54,7 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 
 	// aws S3
-	//implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	// 파일 업로드
 	implementation 'commons-io:commons-io:2.6'
