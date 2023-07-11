@@ -2,66 +2,67 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 // components
-import BoardComment from '../components/Board/BoardComment.tsx';
-import WriterProfile from '../components/Board/WriterProfile.tsx';
-import BoardDetailHeader from '../components/Board/BoardDetailHeader.tsx';
+import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
+import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
+import BoardDetailHeader from '../components/Board/BoardDetail/BoardDetailHeader.tsx';
 // DUMMY DATA
 import { BOARD_DETAIL } from '../data/boardDummyData.ts';
+import { IBoardDetailData } from '../interface/board.tsx';
 
-interface IMateMember {
-  mateMemberId: number;
-  name: string;
-}
+// interface IMateMember {
+//   mateMemberId: number;
+//   name: string;
+// }
 
-export interface IComments {
-  commentId: number;
-  content: string;
-  memberId: number;
-  avgStarRate: number;
-  name: string;
-  createdAt: string;
-}
+// export interface IComments {
+//   commentId: number;
+//   content: string;
+//   memberId: number;
+//   avgStarRate: number;
+//   name: string;
+//   createdAt: string;
+// }
 
-export interface IDetailData {
-  title: string;
-  content: string;
-  image?: string;
-  createdAt: string;
-  viewCount: number;
-  commentCount: number;
-  status: string;
-  category: string;
-  member: {
-    memberId: number;
-    image: string;
-    name: string;
-    gender: string;
-    avgStarRate: number;
-    eatStatus: boolean;
-  };
-  postTag: {
-    postTagId: number;
-    foodTagId: number;
-    genderTagId: number;
-  };
-  genderTag: {
-    genderTagId: number;
-  };
-  foodTag: {
-    foodTagId: number;
-  };
-  mate: {
-    findNum: number;
-    mateNum: number;
-  };
-  mateMembers: IMateMember[];
-  comments: IComments[];
-}
+// export interface IDetailData {
+//   title: string;
+//   content: string;
+//   image?: string;
+//   createdAt: string;
+//   viewCount: number;
+//   commentCount: number;
+//   status: string;
+//   category: string;
+//   member: {
+//     memberId: number;
+//     image: string;
+//     name: string;
+//     gender: string;
+//     avgStarRate: number;
+//     eatStatus: boolean;
+//   };
+//   postTag: {
+//     postTagId: number;
+//     foodTagId: number;
+//     genderTagId: number;
+//   };
+//   genderTag: {
+//     genderTagId: number;
+//   };
+//   foodTag: {
+//     foodTagId: number;
+//   };
+//   mate: {
+//     findNum: number;
+//     mateNum: number;
+//   };
+//   mateMembers: IMateMember[];
+//   comments: IComments[];
+// }
 
 const BoardDetail = () => {
   const params = useParams();
   const postId = Number(params.postId);
-  const [detailData, setDetailData] = useState<IDetailData>(BOARD_DETAIL);
+  const [detailData, setDetailData] = useState<IBoardDetailData>(BOARD_DETAIL);
 
   const { content, mate, mateMembers, member, comments } = detailData;
   // const [updateMate, setUpdateMate] = useState({

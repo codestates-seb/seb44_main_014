@@ -10,24 +10,7 @@ import TextEditor from '../components/TextEditor/TextEditor.tsx';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../constant/constant.ts';
-
-type Nullable<T> = T | null;
-
-export interface IPostInfo {
-  memberId: number;
-  category: string;
-  title: string;
-  content: string;
-  genderTag: {
-    genderTagId: Nullable<number>;
-  };
-  foodTag: {
-    foodTagId?: number;
-  } | null;
-  mate: {
-    mateNum: Nullable<number>;
-  };
-}
+import { IPostInfo } from '../interface/board.tsx';
 
 const PostBoard = () => {
   const navigate = useNavigate();
