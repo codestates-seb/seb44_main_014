@@ -23,6 +23,10 @@ repositories {
 	mavenCentral()
 }
 
+jar {
+	enabled = false
+}
+
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
 }
@@ -42,6 +46,7 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 
 	implementation 'com.google.code.gson:gson:2.9.0'
+	implementation 'mysql:mysql-connector-java'
 
 	// == 스프링 부트 3.0 미만 ==
 	// QueryDSL JPA
