@@ -29,7 +29,7 @@ export interface IFilterInfo {
 }
 
 // Page BoardDetail - mate info
-interface IMateMember {
+export interface IMateMember {
   mateMemberId: number;
   name: string;
 }
