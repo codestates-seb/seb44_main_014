@@ -16,7 +16,7 @@ public class MemberTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_tag_id")
     private Long memberTagId;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
     @ManyToOne
