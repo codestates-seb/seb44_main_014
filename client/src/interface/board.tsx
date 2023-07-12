@@ -2,7 +2,7 @@ export type Nullable<T> = T | null;
 
 // Page Board - borad list info
 export interface IBoardList {
-  questionId: number;
+  postId: number;
   memberId: number;
   name: string;
   avgStarRate: number;
@@ -13,10 +13,9 @@ export interface IBoardList {
   title: string;
   createdAt: string;
   image?: string;
-  genderTag: {
+  postTag: {
+    postTagId: number;
     genderTagId: number;
-  };
-  foodTag: {
     foodTagId: number;
   };
 }
@@ -67,12 +66,6 @@ export interface IBoardDetailData {
     foodTagId: number;
     genderTagId: number;
   };
-  genderTag: {
-    genderTagId: number;
-  };
-  foodTag: {
-    foodTagId: number;
-  };
   mate: {
     findNum: number;
     mateNum: number;
@@ -88,8 +81,8 @@ export interface IPostInfo {
   title: string;
   content: string;
   genderTag: {
-    genderTagId: Nullable<number>;
-  };
+    genderTagId?: number;
+  } | null;
   foodTag: {
     foodTagId?: number;
   } | null;

@@ -17,9 +17,7 @@ const PostForm = () => {
     category: '',
     title: '',
     content: '',
-    genderTag: {
-      genderTagId: 0,
-    },
+    genderTag: null,
     foodTag: null,
     mate: {
       mateNum: 0,
@@ -33,7 +31,7 @@ const PostForm = () => {
     //   .post(`${process.env.REACT_APP_API_URL}/boardpost`, info)
     //   .then((res) => {
     //     console.log(res);
-    //     navigate(res.location);
+    //     navigate(res.Location);
     //   })
     //   .catch((err) => {
     //     console.log(err);
@@ -84,8 +82,8 @@ const PostForm = () => {
     } else if (!info.mate.mateNum) {
       alert('원하는 인원 수를 작성해주세요.');
     } else {
-      if (!info.genderTag.genderTagId) {
-        setInfo({ ...info, genderTag: { genderTagId: 3 } });
+      if (!info.genderTag || info.genderTag.genderTagId === 0) {
+        setInfo({ ...info, genderTag: null });
       }
       if (!info.foodTag || info.foodTag.foodTagId === 0) {
         setInfo({ ...info, foodTag: null });

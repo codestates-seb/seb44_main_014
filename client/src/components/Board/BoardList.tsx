@@ -15,23 +15,24 @@ interface IStyledProps {
 }
 
 const BoardList = ({ list }: BoardListProps) => {
+  const { genderTagId, foodTagId } = list.postTag;
   let genderTag: string;
-  if (list.genderTag.genderTagId === 1) {
+  if (genderTagId === 1) {
     genderTag = '# 여자만';
-  } else if (list.genderTag.genderTagId === 2) {
+  } else if (genderTagId === 2) {
     genderTag = '# 남자만';
   } else {
     genderTag = '# 남녀노소';
   }
 
   let foodTag: string;
-  if (list.foodTag.foodTagId === 1) {
+  if (foodTagId === 1) {
     foodTag = '# 한식';
-  } else if (list.foodTag.foodTagId === 2) {
+  } else if (foodTagId === 2) {
     foodTag = '# 중식';
-  } else if (list.foodTag.foodTagId === 3) {
+  } else if (foodTagId === 3) {
     foodTag = '# 양식';
-  } else if (list.foodTag.foodTagId === 4) {
+  } else if (foodTagId === 4) {
     foodTag = '# 일식';
   } else {
     foodTag = '# 기타';
@@ -50,7 +51,7 @@ const BoardList = ({ list }: BoardListProps) => {
 
   return (
     <ListContainer>
-      <Link to={`/board/posts/${list.questionId}`}>
+      <Link to={`/board/posts/${list.postId}`}>
         <ListTitle>
           <ListH3>{list.title}</ListH3>
           <ListStatus $statusColor={statusColor}>{list.status}</ListStatus>
