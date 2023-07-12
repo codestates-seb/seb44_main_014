@@ -60,6 +60,9 @@ public class Member extends Auditable {
     @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
     private MemberTag memberTag;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
     public MemberTag getMemberTag() {
         return memberTag;
     }
