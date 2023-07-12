@@ -1,8 +1,6 @@
 package com.bobfriends.bf.member.dto;
 
-import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.member.entity.Member;
-import com.bobfriends.bf.member.entity.MemberTag;
 import lombok.*;
 import org.springframework.util.Assert;
 
@@ -11,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class MemberDto {
     @Getter
@@ -34,7 +31,7 @@ public class MemberDto {
 
     }
 
-    @Getter
+    @Getter @Setter
     @AllArgsConstructor
     public static class Patch {
 
@@ -70,11 +67,12 @@ public class MemberDto {
         private String name;
         private String password;
         private String location;
-        private MemberTag memberTag;
+        private MemberTagDto.Response memberTag;
     }
 
-    @Getter
+    @Getter @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class PatchInfo {
         private long memberId;
         private String name;
@@ -100,11 +98,12 @@ public class MemberDto {
         private Member.genderStatus gender;
         private String location;
         private String image;
-        private MemberTag memberTag;
+        private MemberTagDto.Response memberTag;
     }
 
-    @Getter
+    @Getter @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Response {
         private long memberId;
         private String image;
@@ -114,7 +113,7 @@ public class MemberDto {
         private String location;
         private boolean eatStatus;
         private float avgStarRate;
-        private MemberTag memberTag;
+        private MemberTagDto.Response memberTag;
     }
 
 

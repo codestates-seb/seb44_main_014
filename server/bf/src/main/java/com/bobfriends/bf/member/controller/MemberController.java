@@ -1,13 +1,9 @@
 package com.bobfriends.bf.member.controller;
 
-import com.bobfriends.bf.comment.entity.Comment;
-import com.bobfriends.bf.dto.SingleResponseDto;
-import com.bobfriends.bf.mate.entity.Mate;
 import com.bobfriends.bf.member.dto.LoginPostDto;
 import com.bobfriends.bf.member.dto.LoginResponseDto;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
-import com.bobfriends.bf.member.entity.MemberTag;
 import com.bobfriends.bf.member.mapper.MemberMapper;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import com.bobfriends.bf.member.service.MemberService;
@@ -87,15 +83,15 @@ public class MemberController {
 
         Member updateInfo = memberService.updateInfo(patchInfo);
 
-        return new ResponseEntity<>(memberMapper.memberPatchInfoToMember(updateInfo), HttpStatus.OK);
+        return new ResponseEntity<>(memberMapper.memberToMemberPatchInfoResponse(updateInfo), HttpStatus.OK);
     }
 
     @GetMapping("/mypage/{member-id}") // 회원 조회
     public ResponseEntity<MemberDto.Response> getMember (@Positive @PathVariable("member-id") long memberId){
+
         Member member = memberService.findMember(memberId);
 
-        MemberDto.Response response = memberMapper.memberToMemberResponseDto(member);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
     @PatchMapping("/mypage/{member-id}/edit") // 회원 수정
@@ -105,7 +101,7 @@ public class MemberController {
 
         Member updateMemer = memberService.updateMember(memberId, patch);
 
-        return new ResponseEntity<>(memberMapper.memberPatchDtoToMember(updateMemer),HttpStatus.OK);
+        return new ResponseEntity<>(memberMapper.memberToMemberPatchResponseDto(updateMemer),HttpStatus.OK);
 
     }
 
@@ -125,15 +121,24 @@ public class MemberController {
     }
 
     @GetMapping("/mypage/{member-id}/comments") // 작성한 댓글 조회
-    public ResponseEntity<List<MemberDto.MemberCommentResponseDto>> getMyComment(@PathVariable("member-id") Long memberId) {
+    public ResponseEntity<List<MemberDto.MemberCommentResponseDto>> getMyComment(@PathVariable("member-id") long memberId) {
         List<MemberDto.MemberCommentResponseDto> memberCommentResponseDtoList = memberService.findMyComments();
         return ResponseEntity.ok(memberCommentResponseDtoList);
     }
-
     @PatchMapping("/mypage/{member-id}") // eatStatus 수정
-    public boolean updateEatStatus (@RequestBody boolean newStatus) {
-        eatStatus = newStatus;
-        return eatStatus;
+    public ResponseEntity<?> updateEatStatus(@PathVariable ("member-id") long memberId,
+                                             @RequestParam boolean eatStatus) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+
+        if (optionalMember.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Member member = optionalMember.get();
+        member.setEatStatus(eatStatus);
+        memberRepository.save(member);
+
+        return ResponseEntity.ok().build();
     }
 
 }
