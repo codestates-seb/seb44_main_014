@@ -24,34 +24,23 @@ public class MateMemberService {
 
     /** Mate create **/
     public MateMember createMateMember(MateMember mateMember, MateMemberDto.PostMateMember post){
-        // TODO : 같은 멤버는 다시 못 들어오게 해야함!!!!
         // 존재하는 회원인지 검증
         Member findMember = memberService.findVerifiedMember(post.getMemberId());
 
+        // postId로 등록한 mateId를 찾음
+        // mateId에 mateMember를 등록
         Post post1 = postService.findVerifiedPost(mateMember.getMate().getPost().getPostId());
         mateMember.setMate(post1.getMate());
 
         Mate mate = mateService.findVerifiedPost(mateMember.getMate().getMateId());
 
-        if(findMember.getMemberId()== ;){
+        // TODO : 같은 멤버는 다시 못 들어오게 해야함!!!!
+        if(post.getMemberId()== /**같은 mate에 이미 등록돼있는 memberId**/){
             throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MATEMEMBER);
         }
-        // TODO : postId로 등록한 mateId를 찾음
-        // TODO : mateId에 mateMember를 등록함
-        // findVerifiedpost를 찾고(여기서 return post를해주니까) 이 post를 mate에 넣고
-        // 구한 mateId를 memberMember에 넣으면 됨
 
-//        Mate mate = new Mate();
-//        Post post1 = postService.findVerifiedPost(mate.getPost().getPostId());
-//        mate.setPost(post1);
-//        mateMember.setMate(mate);
-
-//         Todo : findNum은 matememebers size로 하면 됨
-        //mate뽑아서 mate.matemembers로 가서 size구함
         int findNum = mate.getMateMembers().size()+1;
 
-//         todo : findNum==mateNum이면 recruitStatus를 COMPLETE로 변경
-//         todo : findNum>mateNum일 떄 예외코드를 등록하고 비즈니스 exception 발생시킴
         if(mate.getMateNum()==findNum) post1.setStatus(COMPLETE);
         if(mate.getMateNum()<findNum){
             throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MATEMEMBER);
