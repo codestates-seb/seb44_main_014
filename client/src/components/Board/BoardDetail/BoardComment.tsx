@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import Comment from './Comment.tsx';
 
-import { IComments } from '../../pages/BoardDetail.tsx';
+import { IComments } from '../../../interface/board.tsx';
 
 type CommentInfoProps = {
   commentInfo: IComments[];

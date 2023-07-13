@@ -5,27 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 // import axios from 'axios';
 
-import InputRadio from '../components/buttons/InputRadio.tsx';
+import InputRadio from '../components/UI/InputRadio.tsx';
 import TextEditor from '../components/TextEditor/TextEditor.tsx';
-import TagCheckbox from '../components/buttons/TagCheckbox.tsx';
+import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 
-type Nullable<T> = T | null;
-
-export interface IPostInfo {
-  memberId: number;
-  category: string;
-  title: string;
-  content: string;
-  genderTag: {
-    genderTagId: Nullable<number>;
-  };
-  foodTag: {
-    foodTagId: Nullable<number>;
-  };
-  mate: {
-    mateNum: Nullable<number>;
-  };
-}
+import { GENDER_TAGS, FOOD_TAGS } from '../constant/constant.ts';
+import { IPostInfo } from '../interface/board.tsx';
 
 const PostBoard = () => {
   const navigate = useNavigate();
@@ -35,11 +20,9 @@ const PostBoard = () => {
     title: '',
     content: '',
     genderTag: {
-      genderTagId: 3,
+      genderTagId: 0,
     },
-    foodTag: {
-      foodTagId: null,
-    },
+    foodTag: null,
     mate: {
       mateNum: 0,
     },
@@ -58,20 +41,6 @@ const PostBoard = () => {
     //   });
   };
 
-  const genderTags = [
-    { id: 1, text: '# 여자만' },
-    { id: 2, text: '# 남자만' },
-    { id: 3, text: '# 남녀노소' },
-  ];
-
-  const foodTags = [
-    { id: 1, text: '# 한식' },
-    { id: 2, text: '# 중식' },
-    { id: 3, text: '# 양식' },
-    { id: 4, text: '# 일식' },
-    { id: 5, text: '# 기타' },
-  ];
-
   const getCheckedValue = (e: React.MouseEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     if (target.checked) {
@@ -84,7 +53,7 @@ const PostBoard = () => {
 
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {
     const category = getCheckedValue(e);
-    setInfo({ ...info, category: category, foodTag: { foodTagID: 0 } });
+    setInfo({ ...info, category: category, foodTag: null });
   };
 
   const handleGenderTag = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -122,8 +91,8 @@ const PostBoard = () => {
       if (!info.genderTag.genderTagId) {
         setInfo({ ...info, genderTag: { genderTagId: 3 } });
       }
-      if (!info.foodTag.foodTagId) {
-        setInfo({ ...info, foodTag: { foodTagId: null } });
+      if (!info.foodTag || info.foodTag.foodTagId === 0) {
+        setInfo({ ...info, foodTag: null });
       }
       postSubmitInfo();
     }
@@ -165,7 +134,7 @@ const PostBoard = () => {
         <InfoDiv>
           <InfoTitle>성별 태그</InfoTitle>
           <TagFlex>
-            {genderTags.map((tag) => (
+            {GENDER_TAGS.map((tag) => (
               <TagCheckbox key={tag.id} type="gender" value={tag.id} handleGetValue={handleGenderTag}>
                 {tag.text}
               </TagCheckbox>
@@ -176,7 +145,7 @@ const PostBoard = () => {
           <InfoDiv>
             <InfoTitle>음식 태그</InfoTitle>
             <TagFlex>
-              {foodTags.map((tag) => (
+              {FOOD_TAGS.map((tag) => (
                 <TagCheckbox key={tag.id} type="food" value={tag.id} handleGetValue={handleFoodTag}>
                   {tag.text}
                 </TagCheckbox>

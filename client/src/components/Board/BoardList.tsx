@@ -4,17 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
 
 import { timeStamp } from '../../util/commonFunction.ts';
-import { IListData } from '../../pages/Board.tsx';
+import { IBoardList } from '../../interface/board.tsx';
 
-type ListProps = {
-  list: IListData;
+type BoardListProps = {
+  list: IBoardList;
 };
 
 interface IStyledProps {
   $statusColor: string;
 }
 
-const BoardList = ({ list }: ListProps) => {
+const BoardList = ({ list }: BoardListProps) => {
   let genderTag: string;
   if (list.genderTag.genderTagId === 1) {
     genderTag = '# 여자만';

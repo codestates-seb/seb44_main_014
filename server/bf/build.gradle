@@ -42,6 +42,7 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.1.Final'
 
 	implementation 'com.google.code.gson:gson:2.9.0'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// == 스프링 부트 3.0 미만 ==
 	// QueryDSL JPA
@@ -54,7 +55,7 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 
 	// aws S3
-	//implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	// 파일 업로드
 	implementation 'commons-io:commons-io:2.6'

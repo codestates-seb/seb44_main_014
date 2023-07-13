@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 const Toggle = () => {
   const [isOn, setIsOn] = useState(true);

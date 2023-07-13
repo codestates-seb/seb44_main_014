@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const LoginPost = async (email: string, password: string) => {
+const postLogin = async (email: string, password: string) => {
   try {
     const response = await axios.post('/users/login', { email, password });
     return response.data;
@@ -9,4 +9,4 @@ const LoginPost = async (email: string, password: string) => {
   }
 };
 
-export default LoginPost;
+export default postLogin;
