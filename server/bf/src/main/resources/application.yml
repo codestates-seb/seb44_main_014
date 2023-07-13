@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: server  # 현재 로컬로 돌리기 위해 local로 설정
+    active: local  # 현재 로컬로 돌리기 위해 local로 설정
 
 logging:
   level:
@@ -20,8 +20,8 @@ server:
 cloud:
   aws:
     credentials:
-      accessKey: ${AWS_ACCESS_KEY}
-      secretKey: ${AWS_SECRET_ACCESS_KEY}
+      accessKey: ${{ secrets.AWS_ACCESS_KEY }}
+      secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     s3:
       bucket: bobimage # 버킷 이름 수정
     stack:
