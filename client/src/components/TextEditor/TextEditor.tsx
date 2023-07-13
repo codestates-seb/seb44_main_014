@@ -34,15 +34,11 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
       }
 
       // file 데이터 담아서 서버에 전달하여 이미지 업로드
-      const res = await axios.post(
-        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/img',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/post/images/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log(res);
 
       if (quillRef.current) {
