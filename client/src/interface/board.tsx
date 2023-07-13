@@ -12,7 +12,6 @@ export interface IBoardList {
   category: string;
   title: string;
   createdAt: string;
-  image?: string;
   postTag: {
     postTagId: number;
     genderTagId: number;
@@ -21,10 +20,17 @@ export interface IBoardList {
 }
 
 export interface IFilterInfo {
+  page: number;
   category: string;
-  search: string;
   genderTag: Nullable<number>;
   foodTag: Nullable<number>;
+}
+
+export interface IPageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 }
 
 // Page BoardDetail - mate info

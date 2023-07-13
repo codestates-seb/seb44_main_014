@@ -1,4 +1,9 @@
-import { IBoardList, IBoardDetailData } from '../interface/board.tsx';
+import { IBoardList, IBoardDetailData, IPageInfo } from '../interface/board.tsx';
+
+interface IPagination {
+  data: IBoardList[];
+  pageInfo: IPageInfo;
+}
 
 export const BOARD_DETAIL: IBoardDetailData = {
   title: '삼겹살 집중 적으로 조질 분 구합니다!',
@@ -69,7 +74,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '장보기',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-07-04T15:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -87,7 +91,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '밥먹기',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-30T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 2,
       genderTagId: 2,
@@ -105,7 +108,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '장보기',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-06-22T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 3,
       genderTagId: 3,
@@ -123,7 +125,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '밥먹기',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-30T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -141,7 +142,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '장보기',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-07-03T15:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -159,7 +159,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '밥먹기',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-12T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -177,7 +176,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '장보기',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-06-02T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -195,7 +193,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '밥먹기',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-06T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -213,7 +210,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '장보기',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-07-01T15:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -231,7 +227,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '밥먹기',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-15T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -249,7 +244,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '장보기',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-06-09T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -267,7 +261,6 @@ export const BOARD_LISTS: IBoardList[] = [
     category: '밥먹기',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-10T18:16:55.3304725',
-    image: '',
     postTag: {
       postTagId: 1,
       genderTagId: 1,
@@ -275,3 +268,184 @@ export const BOARD_LISTS: IBoardList[] = [
     },
   },
 ];
+
+export const PAGINATION: IPagination = {
+  data: [
+    {
+      postId: 1,
+      memberId: 1,
+      name: 'kimcoding',
+      avgStarRate: 3.0,
+      viewCount: 3,
+      commentCount: 0,
+      status: 'RECRUITING',
+      category: 'EATING',
+      title: '제목1',
+      createdAt: '2023-07-11T09:42:32.4847015',
+      postTag: {
+        postTagId: 1,
+        foodTagId: 4,
+        genderTagId: 2,
+      },
+    },
+    {
+      postId: 2,
+      memberId: 2,
+      name: 'yooncoding',
+      avgStarRate: 5.0,
+      viewCount: 8,
+      commentCount: 2,
+      status: 'RECRUITING',
+      category: 'EATING',
+      title: '제목2',
+      createdAt: '2023-07-11T09:42:32.4847015',
+      postTag: {
+        postTagId: 2,
+        foodTagId: 3,
+        genderTagId: 3,
+      },
+    },
+    {
+      postId: 3,
+      memberId: 3,
+      name: '강남코끼리',
+      avgStarRate: 4.6,
+      viewCount: 3,
+      commentCount: 4,
+      status: 'END',
+      category: '장보기',
+      title: '과일 같이 사실 분@@',
+      createdAt: '2023-06-22T18:16:55.3304725',
+      postTag: {
+        postTagId: 3,
+        genderTagId: 3,
+        foodTagId: 3,
+      },
+    },
+    {
+      postId: 4,
+      memberId: 4,
+      name: '잠실원숭이',
+      avgStarRate: 3.5,
+      viewCount: 10,
+      commentCount: 43,
+      status: 'END',
+      category: '밥먹기',
+      title: '삼겹살 집중 적으로 조질 분 구합니다!',
+      createdAt: '2023-06-30T18:16:55.3304725',
+      postTag: {
+        postTagId: 1,
+        genderTagId: 1,
+        foodTagId: 1,
+      },
+    },
+    {
+      postId: 5,
+      memberId: 5,
+      name: '마포갈메기',
+      avgStarRate: 2.5,
+      viewCount: 88,
+      commentCount: 4,
+      status: 'COMPLETE',
+      category: '장보기',
+      title: '과일 같이 사실 분@@',
+      createdAt: '2023-07-03T15:16:55.3304725',
+      postTag: {
+        postTagId: 1,
+        genderTagId: 1,
+        foodTagId: 1,
+      },
+    },
+    {
+      postId: 6,
+      memberId: 6,
+      name: '신촌호랑이',
+      avgStarRate: 5,
+      viewCount: 19,
+      commentCount: 43,
+      status: 'RECRUITING',
+      category: '밥먹기',
+      title: '삼겹살 집중 적으로 조질 분 구합니다!',
+      createdAt: '2023-06-12T18:16:55.3304725',
+      postTag: {
+        postTagId: 1,
+        genderTagId: 1,
+        foodTagId: 1,
+      },
+    },
+    {
+      postId: 7,
+      memberId: 7,
+      name: '강남코끼리',
+      avgStarRate: 4.6,
+      viewCount: 63,
+      commentCount: 4,
+      status: 'COMPLETE',
+      category: '장보기',
+      title: '과일 같이 사실 분@@',
+      createdAt: '2023-06-02T18:16:55.3304725',
+      postTag: {
+        postTagId: 1,
+        genderTagId: 1,
+        foodTagId: 1,
+      },
+    },
+    {
+      postId: 8,
+      memberId: 8,
+      name: '잠실원숭이',
+      avgStarRate: 3.5,
+      viewCount: 15,
+      commentCount: 43,
+      status: 'END',
+      category: '밥먹기',
+      title: '삼겹살 집중 적으로 조질 분 구합니다!',
+      createdAt: '2023-06-06T18:16:55.3304725',
+      postTag: {
+        postTagId: 1,
+        genderTagId: 1,
+        foodTagId: 1,
+      },
+    },
+    {
+      postId: 9,
+      memberId: 9,
+      name: '마포갈메기',
+      avgStarRate: 2.5,
+      viewCount: 83,
+      commentCount: 4,
+      status: 'COMPLETE',
+      category: '장보기',
+      title: '과일 같이 사실 분@@',
+      createdAt: '2023-07-01T15:16:55.3304725',
+      postTag: {
+        postTagId: 1,
+        genderTagId: 1,
+        foodTagId: 1,
+      },
+    },
+    {
+      postId: 10,
+      memberId: 10,
+      name: '신촌호랑이',
+      avgStarRate: 5,
+      viewCount: 70,
+      commentCount: 43,
+      status: 'RECRUITING',
+      category: '밥먹기',
+      title: '삼겹살 집중 적으로 조질 분 구합니다!',
+      createdAt: '2023-06-15T18:16:55.3304725',
+      postTag: {
+        postTagId: 1,
+        genderTagId: 1,
+        foodTagId: 1,
+      },
+    },
+  ],
+  pageInfo: {
+    page: 1,
+    size: 10,
+    totalElements: 23,
+    totalPages: 3,
+  },
+};
