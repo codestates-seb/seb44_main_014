@@ -86,7 +86,6 @@ public class HomeControllerTest {
                                         fieldWithPath("[].category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                         fieldWithPath("[].title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜"),
-                                        fieldWithPath("[].image").type(JsonFieldType.STRING).description("게시글 이미지"),
 
                                         fieldWithPath("[].postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에서 저장한 태그의 식별자"),
                                         fieldWithPath("[].postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),
