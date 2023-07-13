@@ -27,9 +27,9 @@ public class StubData {
         private static Map<HttpMethod, Object> stubRequestBody;
         static {
             stubRequestBody = new HashMap<>();
-            stubRequestBody.put(HttpMethod.POST, new PostDto.Post(1L, Post.categoryStatus.EATING, "제목", "본문", "이미지", new PostTagDto.GenderTagPost(1L), new PostTagDto.FoodTagPost(2L),
+            stubRequestBody.put(HttpMethod.POST, new PostDto.Post(1L, Post.categoryStatus.EATING, "제목", "본문", new PostTagDto.GenderTagPost(1L), new PostTagDto.FoodTagPost(2L),
                     new MateDto.Post(3)));
-            stubRequestBody.put(HttpMethod.PATCH, new PostDto.Patch(1L, 1L, Post.categoryStatus.EATING, "제목", "본문", "이미지", new PostTagDto.GenderTagPost(1L), new PostTagDto.FoodTagPost(2L),
+            stubRequestBody.put(HttpMethod.PATCH, new PostDto.Patch(1L, 1L, Post.categoryStatus.EATING, "제목", "본문", new PostTagDto.GenderTagPost(1L), new PostTagDto.FoodTagPost(2L),
                     new MateDto.Post(3), Post.recruitStatus.RECRUITING));
         }
 
@@ -43,7 +43,6 @@ public class StubData {
                     Post.categoryStatus.EATING,
                     "제목",
                     "본문",
-                    "이미지",
                     new PostTagDto.Response(1L, 2L, 1L),
                     new MateDto.PatchResponse(3),
                     Post.recruitStatus.RECRUITING);
@@ -60,7 +59,6 @@ public class StubData {
             return new PostDto.DetailResponse(
                     "제목",
                     "본문",
-                    "이미지",
                     LocalDateTime.now(),
                     3,
                     1,
@@ -75,18 +73,18 @@ public class StubData {
         }
 
         public static List<Post> getMultiListResultPost() {
-            Post post1 = new Post(Post.categoryStatus.EATING, "제목1", "본문1", "이미지1", Post.recruitStatus.RECRUITING, 3);
+            Post post1 = new Post(Post.categoryStatus.EATING, "제목1", "본문1", Post.recruitStatus.RECRUITING, 3);
 
-            Post post2 = new Post(Post.categoryStatus.SHOPPING, "제목2", "본문2", "이미지2", Post.recruitStatus.RECRUITING, 8);
+            Post post2 = new Post(Post.categoryStatus.SHOPPING, "제목2", "본문2", Post.recruitStatus.RECRUITING, 8);
 
             return new ArrayList<>(List.of(post1,post2));
         }
 
 
         public static Page<Post> getMultiPageResultPost() {
-            Post post1 = new Post(Post.categoryStatus.EATING, "제목1", "본문1", "이미지1", Post.recruitStatus.RECRUITING, 3);
+            Post post1 = new Post(Post.categoryStatus.EATING, "제목1", "본문1", Post.recruitStatus.RECRUITING, 3);
 
-            Post post2 = new Post(Post.categoryStatus.SHOPPING, "제목2", "본문2", "이미지2", Post.recruitStatus.RECRUITING, 8);
+            Post post2 = new Post(Post.categoryStatus.SHOPPING, "제목2", "본문2", Post.recruitStatus.RECRUITING, 8);
 
             return new PageImpl<>(List.of(post1, post2),
                     PageRequest.of(0, 10, Sort.by("createdAt").descending()),
@@ -106,7 +104,6 @@ public class StubData {
                             Post.categoryStatus.EATING,
                             "제목1",
                             LocalDateTime.now(),
-                            "이미지1",
                             new PostTagDto.Response(1L, 4L, 2L)
                     ),
                     new PostDto.Response(
@@ -120,7 +117,6 @@ public class StubData {
                             Post.categoryStatus.EATING,
                             "제목2",
                             LocalDateTime.now(),
-                            "이미지2",
                             new PostTagDto.Response(2L, 3L, 3L)
                     )
             );
