@@ -13,7 +13,16 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL pretty print
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 574447307453-3k73gp7a11a251ptlfr948u8o18evba5.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
@@ -50,6 +59,7 @@ mail:
     admin: admin@gmail.com    # jwt 사용할때 필요
 
 jwt:
-  key: ${JWT_SECRET_KEY}      # jwt 사용할때 필요
+  key:
+    secret: bobfriend132412341234123412341234123423412341234123412341234114123411234123412341234
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
