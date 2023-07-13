@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: local  # 현재 로컬로 돌리기 위해 local로 설정
+
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+server:
+  servlet:
+    multipart:    # 파일 크기 지정
+      max-file-size: 20MB
+      max-request-size: 20MB
+    encoding:
+      force-response: true
+
+#AWS S3
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: bobimage # 버킷 이름 수정
+    stack:
+      auto-: false
+    region:
+      static: ap-northeast-2
+
+mail:
+  address:
+    admin: admin@gmail.com    # jwt 사용할때 필요
+
+jwt:
+  key: ${JWT_SECRET_KEY}      # jwt 사용할때 필요
+  access-token-expiration-minutes: 40
+  refresh-token-expiration-minutes: 420
