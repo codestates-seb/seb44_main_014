@@ -13,6 +13,6 @@ spring:
         format_sql: true  # (3) SQL pretty print
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: guest
-    url: jdbc:mysql://localhost:3306/coffee_order?allowPublicKeyRetrieval=true&characterEncoding=UTF-8
-    username: guest
+    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://bodfriends-db.cusuwxoxsiwr.ap-northeast-2.rds.amazonaws.com:3306/bobfriends?allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+    username: ${MYSQL_USERNAME}
