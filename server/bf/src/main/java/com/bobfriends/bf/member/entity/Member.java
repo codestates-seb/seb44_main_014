@@ -81,5 +81,12 @@ public class Member extends Auditable {
             return status;
         }
     }
+
+    public void updateEmail(String email) {
+        this.email = email;
     }
+    public void updateRoles(List<String> roles) {
+        this.roles = roles;
+    }
+}
 

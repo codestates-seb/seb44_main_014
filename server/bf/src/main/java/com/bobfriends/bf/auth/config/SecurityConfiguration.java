@@ -2,9 +2,8 @@ package com.bobfriends.bf.auth.config;
 
 import com.bobfriends.bf.auth.filter.JwtAuthenticationFilter;
 import com.bobfriends.bf.auth.filter.JwtVerificationFilter;
-import com.bobfriends.bf.auth.handler.MemberAccessDeniedHandler;
-import com.bobfriends.bf.auth.handler.MemberAuthenticationEntryPoint;
 import com.bobfriends.bf.auth.handler.MemberAuthenticationSuccessHandler;
+import com.bobfriends.bf.auth.handler.OAuth2MemberSuccessHandler;
 import com.bobfriends.bf.auth.jwt.JwtTokenizer;
 import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
 import com.bobfriends.bf.member.repository.MemberRepository;
@@ -17,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -28,12 +28,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfiguration  {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -46,14 +44,16 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
-                .accessDeniedHandler(new MemberAccessDeniedHandler())
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository))
                 );
+
         return http.build();
     }
 
@@ -86,7 +86,8 @@ public class SecurityConfiguration {
 
             builder
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+//                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+                    .addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
     }
 }
