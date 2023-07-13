@@ -1,6 +1,9 @@
 # 서버 환경에서 사용하는 정보들은 application-server.yml 파일에 설정합니다.
 # TODO MySQL DB 접속 정보를 아래에 설정하세요
 spring:
+  config:
+    activate:
+      on-profile: server
   jpa:
     hibernate:
       ddl-auto: create  # (1) 스키마 자동 생성
