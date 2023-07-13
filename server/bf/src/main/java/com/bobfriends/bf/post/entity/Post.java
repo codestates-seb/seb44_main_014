@@ -32,8 +32,6 @@ public class Post extends Auditable {
     @Column(nullable = false ,length = 300)
     private String content;
 
-    private String image;
-
     @Enumerated(value = EnumType.STRING)
     private recruitStatus status = recruitStatus.RECRUITING;
 
@@ -55,11 +53,10 @@ public class Post extends Auditable {
     @OneToOne(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     private PostTag postTag;
 
-    public Post(categoryStatus category, String title, String content, String image, recruitStatus status, int viewCount) {
+    public Post(categoryStatus category, String title, String content, recruitStatus status, int viewCount) {
         this.category = category;
         this.title = title;
         this.content = content;
-        this.image = image;
         this.status = status;
         this.viewCount = viewCount;
     }
