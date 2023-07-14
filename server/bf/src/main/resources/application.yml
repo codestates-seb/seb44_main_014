@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: server  # 현재 로컬로 돌리기 위해 local로 설정
+    active: local  # 현재 로컬로 돌리기 위해 local로 설정
 
 logging:
   level:
