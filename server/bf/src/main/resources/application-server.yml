@@ -16,6 +16,16 @@ spring:
     password: ${MYSQL_PASSWORD}
     url: jdbc:mysql://bodfriends-db.cusuwxoxsiwr.ap-northeast-2.rds.amazonaws.com:3306/bobfriends?allowPublicKeyRetrieval=true&characterEncoding=UTF-8
     username: ${MYSQL_USERNAME}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECTET}
+            scope:
+              - email
+              - profile
 
 #AWS S3
 cloud:
