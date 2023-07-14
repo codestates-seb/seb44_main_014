@@ -28,8 +28,8 @@ public class S3Uploader {
     private String bucket;
 
 
-    public String[] upload(MultipartFile file) throws IOException {
-        return new String[]{uploadFiles(file, "bob-friends"), bucket};
+    public String[] uploadPost(MultipartFile file) throws IOException {
+        return new String[]{uploadFiles(file, "post"), bucket};
     }
 
     /** MultipartFile을 전달받아 File로 전환한 후 S3에 업로드 **/

@@ -78,16 +78,13 @@ public interface PostMapper {
         return post;
     }
 
-
     @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "mate.mateNum", target = "mate.mateNum")
     PostDto.PatchResponse PostToPostPatchResponseDto(Post post);
 
     @Mapping(source = "foodTag.foodTagId", target = "foodTagId")
     @Mapping(source = "genderTag.genderTagId", target = "genderTagId")
     PostTagDto.Response PostTagToPostTagResponseDto(PostTag postTag);
-
-    // TODO : Mate 쪽으로 옮기기
-    MateDto.PatchResponse MateToMatePatchResponseDto(Mate mate);
 
 
     default PostDto.DetailResponse PostToPostDetailResponseDto(Post post) {
@@ -111,7 +108,7 @@ public interface PostMapper {
         }
 
 
-        /** QuestionTagDto.Response **/
+        /** PostTagDto.Response **/
         if(post.getPostTag() != null){
             PostTagDto.Response postTagResponseDto =
                     PostTagToPostTagResponseDto(post.getPostTag());
