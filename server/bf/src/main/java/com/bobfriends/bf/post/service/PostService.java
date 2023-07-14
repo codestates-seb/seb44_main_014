@@ -64,7 +64,6 @@ public class PostService {
             Optional.ofNullable(patch.getCategory()).ifPresent(category -> findPost.setCategory(category));
             Optional.ofNullable(patch.getTitle()).ifPresent(title -> findPost.setTitle(title));
             Optional.ofNullable(patch.getContent()).ifPresent(content -> findPost.setContent(content));
-            Optional.ofNullable(patch.getImage()).ifPresent(image -> findPost.setImage(image));
             Optional.ofNullable(patch.getStatus()).ifPresent(status -> findPost.setStatus(status));
 
             if(patch.getGenderTag() != null){

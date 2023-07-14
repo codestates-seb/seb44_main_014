@@ -1,16 +1,24 @@
 package com.bobfriends.bf.member.service;
 
+import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
+import com.bobfriends.bf.auth.utils.GetAuthUserUtils;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.repository.CommentRepository;
+import com.bobfriends.bf.dto.MultiResponseDto;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
+import com.bobfriends.bf.member.mapper.MemberMapper;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
 import com.bobfriends.bf.tag.entity.FoodTag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,22 +29,38 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final MemberTagService memberTagService;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
+    private final MemberMapper memberMapper;
 
 
-    public MemberService(MemberRepository memberRepository, PostRepository postRepository, CommentRepository commentRepository, MemberTagService memberTagService) {
+    public MemberService(MemberRepository memberRepository,
+                         PostRepository postRepository,
+                         CommentRepository commentRepository,
+                         MemberTagService memberTagService,
+                         PasswordEncoder passwordEncoder,
+                         CustomAuthorityUtils authorityUtils, MemberMapper memberMapper) {
         this.memberRepository = memberRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.memberTagService = memberTagService;
+        this.passwordEncoder = passwordEncoder;
+        this.authorityUtils = authorityUtils;
+        this.memberMapper = memberMapper;
     }
 
     // 회원가입
     public Member createMember(Member member) {
         verifyExistEmail(member.getEmail());
+
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
 
         return memberRepository.save(member);
     }
@@ -115,10 +139,19 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
 
+    public Member getLoginMember() {
+        Optional<Member> findMember = memberRepository.findByEmail(GetAuthUserUtils.getAuthUser().getName());
+        findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = findMember.get();
+        return member;
+    }
+
+    // 작성한 게시글
     public List<Post> findMyPosts() {
         return postRepository.findAll();
     }
 
+    //작성한 댓글
     public List<MemberDto.MemberCommentResponseDto> findMyComments() {
         List<Comment> comments = commentRepository.findAll();
         List<MemberDto.MemberCommentResponseDto> commentResponseDtoList = new ArrayList<>();

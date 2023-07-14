@@ -1,4 +1,5 @@
-import * as React from 'react';
+// import * as React from 'react';
+import { useState } from 'react';
 // import axios from 'axios';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +16,10 @@ interface IFilterData {
   setActiveFood: React.Dispatch<React.SetStateAction<number | null | undefined>>;
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
+  setCurrentApi: React.Dispatch<React.SetStateAction<string>>;
+  // getSearchData: () => void;
+  // getGenderTagData: (e: React.MouseEvent<HTMLElement>) => void;
+  // getFoodTagData: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const SearchFilter = ({
@@ -25,7 +30,18 @@ const SearchFilter = ({
   setActiveFood,
   filterInfo,
   setFilterInfo,
-}: IFilterData) => {
+  setCurrentApi,
+}: // getSearchData,
+// getGenderTagData,
+// getFoodTagData,
+IFilterData) => {
+  const [keyword, setKeyword] = useState('');
+  const getSearchData = () => {
+    setFilterInfo({ ...filterInfo, page: 1 });
+    setCurrentApi(`&size=10&keyword=${keyword}&category=${filterInfo.category}`);
+    setKeyword('');
+  };
+
   return (
     <SeachSection>
       <InputArea>
@@ -33,12 +49,13 @@ const SearchFilter = ({
         <InputSearch
           type="text"
           id="search"
-          value={filterInfo.search}
+          value={keyword}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setFilterInfo({ ...filterInfo, search: (e.target as HTMLInputElement).value })
+            // setFilterInfo({ ...filterInfo, page: 1, search: (e.target as HTMLInputElement).value })
+            setKeyword((e.target as HTMLInputElement).value)
           }
         />
-        <ButtonSearch type="button">
+        <ButtonSearch type="button" onClick={() => getSearchData()}>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </ButtonSearch>
         <TagsArea>
@@ -46,11 +63,15 @@ const SearchFilter = ({
             {GENDER_TAGS.map((tag) => (
               <button
                 key={tag.id}
+                value={tag.id}
                 className={activeGender === tag.id ? 'active' : ''}
-                onClick={() => {
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
                   setActiveGender(tag.id);
                   setActiveFood(null);
-                  setFilterInfo({ ...filterInfo, genderTag: tag.id, foodTag: null });
+                  setFilterInfo({ ...filterInfo, page: 1, genderTag: tag.id, foodTag: null });
+                  setCurrentApi(
+                    `&size=10&genderTag=${(e.target as HTMLButtonElement).value}&category=${filterInfo.category}`
+                  );
                 }}
               >
                 {tag.text}
@@ -62,11 +83,15 @@ const SearchFilter = ({
               {FOOD_TAGS.map((tag) => (
                 <button
                   key={tag.id}
+                  value={tag.id}
                   className={activeFood === tag.id ? 'active' : ''}
-                  onClick={() => {
+                  onClick={(e: React.MouseEvent<HTMLElement>) => {
                     setActiveFood(tag.id);
                     setActiveGender(null);
-                    setFilterInfo({ ...filterInfo, foodTag: tag.id, genderTag: null });
+                    setFilterInfo({ ...filterInfo, page: 1, foodTag: tag.id, genderTag: null });
+                    setCurrentApi(
+                      `&size=10&foodTag=${(e.target as HTMLButtonElement).value}&category=${filterInfo.category}`
+                    );
                   }}
                 >
                   {tag.text}

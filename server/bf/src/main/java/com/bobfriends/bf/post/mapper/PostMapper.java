@@ -35,7 +35,6 @@ public interface PostMapper {
         post.setCategory(requestBody.getCategory());
         post.setTitle(requestBody.getTitle());
         post.setContent(requestBody.getContent());
-        post.setImage(requestBody.getImage());
         post.setStatus(Post.recruitStatus.RECRUITING);
 
 
@@ -97,7 +96,6 @@ public interface PostMapper {
                 PostDto.DetailResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .image(post.getImage())
                 .createdAt(post.getCreatedAt())
                 .viewCount(post.getViewCount())
                 .commentCount(post.getComments().size())
