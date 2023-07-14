@@ -152,7 +152,7 @@ const UserInfo = () => {
       <InfoContainer>
         <EmailContainer>
           <EmailTitle>이메일</EmailTitle>
-          <EmailInput></EmailInput>
+          <EmailInput readOnly value="//ReadOnly:prop로 받아올것" />
         </EmailContainer>
         <NameContainer>
           <NameTitle>활동명 *</NameTitle>
