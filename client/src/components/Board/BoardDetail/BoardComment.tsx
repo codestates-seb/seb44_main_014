@@ -16,7 +16,7 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
 
   const postComment = () => {
     // axios
-    //   .post(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
+    //   .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
     //   .then((res) => {
     //     console.log(res);
     //     setCommentContent({ ...commentContent, content: res.content });

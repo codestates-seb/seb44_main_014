@@ -31,7 +31,7 @@ const BoardDetail = () => {
   const getDetailData = () => {
     setDetailData(BOARD_DETAIL);
     // axios
-    //   .get(`${process.env.REACT_APP_API_URL}/board/posts/${postId}`)
+    //   .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
     //   .then((res) => {
     //     console.log(res);
     //     setDetailData(res.data);
@@ -47,7 +47,7 @@ const BoardDetail = () => {
 
   const postApplyData = () => {
     // axios
-    //   .post(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/mate`, applyData)
+    //   .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/mate`, applyData)
     //   .then((res) => {
     //     console.log(res)
     //     setUpdateMate({...updateMate, mate: res.mate})
@@ -59,7 +59,7 @@ const BoardDetail = () => {
 
   const deletePost = () => {
     // axios
-    //   .delete(`${process.env.REACT_APP_API_URL}/board/posts/${postId}`)
+    //   .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
     //   .then((res) => {
     //     console.log(res)
     //   })
