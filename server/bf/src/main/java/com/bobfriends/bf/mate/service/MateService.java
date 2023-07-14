@@ -4,7 +4,10 @@ import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.entity.Mate;
+import com.bobfriends.bf.mate.entity.MateMember;
 import com.bobfriends.bf.mate.repository.MateRepository;
+import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.member.service.MemberService;
 import com.bobfriends.bf.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.bobfriends.bf.post.entity.Post.recruitStatus.COMPLETE;
+
 @Service
 @Slf4j
 @Transactional
@@ -20,6 +25,8 @@ import java.util.Optional;
 public class MateService {
 
     private final MateRepository mateRepository;
+    private final MemberService memberService;
+
 
     /** Mate update **/
     public void updateMate(Post post, MateDto.Post matePost){
