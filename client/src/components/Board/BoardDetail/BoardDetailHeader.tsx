@@ -16,25 +16,25 @@ interface IStyledProps {
 
 const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
   const navigate = useNavigate();
-  const { title, status, genderTag, foodTag, viewCount, commentCount, createdAt } = boardInfo;
+  const { title, status, postTag, viewCount, commentCount, createdAt } = boardInfo;
 
   let newGenderTag: string;
-  if (genderTag.genderTagId === 1) {
+  if (postTag.genderTagId === 1) {
     newGenderTag = '# 여자만';
-  } else if (genderTag.genderTagId === 2) {
+  } else if (postTag.genderTagId === 2) {
     newGenderTag = '# 남자만';
   } else {
     newGenderTag = '# 남녀노소';
   }
 
   let newFoodTag: string;
-  if (foodTag.foodTagId === 1) {
+  if (postTag.foodTagId === 1) {
     newFoodTag = '# 한식';
-  } else if (foodTag.foodTagId === 2) {
+  } else if (postTag.foodTagId === 2) {
     newFoodTag = '# 중식';
-  } else if (foodTag.foodTagId === 3) {
+  } else if (postTag.foodTagId === 3) {
     newFoodTag = '# 양식';
-  } else if (foodTag.foodTagId === 4) {
+  } else if (postTag.foodTagId === 4) {
     newFoodTag = '# 일식';
   } else {
     newFoodTag = '# 기타';

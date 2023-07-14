@@ -88,9 +88,11 @@ public class PostController {
 
     /** 질문 삭제 **/
     @DeleteMapping("/posts/{post-id}")
-    public ResponseEntity deletePost(@Positive @PathVariable("post-id") long postId){
+    public ResponseEntity deletePost(@Positive @PathVariable("post-id") long postId,
+                                     @RequestHeader("authorization") String token){
 
-        postService.deletePost(postId);
+        // token으로 어떤 회원인지 알아야함
+        postService.deletePost(postId, token);
 
         return ResponseEntity.noContent().build();
     }

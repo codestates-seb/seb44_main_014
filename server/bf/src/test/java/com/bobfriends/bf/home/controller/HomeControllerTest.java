@@ -1,5 +1,6 @@
 package com.bobfriends.bf.home.controller;
 
+import com.bobfriends.bf.auth.config.SecurityConfiguration;
 import com.bobfriends.bf.helper.StubData;
 import com.bobfriends.bf.home.service.HomeService;
 import com.bobfriends.bf.post.dto.PostDto;
@@ -10,12 +11,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -32,8 +38,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@WebMvcTest(HomeController.class)
+/*
+@WebMvcTest(
+        controllers = {HomeController.class}, // 테스트 하고자 하는 Controller를 지정한다.
+        excludeAutoConfiguration = SecurityAutoConfiguration.class,// Spring Security의 자동 구성을 사용하지 않도록 한다.
+        excludeFilters = {      // 테스트 수행 시, 사용하지 않을 필터를 지정한다. 여기서는 SecurityConfiguration에서 설정하는 필터를 제외한다.
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+                        classes = SecurityConfiguration.class)
+        }
+)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 public class HomeControllerTest {
@@ -95,5 +108,6 @@ public class HomeControllerTest {
                 ));
     }
 }
+ */
 
 

@@ -1,4 +1,4 @@
-import { useState /*, useEffect*/ } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
 import { styled } from 'styled-components';
@@ -7,8 +7,9 @@ import SearchFilter from '../components/Board/SearchFilter.tsx';
 import TabMenu from '../components/Board/TabMenu.tsx';
 import SortButtons from '../components/Board/SortButtons.tsx';
 import BoardList from '../components/Board/BoardList.tsx';
+import Pagination from '../components/Board/Pagination.tsx';
 // DUMMY DATA
-import { BOARD_LISTS } from '../data/boardDummyData.ts';
+import { PAGINATION } from '../data/boardDummyData.ts';
 import { IBoardList, IFilterInfo } from '../interface/board.tsx';
 
 const Board = () => {
@@ -23,63 +24,31 @@ const Board = () => {
   const [activeGender, setActiveGender] = useState<number | null>();
   const [activeFood, setActiveFood] = useState<number | null>();
   // 리스트 정렬
-  const [lists, setLists] = useState<IBoardList[]>(BOARD_LISTS);
-  // 서버 전달 정보
+  const [pageInfo, setPageInfo] = useState(PAGINATION.pageInfo);
+  const [lists, setLists] = useState<IBoardList[]>(PAGINATION.data);
+  // endPoint 파라미터
   const [filterInfo, setFilterInfo] = useState<IFilterInfo>({
+    page: 1,
     category: '밥먹기',
-    search: '',
     genderTag: null,
     foodTag: null,
   });
-  console.log(filterInfo);
+  const [currentApi, setCurrentApi] = useState<string>(`&size=10&category=밥먹기`);
 
-  // useEffect(() => {
-  //   getTabMenuData();
-  // }, []);
-
-  // const getTabMenuData = () => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&category=${밥먹기}`)
-  //     .then((res) => {
-  //       console.log(res)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
-
-  // const getSearchData = () => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&keyword=${연남동}&category=${장보기}`)
-  //     .then((res) => {
-  //       console.log(res)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
-
-  // const getGenderTagData = () => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&genderTag=${1}&category=${장보기}`)
-  //     .then((res) => {
-  //       console.log(res)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
-
-  // const getFoodTagData = () => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_API_URL}/board?page=${1}&size=${10}&foodTag=${1}&category=${장보기}`)
-  //     .then((res) => {
-  //       console.log(res)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
+  useEffect(() => {
+    console.log(filterInfo);
+    console.log(`${import.meta.env.VITE_APP_API_URL}/board?page=${filterInfo.page}${currentApi}`);
+    // axios
+    //   .get(`${import.meta.env.VITE_APP_API_URL}/board?page=${filterInfo.page}&size=10&category=밥먹기`)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setPageInfo();
+    //     setLists();
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  }, [filterInfo, currentApi]);
 
   // TODO: 임시. 사용자 로그인 상태 가져올 것
   const isLoggedIn = true;
@@ -103,6 +72,7 @@ const Board = () => {
         setActiveFood={setActiveFood}
         filterInfo={filterInfo}
         setFilterInfo={setFilterInfo}
+        setCurrentApi={setCurrentApi}
       />
 
       {/* 밥먹기, 장보기 탭메뉴 */}
@@ -116,6 +86,7 @@ const Board = () => {
           setActiveFood={setActiveFood}
           filterInfo={filterInfo}
           setFilterInfo={setFilterInfo}
+          setCurrentApi={setCurrentApi}
         />
 
         {/* 게시판 영역 */}
@@ -139,6 +110,7 @@ const Board = () => {
               <BoardList key={idx} list={list} />
             ))}
           </ul>
+          <Pagination filterInfo={filterInfo} setFilterInfo={setFilterInfo} pageInfo={pageInfo} />
         </ListsSection>
       </ListLayout>
     </>

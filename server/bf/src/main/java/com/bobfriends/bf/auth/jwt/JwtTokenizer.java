@@ -71,6 +71,21 @@ public class JwtTokenizer {
         return claims;
     }
 
+    /** token으로 memberId 추출 메서드 **/
+    public long getMemberIdFromToken(String token, String base64EncodedSecretKey){
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
+        String jwtToken = token.substring("Bearer ".length());
+
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken);
+
+        Claims claims = claimsJws.getBody();
+
+        Long memberId = claims.get("memberId", Long.class);
+
+        return memberId;
+    }
+
     // 단순히 검증만 하는 용도로 쓰일 경우
     public void verifySignature(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);

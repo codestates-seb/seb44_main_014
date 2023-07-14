@@ -17,6 +17,7 @@ interface ITabMenuProps {
   setActiveFood: React.Dispatch<React.SetStateAction<number | null | undefined>>;
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
+  setCurrentApi: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const TabMenu = ({
@@ -28,30 +29,33 @@ const TabMenu = ({
   setActiveFood,
   filterInfo,
   setFilterInfo,
+  setCurrentApi,
 }: ITabMenuProps) => {
   const handleClickEating = (e: React.MouseEvent<HTMLElement>) => {
+    setCurrentApi(`&size=10&category=${(e.target as HTMLButtonElement).value}`);
     setTabLeft(true);
     setTabRight(false);
     setActiveGender(null);
     setActiveFood(null);
     setFilterInfo({
       ...filterInfo,
+      page: 1,
       category: (e.target as HTMLButtonElement).value,
-      search: '',
       genderTag: null,
       foodTag: null,
     });
   };
 
   const handleClickShopping = (e: React.MouseEvent<HTMLElement>) => {
+    setCurrentApi(`&size=10&category=${(e.target as HTMLButtonElement).value}`);
     setTabLeft(false);
     setTabRight(true);
     setActiveGender(null);
     setActiveFood(null);
     setFilterInfo({
       ...filterInfo,
+      page: 1,
       category: (e.target as HTMLButtonElement).value,
-      search: '',
       genderTag: null,
       foodTag: null,
     });
