@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class MemberAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
    private final MemberRepository memberRepository;
@@ -35,18 +37,16 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         String name = member.getName();
         String email = member.getEmail();
 
-        response.setStatus(HttpStatus.ACCEPTED.value());
+        response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 
         try (PrintWriter writer = response.getWriter()){
             JsonObject json = new JsonObject();
-
             json.addProperty("memberId", memberId);
             json.addProperty("name", name);
             json.addProperty("email", email);
             writer.write(json.toString());
         }
-
     }
 }
