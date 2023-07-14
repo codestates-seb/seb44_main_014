@@ -1,5 +1,6 @@
 package com.bobfriends.bf.post.service;
 
+import com.bobfriends.bf.auth.jwt.JwtTokenizer;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.mate.service.MateService;
@@ -36,6 +37,8 @@ public class PostService {
     private final MemberService memberService;
 
     private final MateService mateService;
+
+    private final JwtTokenizer jwtTokenizer;
 
     /**
      * 게시글 등록
@@ -104,14 +107,22 @@ public class PostService {
     }
 
     /** 질문 삭제 **/
-    public void deletePost(long postId){
+    public void deletePost(long postId, String token){
 
         Post findPost = findVerifiedPost(postId);
 
-        // TODO : 로그인한 회원이 작성자인지 확인 (JWT)
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        long loginId = jwtTokenizer.getMemberIdFromToken(token, base64EncodedSecretKey);
+
         long writerMemberId = findPost.getMember().getMemberId();
 
-        postRepository.delete(findPost);
+        // 로그인 한 회원이 작성자이면
+        if(loginId == writerMemberId){
+            postRepository.delete(findPost);
+        }else {
+            throw new RuntimeException("등록한 작성자가 아닙니다");
+        }
     }
 
 

@@ -24,8 +24,7 @@ public class S3Controller {
     @PostMapping("/post/images/upload")
     public ResponseEntity<String[]> postImage(@RequestPart MultipartFile multipartFile) throws IOException {
 
-        return new ResponseEntity<>(s3Uploader.upload(multipartFile), null, HttpStatus.OK);
-        //return ResponseEntity.ok().build();
+        return new ResponseEntity<>(s3Uploader.uploadPost(multipartFile), null, HttpStatus.OK);
     }
 
 }
