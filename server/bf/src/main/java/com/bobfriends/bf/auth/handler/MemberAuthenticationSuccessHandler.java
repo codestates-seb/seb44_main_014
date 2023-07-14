@@ -5,7 +5,6 @@ import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,8 +34,6 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         Long memberId = member.getMemberId();
         String name = member.getName();
         String email = member.getEmail();
-        String location = member.getLocation();
-        Member.genderStatus gender = member.getGender();
 
         response.setStatus(HttpStatus.ACCEPTED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -45,11 +42,9 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         try (PrintWriter writer = response.getWriter()){
             JsonObject json = new JsonObject();
 
-            json.add("memberId", new JsonPrimitive(memberId));
-            json.add("name", new JsonPrimitive(name));
-            json.add("email", new JsonPrimitive(email));
-            json.add("location", new JsonPrimitive(location));
-            json.add("gender", new JsonPrimitive(gender.toString()));
+            json.addProperty("memberId", memberId);
+            json.addProperty("name", name);
+            json.addProperty("email", email);
             writer.write(json.toString());
         }
 
