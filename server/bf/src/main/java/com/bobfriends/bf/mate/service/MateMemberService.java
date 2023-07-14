@@ -13,6 +13,10 @@ import com.bobfriends.bf.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static com.bobfriends.bf.post.entity.Post.recruitStatus.COMPLETE;
 @Service
 @RequiredArgsConstructor
@@ -31,14 +35,14 @@ public class MateMemberService {
         // mateId에 mateMember를 등록
         Post post1 = postService.findVerifiedPost(mateMember.getMate().getPost().getPostId());
         mateMember.setMate(post1.getMate());
-
         Mate mate = mateService.findVerifiedPost(mateMember.getMate().getMateId());
 
-        // TODO : 같은 멤버는 다시 못 들어오게 해야함!!!!
-        if(post.getMemberId()== /**같은 mate에 이미 등록돼있는 memberId**/){
-            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MATEMEMBER);
+        // 같은 회원은 같은 mate에 등록할 수 없음
+        if (post1.getMate().getMateMembers().stream().anyMatch(member -> member.getMember().getMemberId().equals(post.getMemberId()))) {
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_SAME_MATEMEMBER);
         }
-
+        
+        // 구해진 mate 인원
         int findNum = mate.getMateMembers().size()+1;
 
         if(mate.getMateNum()==findNum) post1.setStatus(COMPLETE);

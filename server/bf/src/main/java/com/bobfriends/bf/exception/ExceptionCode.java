@@ -18,7 +18,8 @@ public enum ExceptionCode {
     CANNOT_CHANGE_POST(403, "Post can not change"),
     COMMENT_NOT_FOUND(404, "Comment not found"),
     CANNOT_CHANGE_COMMENT(403, "Comment can not change"),
-    CANNOT_CREATE_MATEMEMBER(403, "MateMember can not create");
+    CANNOT_CREATE_MATEMEMBER(403, "MateMember can not create"),
+    CANNOT_CREATE_SAME_MATEMEMBER(403, "Same MateMember can not create");
 
     @Getter
     private int status;
