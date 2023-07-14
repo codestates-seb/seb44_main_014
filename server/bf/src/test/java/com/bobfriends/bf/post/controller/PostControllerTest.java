@@ -8,7 +8,6 @@ import com.bobfriends.bf.post.service.PostService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -92,7 +91,6 @@ public class PostControllerTest {
                                         fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문"),
-                                        fieldWithPath("image").type(JsonFieldType.STRING).description("이미지"),
 
                                         fieldWithPath("genderTag.genderTagId").type(JsonFieldType.NUMBER).description("성별 태그의 식별자").optional(),
                                         fieldWithPath("foodTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자").optional(),
@@ -143,7 +141,6 @@ public class PostControllerTest {
                                 fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)").optional(),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목").optional(),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문").optional(),
-                                fieldWithPath("image").type(JsonFieldType.STRING).description("이미지").optional(),
 
                                 fieldWithPath("genderTag.genderTagId").type(JsonFieldType.NUMBER).description("성별 태그의 식별자").optional(),
                                 fieldWithPath("foodTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자").optional(),
@@ -156,7 +153,6 @@ public class PostControllerTest {
                                 fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문"),
-                                fieldWithPath("image").type(JsonFieldType.STRING).description("이미지"),
 
                                 fieldWithPath("postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에 등록한 태그의 식별자"),
                                 fieldWithPath("postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),
@@ -198,7 +194,6 @@ public class PostControllerTest {
                                 List.of(
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문"),
-                                        fieldWithPath("image").type(JsonFieldType.STRING).description("이미지"),
                                         fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글 생성날짜"),
                                         fieldWithPath("viewCount").type(JsonFieldType.NUMBER).description("게시글 조회수"),
                                         fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("게시글에 달린 댓글 수"),
@@ -251,7 +246,6 @@ public class PostControllerTest {
         given(postService.searchPosts(Mockito.any(),Mockito.anyString(),Mockito.eq(null),Mockito.eq(null),Mockito.eq(null))).willReturn(posts);
         given(postMapper.PostsToPostResponseDtos(Mockito.anyList())).willReturn(responses);
 
-        // ,Mockito.anyString(),Mockito.anyString(),Mockito.anyLong(),Mockito.anyLong()
 
         // when
         ResultActions actions = mockMvc.perform(
@@ -286,7 +280,6 @@ public class PostControllerTest {
                                         fieldWithPath("data[].category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜"),
-                                        fieldWithPath("data[].image").type(JsonFieldType.STRING).description("게시글 이미지"),
 
                                         fieldWithPath("data[].postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에서 저장한 태그의 식별자"),
                                         fieldWithPath("data[].postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),

@@ -5,7 +5,7 @@ import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { RangeStatic } from 'quill';
-import { IPostInfo } from '../../pages/PostBoard.tsx';
+import { IPostInfo } from '../../interface/board.tsx';
 
 interface IEditor {
   // htmlStr: string;

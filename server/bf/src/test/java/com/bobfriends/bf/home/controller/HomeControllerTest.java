@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -30,6 +31,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebMvcTest(HomeController.class)
 @MockBean(JpaMetamodelMappingContext.class)
@@ -84,7 +86,6 @@ public class HomeControllerTest {
                                         fieldWithPath("[].category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                         fieldWithPath("[].title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜"),
-                                        fieldWithPath("[].image").type(JsonFieldType.STRING).description("게시글 이미지"),
 
                                         fieldWithPath("[].postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에서 저장한 태그의 식별자"),
                                         fieldWithPath("[].postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),
@@ -94,3 +95,5 @@ public class HomeControllerTest {
                 ));
     }
 }
+
+

@@ -54,6 +54,7 @@ dependencies {
 	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	implementation 'com.google.code.gson:gson:2.9.0'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// == 스프링 부트 3.0 미만 ==
 	// QueryDSL JPA
