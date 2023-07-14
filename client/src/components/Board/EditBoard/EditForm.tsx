@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 // import axios from 'axios';
 
@@ -8,30 +8,50 @@ import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
-import { IPostInfo } from '../../../interface/board.tsx';
+import { IEditInfo } from '../../../interface/board.tsx';
+import { EDIT_DATA } from '../../../data/boardDummyData.ts';
 
-const PostForm = () => {
+const EditForm = () => {
   const navigate = useNavigate();
-  const [info, setInfo] = useState<IPostInfo>({
-    memberId: 0, // 사용자 memberID
-    category: '',
-    title: '',
-    content: '',
-    genderTag: null,
-    foodTag: null,
-    mate: {
-      mateNum: 0,
-    },
-  });
+  const params = useParams();
+  const postId = Number(params.postId);
+  const [info, setInfo] = useState<IEditInfo>(EDIT_DATA);
   console.log(info);
 
-  const postSubmitInfo = () => {
-    navigate(`/board`);
+  useEffect(() => {
+    const categoryRadios = document.getElementsByName('category');
+    for (let i = 0; i < categoryRadios.length; i++) {
+      if (info.category === (categoryRadios[i] as HTMLInputElement).value) {
+        (categoryRadios[i] as HTMLInputElement).checked = true;
+      }
+    }
+    const genderCheckboxes = document.getElementsByName('gender');
+    for (let i = 0; i < genderCheckboxes.length; i++) {
+      if (info.genderTag?.genderTagId === Number((genderCheckboxes[i] as HTMLInputElement).value)) {
+        (genderCheckboxes[i] as HTMLInputElement).checked = true;
+      }
+    }
+    const foodCheckboxes = document.getElementsByName('food');
+    for (let i = 0; i < foodCheckboxes.length; i++) {
+      if (info.foodTag?.foodTagId === Number((foodCheckboxes[i] as HTMLInputElement).value)) {
+        (foodCheckboxes[i] as HTMLInputElement).checked = true;
+      }
+    }
+    const statusRadios = document.getElementsByName('status');
+    for (let i = 0; i < statusRadios.length; i++) {
+      if (info.status === (statusRadios[i] as HTMLInputElement).value) {
+        (statusRadios[i] as HTMLInputElement).checked = true;
+      }
+    }
+  }, []);
+
+  const patchSubmitInfo = () => {
+    navigate(`/board/posts/${postId}`);
     // axios
-    //   .post(`${import.meta.env.VITE_APP_API_URL}/boardpost`, info)
+    //   .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/{post-id}/edit`, info)
     //   .then((res) => {
     //     console.log(res);
-    //     navigate(res.Location);
+    //     navigate(`/board/posts/${postId}`);
     //   })
     //   .catch((err) => {
     //     console.log(err);
@@ -72,6 +92,11 @@ const PostForm = () => {
     setInfo({ ...info, foodTag: { foodTagId: Number(foodTag) } });
   };
 
+  const handleStatusType = (e: React.MouseEvent<HTMLInputElement>) => {
+    const status = checkedValue(e);
+    setInfo({ ...info, status: status });
+  };
+
   const handleSubmitInfo = () => {
     if (!info.category) {
       alert('카테고리를 체크해주세요.');
@@ -88,7 +113,7 @@ const PostForm = () => {
       if (!info.foodTag || info.foodTag.foodTagId === 0) {
         setInfo({ ...info, foodTag: null });
       }
-      postSubmitInfo();
+      patchSubmitInfo();
     }
   };
 
@@ -109,6 +134,7 @@ const PostForm = () => {
         <InfoTitle>제목 *</InfoTitle>
         <InputText
           type="text"
+          value={info.title}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setInfo({ ...info, title: (e.target as HTMLInputElement).value })
           }
@@ -145,14 +171,30 @@ const PostForm = () => {
         <div>
           <InputNumber
             type="number"
+            value={Number(info.mate.mateNum)}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setInfo({ ...info, mate: { mateNum: Number((e.target as HTMLInputElement).value) } })
             }
           />
         </div>
       </InfoDiv>
+      <InfoDiv>
+        <InfoTitle>카테고리 *</InfoTitle>
+        <RadioFlex>
+          <InputRadio type="status" value="RECRUITING" handleGetValue={handleStatusType}>
+            모집 중
+          </InputRadio>
+          <InputRadio type="status" value="COMPLETE" handleGetValue={handleStatusType}>
+            모집 완료
+          </InputRadio>
+          <InputRadio type="status" value="END" handleGetValue={handleStatusType}>
+            모집 종료
+          </InputRadio>
+        </RadioFlex>
+      </InfoDiv>
+
       <SubmitButton type="button" onClick={() => handleSubmitInfo()}>
-        등록
+        수정
       </SubmitButton>
     </form>
   );
@@ -219,4 +261,4 @@ const SubmitButton = styled.button`
   }
 `;
 
-export default PostForm;
+export default EditForm;
