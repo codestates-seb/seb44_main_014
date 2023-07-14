@@ -19,18 +19,19 @@ public class MemberDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
 
-    public MemberDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils, MemberRepository memberRepository1, CustomAuthorityUtils authorityUtils1){
+    public MemberDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils){
 
-        this.memberRepository = memberRepository1;
-        this.authorityUtils = authorityUtils1;
+        this.memberRepository = memberRepository;
+        this.authorityUtils = authorityUtils;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> optionalMember = memberRepository.findByEmail(username);
-        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Optional<Member> findMember = memberRepository.findByEmail(username);
+        Member member = findMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        UserDetails userDetails = new MemberDetails(member);
 
-        return new MemberDetails(findMember);
+        return userDetails;
     }
 
     private final class MemberDetails extends Member implements UserDetails {
