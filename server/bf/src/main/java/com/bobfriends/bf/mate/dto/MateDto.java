@@ -3,6 +3,7 @@ package com.bobfriends.bf.mate.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 public class MateDto {
 
@@ -22,7 +23,6 @@ public class MateDto {
 
         private int mateNum;
     }
-
 
     @Getter @Setter
     @NoArgsConstructor
