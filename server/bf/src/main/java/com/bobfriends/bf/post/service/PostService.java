@@ -106,6 +106,7 @@ public class PostService {
         return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
     }
 
+
     /** 질문 삭제 **/
     public void deletePost(long postId, String token){
 
