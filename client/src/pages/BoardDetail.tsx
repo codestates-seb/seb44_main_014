@@ -2,62 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 // components
-import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
-import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardDetailHeader from '../components/Board/BoardDetail/BoardDetailHeader.tsx';
+import ApplyParticipate from '../components/Board/BoardDetail/ApplyParticipate.tsx';
+import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
+import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
 // DUMMY DATA
 import { BOARD_DETAIL } from '../data/boardDummyData.ts';
 import { IBoardDetailData } from '../interface/board.tsx';
-
-// interface IMateMember {
-//   mateMemberId: number;
-//   name: string;
-// }
-
-// export interface IComments {
-//   commentId: number;
-//   content: string;
-//   memberId: number;
-//   avgStarRate: number;
-//   name: string;
-//   createdAt: string;
-// }
-
-// export interface IDetailData {
-//   title: string;
-//   content: string;
-//   image?: string;
-//   createdAt: string;
-//   viewCount: number;
-//   commentCount: number;
-//   status: string;
-//   category: string;
-//   member: {
-//     memberId: number;
-//     image: string;
-//     name: string;
-//     gender: string;
-//     avgStarRate: number;
-//     eatStatus: boolean;
-//   };
-//   postTag: {
-//     postTagId: number;
-//     foodTagId: number;
-//     genderTagId: number;
-//   };
-//   genderTag: {
-//     genderTagId: number;
-//   };
-//   foodTag: {
-//     foodTagId: number;
-//   };
-//   mate: {
-//     findNum: number;
-//     mateNum: number;
-//   };
-//   mateMembers: IMateMember[];
-//   comments: IComments[];
-// }
 
 const BoardDetail = () => {
   const params = useParams();
@@ -72,8 +23,6 @@ const BoardDetail = () => {
 
   // 임시 사용자 id
   const userId = 3;
-
-  const showParticipant = mateMembers.filter((member) => member.mateMemberId === userId).length;
 
   useEffect(() => {
     getDetailData();
@@ -138,31 +87,12 @@ const BoardDetail = () => {
             )}
           </TextContainer>
           {/* 참가 신청 영역 */}
-          <ParticipantContainer>
-            <ApplyParticipate>
-              모집인원
-              <span>
-                {mate.findNum} / {mate.mateNum}
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  postApplyData();
-                  getDetailData();
-                }}
-              >
-                신청
-              </button>
-            </ApplyParticipate>
-            {showParticipant !== 0 && (
-              <ParticipantId>
-                <span>참가자: &nbsp;</span>
-                {mateMembers.map((member, idx) => (
-                  <span key={idx}>&nbsp; {member.name}</span>
-                ))}
-              </ParticipantId>
-            )}
-          </ParticipantContainer>
+          <ApplyParticipate
+            mate={mate}
+            mateMembers={mateMembers}
+            postApplyData={postApplyData}
+            getDetailData={getDetailData}
+          />
         </ContentsWrapper>
         {/* 작성자 프로필 영역 */}
         <WriterProfile profileInfo={member} />
@@ -220,44 +150,6 @@ const ModifyButtons = styled.div`
   a,
   button {
     margin-left: 1rem;
-    color: var(--color-black);
-  }
-`;
-
-// 참가 신청 영역
-const ParticipantContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 1.25rem;
-`;
-
-const ApplyParticipate = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.625rem;
-  font-size: 13px;
-  span {
-    margin-left: 1.25rem;
-    margin-right: 1.25rem;
-  }
-  button {
-    margin-right: 1.25rem;
-    padding: 5px;
-    background-color: #b3b3b3;
-    border-radius: 5px;
-    color: #ffffff;
-    &:hover {
-      background-color: var(--color-orange);
-    }
-  }
-`;
-
-const ParticipantId = styled.div`
-  padding: 0.625rem;
-  border: 1px solid var(--color-gray);
-  border-radius: 0.625rem;
-  font-size: 13px;
-  span {
     color: var(--color-black);
   }
 `;
