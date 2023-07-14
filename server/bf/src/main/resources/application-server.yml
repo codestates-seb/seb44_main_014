@@ -35,6 +35,7 @@ mail:
     admin: admin@gmail.com    # jwt 사용할때 필요
 
 jwt:
-  key: ${JWT_SECRET_KEY}      # jwt 사용할때 필요
+  key:
+    secret: ${JWT_SECRET_KEY}      # jwt 사용할때 필요
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
