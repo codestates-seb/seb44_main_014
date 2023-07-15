@@ -55,7 +55,7 @@ public class MateMemberService {
     public List<MateMember> getMateMembers(Long postId) {
 
         Post post1 = postService.findVerifiedPost(postId);
-        Mate mate = mateService.findVerifiedPost(post1.getMate().getMateId());
+        Mate mate = mateService.findVerifiedMate(post1.getMate().getMateId());
 
         // postId가 일치하는 mateMembers를 List로 찾음
 
