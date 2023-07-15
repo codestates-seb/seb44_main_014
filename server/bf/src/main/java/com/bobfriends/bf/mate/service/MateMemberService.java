@@ -34,7 +34,7 @@ public class MateMemberService {
         // mateId에 mateMember를 등록
         Post post1 = postService.findVerifiedPost(mateMember.getMate().getPost().getPostId());
         mateMember.setMate(post1.getMate());
-        Mate mate = mateService.findVerifiedPost(mateMember.getMate().getMateId());
+        Mate mate = mateService.findVerifiedMate(mateMember.getMate().getMateId());
 
         // 같은 회원은 같은 mate에 등록할 수 없음
         if (post1.getMate().getMateMembers().stream().anyMatch(member -> member.getMember().getMemberId().equals(post.getMemberId()))) {

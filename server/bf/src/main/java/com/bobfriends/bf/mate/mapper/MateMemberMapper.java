@@ -6,6 +6,7 @@ import com.bobfriends.bf.mate.entity.MateMember;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.post.entity.Post;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
 import java.util.ArrayList;
@@ -38,10 +39,16 @@ public interface MateMemberMapper {
 
         return response;
     }
-    
+
+    @Mapping(source = "member.name", target = "name")
+    MateMemberDto.DetailResponse MateMemberToMateMemberDetailResponse(MateMember mateMember);
+
+    List<MateMemberDto.DetailResponse> MateMembersToMateMemberDetailResponses(List<MateMember> mateMembers);
+
     default MateMemberDto.MateMemberGetResponses MateMemberToMateMemberGetResponses(Post post, List<MateMember> mateMembers) {
         MateMemberDto.MateMemberGetResponses responses = new MateMemberDto.MateMemberGetResponses();
         List<MateMemberDto.MateMemberGetResponse> list = new ArrayList<>();
+
 
         for (MateMember mateMember : mateMembers) {
             MateMemberDto.MateMemberGetResponse response = new MateMemberDto.MateMemberGetResponse();
@@ -60,3 +67,4 @@ public interface MateMemberMapper {
         return responses;
     }
 }
+

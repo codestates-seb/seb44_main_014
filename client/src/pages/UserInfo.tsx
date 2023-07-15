@@ -2,36 +2,42 @@ import { styled } from 'styled-components';
 import Button from '../components/UI/Button.tsx';
 import InputRadio from '../components/UI/InputRadio.tsx';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
-import { useState } from 'react';
+import React, { useState } from 'react';
+// import axios from 'axios';
 
 // login, signup, userinfo에서 모두 버튼을 누르면 다 validate해야하는데 하나의 컴포넌트로 묶을 수는 없을까?? 뭔가 form, input같은걸로 태그달면 할 수 있을 것 같은데
+interface IUserInfo {
+  name: string;
+  image: string;
+  gender: string;
+  location: string;
+  foodTag: number | null;
+}
 
 const UserInfo = () => {
-  // const [userInfo, setUserInfo] = useState({
-  //   image: null,
-  //   name: '',
-  //   gender: '',
-  //   location: '',
-  //   foodTag: [
-  //     //선택안할경우에는 초기값이 0? -> null
-  //
-  //   ],
-  // });
-  const [imageSrc, setImageSrc]: any = useState(null);
+  const [userInfo, setUserInfo] = useState<IUserInfo>({
+    name: '',
+    image: '',
+    gender: '',
+    location: '',
+    foodTag: null, //선택안할경우에는 초기값이 0? -> null
+  });
+  const [nameErrMsg, setNameErrMsg] = useState('');
+  const [genderErrMsg, setGenderErrMsg] = useState('');
+  const [locationErrMsg, setLocationErrMsg] = useState('');
+  /////////////////////////////////////////////////////////
+  // const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
 
-  const onUpload = (e: any) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    return new Promise<void>((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result || null); // 파일의 컨텐츠
-        resolve();
-      };
-    });
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0]; //formData써야하나?
+    // console.log(selectedImage);
+    // setImage(selectedImage);
+    setUserInfo({ ...userInfo, image: selectedImage });
+    setPreview(URL.createObjectURL(selectedImage));
+    // console.log(URL.createObjectURL(selectedImage));
   };
-
+  /////////////////////////////////////////////////////////
   const foodTags = [
     { id: 1, text: '# 한식' },
     { id: 2, text: '# 중식' },
@@ -40,69 +46,151 @@ const UserInfo = () => {
     { id: 5, text: '# 기타' },
   ];
 
-  const getCheckedValue = (e: React.MouseEvent<HTMLInputElement>) => {
+  const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
+    const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] !== e.target) {
+        (checkboxes[i] as HTMLInputElement).checked = false;
+      }
+    }
+  };
+
+  const handleNameValue = (e) => {
+    const name = e.target.value;
+    setUserInfo({ ...userInfo, name: name });
+  };
+
+  const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     if (target.checked) {
       return target.value;
     } else {
       return '';
     }
-    // console.log(result);
+  };
+
+  const handleGenderRadio = (e: React.MouseEvent<HTMLInputElement>) => {
+    const gender = checkedValue(e);
+    setUserInfo({ ...userInfo, gender: gender });
+  };
+
+  const handleLocationValue = (e) => {
+    const location = e.target.value;
+    setUserInfo({ ...userInfo, location: location });
   };
 
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
-    // const foodTag = getCheckedValue(e);
-    // setUserInfo({ ...userInfo, foodTag: { foodTagID: Number(foodTag) } });
+    selectOneCheckbox(e);
+    const foodTag = checkedValue(e);
+    setUserInfo({ ...userInfo, foodTag: Number(foodTag) });
+  };
+
+  const makeUserInfoData = async () => {
+    const formData = new FormData();
+    const { image, ...data } = userInfo;
+    // console.log(image);
+    // console.log(data);
+
+    formData.append('image', image);
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    formData.append('data', blob);
+
+    // await axios({
+    //   method: 'POST',
+    //   url: `/users/userInfo/{member-id}`,
+    //   mode: 'cors',
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data', // Content-Type을 반드시 이렇게 하여야 한다.
+    //   },
+    //   data: formData, // data 전송시에 반드시 생성되어 있는 formData 객체만 전송 하여야 한다.
+    // });
+  };
+
+  const userInfoValidate = () => {
+    let userInfoErr = false;
+    if (!userInfo.name) {
+      setNameErrMsg('활동명은 필수로 입력해야합니다.');
+      userInfoErr = true;
+    } else {
+      setNameErrMsg('');
+    }
+    if (!userInfo.gender) {
+      setGenderErrMsg('성별은 필수로 입력해야합니다.');
+      userInfoErr = true;
+    } else {
+      setGenderErrMsg('');
+    }
+    if (!userInfo.location) {
+      setLocationErrMsg('지역은 필수로 입력해야합니다.');
+      userInfoErr = true;
+    } else {
+      setLocationErrMsg('');
+    }
+    if (!userInfoErr) {
+      try {
+        makeUserInfoData();
+        //  patch해서 활동명 중복되나 확인 &
+        // const responseData = await postUserInfo(userInfo.name, userInfo.gender, userInfo.location, userInfo.foodTag);
+        alert('제출이 완료되었습니다.');
+        // login 상태 들고 가야해
+        // navigate('/');
+      } catch (error) {
+        alert('이미 사용하고 있는 활동명입니다.');
+      }
+    }
   };
 
   return (
     <UserInfoContainer>
       <ProfileImgContainer>
-        <ProfileImg width={'100%'} src={imageSrc}></ProfileImg>
-        <ProfileImgChangeText type="file" accept="image/*" onChange={(e) => onUpload(e)}>
+        <ProfileImg src={preview} />
+        <ProfileImgChangeText htmlFor="profileImg_uploads">
           프로필 사진 변경
+          <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange} />
         </ProfileImgChangeText>
       </ProfileImgContainer>
       <InfoContainer>
         <EmailContainer>
           <EmailTitle>이메일</EmailTitle>
-          <EmailInput></EmailInput>
+          <EmailInput readOnly value="//ReadOnly:prop로 받아올것" />
         </EmailContainer>
         <NameContainer>
           <NameTitle>활동명 *</NameTitle>
-          <NameInput></NameInput>
+          <NameInput value={userInfo.name} onChange={handleNameValue}></NameInput>
+          <ErrorMessage>{nameErrMsg}</ErrorMessage>
         </NameContainer>
         <GenderContainer>
           <GenderTitle>성별 *</GenderTitle>
           <GenderRadio>
-            <InputRadio type="gender">남성</InputRadio>
-            <InputRadio type="gender">여성</InputRadio>
+            <InputRadio type="gender" value="MALE" handleGetValue={handleGenderRadio}>
+              남성
+            </InputRadio>
+            <InputRadio type="gender" value="FEMALE" handleGetValue={handleGenderRadio}>
+              여성
+            </InputRadio>
           </GenderRadio>
+          <ErrorMessage>{genderErrMsg}</ErrorMessage>
         </GenderContainer>
         <LocationContainer>
           <LocationTitle>지역 선택 *</LocationTitle>
           <LocationInputContainer>
-            <LocationInput></LocationInput>
+            <LocationInput value={userInfo.location} onChange={handleLocationValue}></LocationInput>
             <LocationButton>우편번호</LocationButton>
           </LocationInputContainer>
+          <ErrorMessage>{locationErrMsg}</ErrorMessage>
         </LocationContainer>
         <FoodTagContainer>
           <FoodTagTitle>음식 태그</FoodTagTitle>
           <FoodTagList>
             {foodTags.map((tag) => (
-              <TagCheckbox
-                key={tag.id}
-                type="food"
-                value={tag.id}
-                handleGetValue={(e: React.MouseEvent<HTMLInputElement>) => handleFoodTag(e)}
-              >
+              <TagCheckbox key={tag.id} type="food" value={tag.id} handleGetValue={handleFoodTag}>
                 {tag.text}
               </TagCheckbox>
             ))}
           </FoodTagList>
         </FoodTagContainer>
       </InfoContainer>
-      <Button>저장</Button>
+      <Button onClick={userInfoValidate}>저장</Button>
     </UserInfoContainer>
   );
 };
@@ -129,12 +217,16 @@ const ProfileImg = styled.img`
   border-radius: 100px;
   background-color: var(--color-gray);
 `;
-const ProfileImgChangeText = styled.input`
+const ProfileImgChangeText = styled.label`
+  cursor: pointer;
   @media screen and (max-width: 768px) {
     margin: 5px 0 10px 0;
   }
   @media screen and (min-width: 769px) {
     margin: 5px 0 15px 0;
+  }
+  input {
+    display: none;
   }
 `;
 const InfoContainer = styled.section`
@@ -165,6 +257,10 @@ const EmailInput = styled.input`
 const NameContainer = styled(EmailContainer)``;
 const NameTitle = styled(EmailTitle)``;
 const NameInput = styled(EmailInput)``;
+const ErrorMessage = styled.div`
+  margin: 10px 0 10px 0;
+  color: var(--status-finished);
+`;
 const GenderContainer = styled(EmailContainer)``;
 const GenderTitle = styled(EmailTitle)``;
 const GenderRadio = styled.section`

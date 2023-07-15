@@ -5,13 +5,13 @@ import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { RangeStatic } from 'quill';
-import { IPostInfo } from '../../interface/board.tsx';
+import { IEditInfo } from '../../interface/board.tsx';
 
 interface IEditor {
   // htmlStr: string;
   // setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
-  info: IPostInfo;
-  setInfo: React.Dispatch<React.SetStateAction<IPostInfo>>;
+  info: IEditInfo;
+  setInfo: React.Dispatch<React.SetStateAction<IEditInfo>>;
 }
 
 // const TextEditor = ({ htmlStr, setHtmlStr }: IEditor) => {

@@ -1,9 +1,26 @@
-import { IBoardList, IBoardDetailData, IPageInfo } from '../interface/board.tsx';
+import { IBoardList, IBoardDetailData, IPageInfo, IEditInfo } from '../interface/board.tsx';
 
 interface IPagination {
   data: IBoardList[];
   pageInfo: IPageInfo;
 }
+
+export const EDIT_DATA: IEditInfo = {
+  memberId: 1,
+  category: 'EATING',
+  title: 'test',
+  content: 'test test',
+  genderTag: {
+    genderTagId: 2,
+  },
+  foodTag: {
+    foodTagId: 3,
+  },
+  mate: {
+    mateNum: 3,
+  },
+  status: 'COMPLETE',
+};
 
 export const BOARD_DETAIL: IBoardDetailData = {
   title: '삼겹살 집중 적으로 조질 분 구합니다!',
