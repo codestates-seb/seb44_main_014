@@ -25,18 +25,16 @@ import static com.bobfriends.bf.post.entity.Post.recruitStatus.COMPLETE;
 public class MateService {
 
     private final MateRepository mateRepository;
-    private final MemberService memberService;
-
 
     /** Mate update **/
     public void updateMate(Post post, MateDto.Post matePost){
 
-        Mate findMate = findVerifiedPost(post.getMate().getMateId());
+        Mate findMate = findVerifiedMate(post.getMate().getMateId());
         findMate.setMateNum(matePost.getMateNum());
     }
 
     /** Mate가 존재하는지 확인 **/
-    public Mate findVerifiedPost(long mateId){
+    public Mate findVerifiedMate(long mateId){
 
         Optional<Mate> optionalMate = mateRepository.findById(mateId);
 
