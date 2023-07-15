@@ -5,6 +5,8 @@ import com.bobfriends.bf.comment.mapper.CommentMapper;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.mate.entity.Mate;
+import com.bobfriends.bf.mate.mapper.MateMapper;
+import com.bobfriends.bf.mate.mapper.MateMemberMapper;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.mapper.MemberMapper;
@@ -18,13 +20,14 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PostMapper {
 
     MemberMapper memberMapper = Mappers.getMapper(MemberMapper.class);
     CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
+    MateMapper mateMapper = Mappers.getMapper(MateMapper.class);
+    MateMemberMapper mateMemberMapper = Mappers.getMapper(MateMemberMapper.class);
 
 
     default Post PostPostToPost(PostDto.Post requestBody){
@@ -46,7 +49,6 @@ public interface PostMapper {
         if(requestBody.getGenderTag() != null){
             genderTag.setGenderTagId(requestBody.getGenderTag().getGenderTagId());
         }else{
-            // null이면 기본값 태그 3 입력
             genderTag.setGenderTagId(3L);
         }
 
@@ -60,7 +62,6 @@ public interface PostMapper {
             if(requestBody.getFoodTag() != null){
                 foodTag.setFoodTagId(requestBody.getFoodTag().getFoodTagId());
             }else {
-                // null이면 기본값 태그 5 입력
                 foodTag.setFoodTagId(5L);
             }
             postTag.setFoodTag(foodTag);
@@ -100,53 +101,30 @@ public interface PostMapper {
                 .category(post.getCategory())
                 .build();
 
-        /** MemberDto.Response **/
         if(post.getMember() != null){
             MemberDto.DetailResponse memberDetailResponseDto
                     = memberMapper.memberToMemberDetailResponseDto(post.getMember());
             postResponseDto.setMember(memberDetailResponseDto);
         }
 
-
-        /** PostTagDto.Response **/
         if(post.getPostTag() != null){
             PostTagDto.Response postTagResponseDto =
                     PostTagToPostTagResponseDto(post.getPostTag());
             postResponseDto.setPostTag(postTagResponseDto);
         }
 
-        /** MateDto.DetailResponse
-         *  TODO : MateMapper 에서 가져오기
-         * **/
         if (post.getMate() != null){
-
-            MateDto.DetailResponse mateResponseDto =
-                    MateDto.DetailResponse.builder()
-                    .findNum(post.getMate().getMateMembers().size())
-                    .mateNum(post.getMate().getMateNum())
-                    .build();
-
-            postResponseDto.setMate(mateResponseDto);
+            MateDto.DetailResponse mateDetailResponseDto
+                    = mateMapper.MateToMateDetailResponseDto(post.getMate());
+            postResponseDto.setMate(mateDetailResponseDto);
         }
 
-        /** List<MateMemberDto.DetailResponse>
-         *  TODO : MateMemberMapper 에서 가져오기
-         * **/
         if (post.getMate().getMateMembers() != null){
-
-            List<MateMemberDto.DetailResponse> mateMembersDto =
-                    post.getMate().getMateMembers()
-                    .stream()
-                    .map(mateMember -> MateMemberDto.DetailResponse.builder()
-                            .mateMemberId(mateMember.getMateMemberId())
-                            .name(mateMember.getMember().getName())
-                            .build())
-                    .collect(Collectors.toList());
-
-            postResponseDto.setMateMembers(mateMembersDto);
+            List<MateMemberDto.DetailResponse> mateMemberDetailResponseDtos
+                    = mateMemberMapper.MateMembersToMateMemberDetailResponses(post.getMate().getMateMembers());
+            postResponseDto.setMateMembers(mateMemberDetailResponseDtos);
         }
 
-        /** List<CommentDto.DetailResponse> **/
         if (post.getComments() != null){
             List<CommentDto.DetailResponse> commentDetailsResponseDtos
                     = commentMapper.commentsToCommentDetailsResponse(post.getComments());

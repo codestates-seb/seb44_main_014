@@ -64,7 +64,7 @@ public class PostTagService {
             if(post.getPostTag().getFoodTag() == null){
 
                 // 기본값으로 설정
-                foodTag.setFoodTagId(5l);
+                foodTag.setFoodTagId(5L);
             }else{
 
                 // 삭제 전 저장
