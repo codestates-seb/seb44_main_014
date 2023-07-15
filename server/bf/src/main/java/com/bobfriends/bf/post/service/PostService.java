@@ -42,10 +42,8 @@ public class PostService {
 
     /**
      * 게시글 등록
-     * - [밥먹기] 성별 태그 / 음식 태그 선택 (default : 상관없음(3), 기타(5))
+     * - [밥먹기] 성별 태그 / 음식 태그 선택 (default : 남녀노소(3), 기타(5))
      * - [장보기] 음식 태그 사용 X
-     * - 등록 기본 status : 모집중
-     * TODO : 이미지
      */
     public Post createPost(Post requestBody){
 
@@ -57,8 +55,6 @@ public class PostService {
 
     /** 게시글 수정 **/
     public Post updatePost(long postId, PostDto.Patch patch){
-
-        // TODO : 로그인한 회원이 작성자인지 확인 (JWT)
 
         Post findPost = findVerifiedPost(postId);
 
