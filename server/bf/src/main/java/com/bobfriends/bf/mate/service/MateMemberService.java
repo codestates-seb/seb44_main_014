@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.bobfriends.bf.post.entity.Post.recruitStatus.COMPLETE;
 @Service
@@ -27,7 +26,7 @@ public class MateMemberService {
     private final MateService mateService;
 
     /** Mate create **/
-    public MateMember createMateMember(MateMember mateMember, MateMemberDto.PostMateMember post){
+    public MateMember createMateMember(MateMember mateMember, MateMemberDto.PostMateMember post) {
         // 존재하는 회원인지 검증
         Member findMember = memberService.findVerifiedMember(post.getMemberId());
 
@@ -41,14 +40,30 @@ public class MateMemberService {
         if (post1.getMate().getMateMembers().stream().anyMatch(member -> member.getMember().getMemberId().equals(post.getMemberId()))) {
             throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_SAME_MATEMEMBER);
         }
-        
-        // 구해진 mate 인원
-        int findNum = mate.getMateMembers().size()+1;
 
-        if(mate.getMateNum()==findNum) post1.setStatus(COMPLETE);
-        if(mate.getMateNum()<findNum){
+        // 구해진 mate 인원
+        int findNum = mate.getMateMembers().size() + 1;
+
+        if (mate.getMateNum() == findNum) post1.setStatus(COMPLETE);
+        if (mate.getMateNum() < findNum) {
             throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MATEMEMBER);
         }
         return mateMemberRepository.save(mateMember);
+    }
+
+    /** mate 팀원 전체 조회 **/
+    public List<MateMember> getMateMembers(Long postId) {
+
+        Post post1 = postService.findVerifiedPost(postId);
+        Mate mate = mateService.findVerifiedMate(post1.getMate().getMateId());
+
+        // postId가 일치하는 mateMembers를 List로 찾음
+
+        List<MateMember> mateMembers = mate.getMateMembers().stream()
+                .filter(mateMember -> mateMember.getMate().getPost().getPostId().equals(post1.getPostId()))
+                .collect(Collectors.toList());
+
+        return mateMembers;
+
     }
 }
