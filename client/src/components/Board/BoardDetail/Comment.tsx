@@ -30,7 +30,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 
   const patchComment = () => {
     // axios
-    //   .patch(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
+    //   .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
     //   .then((res) => {
     //     console.log(res);
     //     setCommentContent({ ...commentContent, content: res.content });
@@ -42,7 +42,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 
   const deleteComment = () => {
     // axios
-    //   .delete(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`)
+    //   .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`)
     //   .then((res) => {
     //     console.log(res);
     //   })

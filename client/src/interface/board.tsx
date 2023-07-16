@@ -96,3 +96,8 @@ export interface IPostInfo {
     mateNum: Nullable<number>;
   };
 }
+
+// Page Edit Board - edit info
+export interface IEditInfo extends IPostInfo {
+  status?: string;
+}
