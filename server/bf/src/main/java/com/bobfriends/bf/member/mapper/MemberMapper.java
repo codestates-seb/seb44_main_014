@@ -15,20 +15,6 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface MemberMapper {
 
-    default Member memberPostDtoToMember(MemberDto.Post requestBody) {
-        if (requestBody == null) {
-            return null;
-        }
-
-        Member member = new Member();
-
-        member.setName(requestBody.getName());
-        member.setEmail(requestBody.getEmail());
-        member.setPassword(requestBody.getPassword());
-
-        return member;
-    }
-
     default MemberDto.PatchResponse memberToMemberPatchResponseDto(Member member){
         MemberDto.PatchResponse patchResponse = new MemberDto.PatchResponse();
 
@@ -46,6 +32,7 @@ public interface MemberMapper {
         MemberDto.PatchInfoResponse patchInfoResponse = new MemberDto.PatchInfoResponse();
 
         patchInfoResponse.setImage(member.getImage());
+        patchInfoResponse.setEmail(member.getEmail());
         patchInfoResponse.setMemberId(member.getMemberId());
         patchInfoResponse.setLocation(member.getLocation());
         patchInfoResponse.setGender(member.getGender());
