@@ -9,7 +9,6 @@ import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
-import com.bobfriends.bf.member.mapper.MemberMapper;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
@@ -122,10 +121,12 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
-    // 회원 정보 삭제
-    public void deleteMember(long memberId) {
-        Member findMember = findVerifiedMember(memberId);
 
+    /** 회원 탈퇴 **/
+    @Transactional
+    public void deleteMember(long memberId) {
+
+        Member findMember = findVerifiedMember(memberId);
         memberRepository.deleteById(findMember.getMemberId());
     }
 
