@@ -45,6 +45,12 @@ public interface MateMemberMapper {
 
     List<MateMemberDto.DetailResponse> MateMembersToMateMemberDetailResponses(List<MateMember> mateMembers);
 
+    @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "member.name", target = "name")
+    MateMemberDto.MateMemberGetResponse MateMemberToMateMemberGetResponse(MateMember mateMember);
+
+    List<MateMemberDto.MateMemberGetResponse> MateMembersToMateMemberGetResponses(List<MateMember> mateMembers);
+
     default MateMemberDto.MateMemberGetResponses MateMemberToMateMemberGetResponses(Post post, List<MateMember> mateMembers) {
         MateMemberDto.MateMemberGetResponses responses = new MateMemberDto.MateMemberGetResponses();
         List<MateMemberDto.MateMemberGetResponse> list = new ArrayList<>();

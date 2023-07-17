@@ -11,6 +11,7 @@ import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
 import com.bobfriends.bf.member.mapper.MemberMapper;
 import com.bobfriends.bf.member.repository.MemberRepository;
+import com.bobfriends.bf.member.repository.MemberTagRepository;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
 import com.bobfriends.bf.tag.entity.FoodTag;
@@ -66,14 +67,14 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    // 회원 정보 수정
+    /** 회원 정보 수정 **/
+    @Transactional
     public Member updateMember(long memberId, MemberDto.Patch patch) {
         Member findMember = findVerifiedMember(memberId);
 
-        Optional.ofNullable(patch.getName()).ifPresent(name -> findMember.setName(name));
-        Optional.ofNullable(patch.getPassword()).ifPresent(password -> findMember.setPassword(password));
-        Optional.ofNullable(patch.getLocation()).ifPresent(location -> findMember.setLocation(location));
         Optional.ofNullable(patch.getImage()).ifPresent(image -> findMember.setImage(image));
+        Optional.ofNullable(patch.getLocation()).ifPresent(location -> findMember.setLocation(location));
+
 
         if (patch.getFoodTag() != null) {
             MemberTag memberTag = memberTagService.updateMemberFoodTag(findMember, patch.getFoodTag());
@@ -115,7 +116,8 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    // 회원 정보 조회
+
+    /** 회원 마이페이지 정보 조회 **/
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
     }
@@ -127,7 +129,8 @@ public class MemberService {
         memberRepository.deleteById(findMember.getMemberId());
     }
 
-    // 이미 존재하는 회원인지 검증
+
+    /** 이미 존재하는 회원인지 검증 **/
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
@@ -135,7 +138,7 @@ public class MemberService {
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-    // 이미 등록된 이메일인지 검증
+    /** 이미 등록된 이메일인지 검증 **/
     public void verifyExistEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
