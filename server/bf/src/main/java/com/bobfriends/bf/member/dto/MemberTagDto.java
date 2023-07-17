@@ -25,4 +25,13 @@ public class MemberTagDto {
 
         private long foodTagId;
     }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class FoodTagResponse {
+
+        private long foodTagId;
+    }
 }

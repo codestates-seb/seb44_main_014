@@ -66,15 +66,16 @@ public class MemberController {
         return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
-    @PatchMapping("/mypage/{member-id}/edit") // 회원 수정
+
+    /** 회원 정보 수정 **/
+    @PatchMapping("/mypage/{member-id}/edit")
     public ResponseEntity patchMember (@PathVariable("member-id") @Positive long memberId,
                                        @RequestBody MemberDto.Patch patch) {
+
         patch.addMemberId(memberId);
+        Member updateMember = memberService.updateMember(memberId, patch);
 
-        Member updateMemer = memberService.updateMember(memberId, patch);
-
-        return new ResponseEntity<>(memberMapper.memberToMemberPatchResponseDto(updateMemer),HttpStatus.OK);
-
+        return new ResponseEntity<>(memberMapper.memberToMemberPatchResponseDto(updateMember),HttpStatus.OK);
     }
 
     @DeleteMapping("/mypage/{member-id}/edit") // 회원 삭제

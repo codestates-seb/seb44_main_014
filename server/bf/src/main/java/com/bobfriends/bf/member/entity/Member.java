@@ -57,7 +57,7 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private MemberTag memberTag;
 
     @ElementCollection(fetch = FetchType.EAGER)

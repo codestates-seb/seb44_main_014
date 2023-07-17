@@ -18,15 +18,19 @@ public interface MemberMapper {
     default MemberDto.PatchResponse memberToMemberPatchResponseDto(Member member){
         MemberDto.PatchResponse patchResponse = new MemberDto.PatchResponse();
 
-        patchResponse.setLocation(member.getLocation());
-        patchResponse.setName(member.getName());
-        patchResponse.setMemberId(member.getMemberId());
-        patchResponse.setPassword(member.getPassword());
         patchResponse.setImage(member.getImage());
-        patchResponse.setMemberTag(memberTagToMemberTagResponseDto(member.getMemberTag()));
+        patchResponse.setName(member.getName());
+        patchResponse.setEmail(member.getEmail());
+        patchResponse.setGender(member.getGender());
+        patchResponse.setLocation(member.getLocation());
+
+        patchResponse.setFoodTag(memberTagToMemberFoodTagResponseDto(member.getMemberTag()));
 
         return patchResponse;
     }
+
+    @Mapping(source = "foodTag.foodTagId", target = "foodTagId")
+    MemberTagDto.FoodTagResponse memberTagToMemberFoodTagResponseDto (MemberTag memberTag);
 
     default MemberDto.PatchInfoResponse memberToMemberPatchInfoResponse(Member member){
         MemberDto.PatchInfoResponse patchInfoResponse = new MemberDto.PatchInfoResponse();
