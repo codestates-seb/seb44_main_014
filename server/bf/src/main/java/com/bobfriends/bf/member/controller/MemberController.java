@@ -1,5 +1,6 @@
 package com.bobfriends.bf.member.controller;
 
+import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.mapper.MemberMapper;
@@ -91,10 +92,14 @@ public class MemberController {
         return new ResponseEntity<>(memberMapper.memberPostResponseDtos(memberPosts), HttpStatus.OK);
     }
 
-    @GetMapping("/mypage/{member-id}/comments") // 작성한 댓글 조회
-    public ResponseEntity<List<MemberDto.MemberCommentResponseDto>> getMyComment(@PathVariable("member-id") long memberId) {
-        List<MemberDto.MemberCommentResponseDto> memberCommentResponseDtoList = memberService.findMyComments();
-        return ResponseEntity.ok(memberCommentResponseDtoList);
+
+    /** 작성한 댓글들 조회 **/
+    @GetMapping("/mypage/{member-id}/comments")
+    public ResponseEntity getMyComment(@PathVariable("member-id") @Positive long memberId) {
+
+        List<Comment> memberComments = memberService.findMyComments(memberId);
+
+        return new ResponseEntity<>(memberMapper.memberToMemberCommentResponses(memberComments), HttpStatus.OK);
     }
 
 

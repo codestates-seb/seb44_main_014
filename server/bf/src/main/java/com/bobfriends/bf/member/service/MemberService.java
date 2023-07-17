@@ -11,19 +11,14 @@ import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
 import com.bobfriends.bf.member.mapper.MemberMapper;
 import com.bobfriends.bf.member.repository.MemberRepository;
-import com.bobfriends.bf.member.repository.MemberTagRepository;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
 import com.bobfriends.bf.tag.entity.FoodTag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +31,6 @@ public class MemberService {
     private final MemberTagService memberTagService;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberMapper memberMapper;
 
     /** 회원 가입 **/
     public Member createMember(MemberDto.Post post) {
@@ -164,22 +158,10 @@ public class MemberService {
         return postRepository.findAllByMemberId(memberId);
     }
 
-    //작성한 댓글
-    public List<MemberDto.MemberCommentResponseDto> findMyComments() {
-        List<Comment> comments = commentRepository.findAll();
-        List<MemberDto.MemberCommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
-        for (Comment comment : comments) {
-            MemberDto.MemberCommentResponseDto memberCommentResponseDto = new MemberDto.MemberCommentResponseDto();
-
-            memberCommentResponseDto.setMemberId(comment.getMember().getMemberId());
-            memberCommentResponseDto.setCommentId(comment.getCommentId());
-            memberCommentResponseDto.setContent(comment.getContent());
-            memberCommentResponseDto.setPostTitle(comment.getPost().getTitle());
-            commentResponseDtoList.add(memberCommentResponseDto);
-        }
-
-        return commentResponseDtoList;
+    /** 작성한 댓글들 조회 **/
+    public List<Comment> findMyComments(long memberId) {
+        return commentRepository.findAllByMemberId(memberId);
     }
 
 }

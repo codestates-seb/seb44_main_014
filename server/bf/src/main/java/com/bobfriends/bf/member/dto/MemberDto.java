@@ -142,9 +142,9 @@ public class MemberDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MemberCommentResponseDto {
-        private long memberId;
+        private long postId;
         private long commentId;
         private String content;
-        private String postTitle;
+        private String title;
     }
 }
