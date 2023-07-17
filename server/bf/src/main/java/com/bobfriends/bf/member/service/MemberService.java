@@ -4,7 +4,6 @@ import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
 import com.bobfriends.bf.auth.utils.GetAuthUserUtils;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.repository.CommentRepository;
-import com.bobfriends.bf.dto.MultiResponseDto;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.dto.MemberDto;
@@ -60,6 +59,8 @@ public class MemberService {
             // Role 부여
             List<String> roles = authorityUtils.createRoles(member.getEmail());
             member.setRoles(roles);
+
+            member.setImage("/users/image/defaultProfile.png");
         }
 
         return memberRepository.save(member);
@@ -82,15 +83,17 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+
+    /** 최소 회원 정보 등록 **/
     @Transactional
     public Member updateInfo(MemberDto.PatchInfo requestBody) {
 
         Member findMember = findVerifiedMember(requestBody.getMemberId());
 
         findMember.setName(requestBody.getName());
+        findMember.setImage(requestBody.getImage());
         findMember.setGender(requestBody.getGender());
         findMember.setLocation(requestBody.getLocation());
-        findMember.setImage(requestBody.getImage());
 
         if (requestBody.getFoodTag() != null) {
 

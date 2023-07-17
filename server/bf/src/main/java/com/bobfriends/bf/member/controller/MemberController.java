@@ -47,11 +47,12 @@ public class MemberController {
     @Autowired
     private MemberRepository memberRepository;
 
-    @PatchMapping("/userInfo/{member-id}")  // 최초 회원 정보 등록
+    /** 최초 회원 정보 등록 **/
+    @PatchMapping("/userInfo/{member-id}")
     public ResponseEntity memberInfo (@PathVariable("member-id") @Positive long memberId,
                                       @RequestBody MemberDto.PatchInfo patchInfo) {
-        patchInfo.addMemberId(memberId);
 
+        patchInfo.addMemberId(memberId);
         Member updateInfo = memberService.updateInfo(patchInfo);
 
         return new ResponseEntity<>(memberMapper.memberToMemberPatchInfoResponse(updateInfo), HttpStatus.OK);

@@ -24,6 +24,7 @@ public class S3Controller {
         return new ResponseEntity<>(s3Uploader.uploadPost(multipartFile), null, HttpStatus.OK);
     }
 
+    /** 회원 이미지 등록 **/
     @PostMapping("/users/images/upload")
     public ResponseEntity<String[]> memberImage(@RequestPart MultipartFile multipartFile) throws IOException {
 

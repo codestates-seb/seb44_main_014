@@ -70,6 +70,7 @@ public class MemberDto {
         private MemberTagDto.Response memberTag;
     }
 
+    /** 최초 등록 **/
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
@@ -81,23 +82,22 @@ public class MemberDto {
         private String location;
         private MemberTagDto.FoodTagMember foodTag;
 
-        public PatchInfo addMemberId(Long memberId){
-            Assert.notNull(memberId, "member id must not be null.");
+        public void addMemberId(long memberId){
             this.memberId = memberId;
-
-            return this;
         }
     }
 
+    /** 최초 등록 response **/
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PatchInfoResponse {
         private long memberId;
+        private String image;
+        private String email;
         private String name;
         private Member.genderStatus gender;
         private String location;
-        private String image;
         private MemberTagDto.Response memberTag;
     }
 
