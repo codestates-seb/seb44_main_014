@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
+import axios from 'axios';
 import Comment from './Comment.tsx';
 
 import { IComments } from '../../../interface/board.tsx';
@@ -9,21 +11,32 @@ type CommentInfoProps = {
 };
 
 const BoardComment = ({ commentInfo }: CommentInfoProps) => {
+  const params = useParams();
+  const postId = Number(params.postId);
   const [commentContent, setCommentContent] = useState({
     memberId: 1, // 사용자 멤버 아이디
     content: '',
   });
+  const comments = commentInfo.sort((a, b) => {
+    if (a.createdAt > b.createdAt) {
+      return -1;
+    } else if (a.createdAt < b.createdAt) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 
   const postComment = () => {
-    // axios
-    //   .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
-    //   .then((res) => {
-    //     console.log(res);
-    //     setCommentContent({ ...commentContent, content: res.content });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments`, commentContent)
+      .then((res) => {
+        console.log(res);
+        // setCommentContent({ ...commentContent, content: res.content });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -44,7 +57,7 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
         />
       </CommentForm>
       <ul>
-        {commentInfo.map((comment: IComments, idx: number) => (
+        {comments.map((comment: IComments, idx: number) => (
           <Comment key={idx} commentInfo={comment} />
         ))}
       </ul>

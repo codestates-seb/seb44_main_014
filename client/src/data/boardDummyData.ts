@@ -87,8 +87,8 @@ export const BOARD_LISTS: IBoardList[] = [
     avgStarRate: 2.5,
     viewCount: 3,
     commentCount: 4,
-    status: '모집 완료',
-    category: '장보기',
+    status: 'END',
+    category: 'SHOPPING',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-07-04T15:16:55.3304725',
     postTag: {
@@ -104,8 +104,8 @@ export const BOARD_LISTS: IBoardList[] = [
     avgStarRate: 5,
     viewCount: 10,
     commentCount: 43,
-    status: '모집 중',
-    category: '밥먹기',
+    status: 'RECRUITING',
+    category: 'SHOPPING',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-30T18:16:55.3304725',
     postTag: {
@@ -121,8 +121,8 @@ export const BOARD_LISTS: IBoardList[] = [
     avgStarRate: 4.6,
     viewCount: 3,
     commentCount: 4,
-    status: '모집 완료',
-    category: '장보기',
+    status: 'COMPLETE',
+    category: 'SHOPPING',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-06-22T18:16:55.3304725',
     postTag: {
@@ -139,7 +139,7 @@ export const BOARD_LISTS: IBoardList[] = [
     viewCount: 10,
     commentCount: 43,
     status: '모집 종료',
-    category: '밥먹기',
+    category: 'SHOPPING',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-30T18:16:55.3304725',
     postTag: {
@@ -156,7 +156,7 @@ export const BOARD_LISTS: IBoardList[] = [
     viewCount: 88,
     commentCount: 4,
     status: '모집 완료',
-    category: '장보기',
+    category: 'SHOPPING',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-07-03T15:16:55.3304725',
     postTag: {
@@ -173,7 +173,7 @@ export const BOARD_LISTS: IBoardList[] = [
     viewCount: 19,
     commentCount: 43,
     status: '모집 중',
-    category: '밥먹기',
+    category: 'EATING',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-12T18:16:55.3304725',
     postTag: {
@@ -190,7 +190,7 @@ export const BOARD_LISTS: IBoardList[] = [
     viewCount: 63,
     commentCount: 4,
     status: '모집 완료',
-    category: '장보기',
+    category: 'EATING',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-06-02T18:16:55.3304725',
     postTag: {
@@ -207,7 +207,7 @@ export const BOARD_LISTS: IBoardList[] = [
     viewCount: 15,
     commentCount: 43,
     status: '모집 종료',
-    category: '밥먹기',
+    category: 'EATING',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-06T18:16:55.3304725',
     postTag: {
@@ -224,7 +224,7 @@ export const BOARD_LISTS: IBoardList[] = [
     viewCount: 83,
     commentCount: 4,
     status: '모집 완료',
-    category: '장보기',
+    category: 'EATING',
     title: '과일 같이 사실 분@@',
     createdAt: '2023-07-01T15:16:55.3304725',
     postTag: {
@@ -241,7 +241,7 @@ export const BOARD_LISTS: IBoardList[] = [
     viewCount: 70,
     commentCount: 43,
     status: '모집 중',
-    category: '밥먹기',
+    category: 'EATING',
     title: '삼겹살 집중 적으로 조질 분 구합니다!',
     createdAt: '2023-06-15T18:16:55.3304725',
     postTag: {

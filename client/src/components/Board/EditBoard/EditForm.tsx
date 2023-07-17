@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import axios from 'axios';
+import axios from 'axios';
 
 import InputRadio from '../../UI/InputRadio.tsx';
 import TextEditor from '../../TextEditor/TextEditor.tsx';
@@ -9,14 +9,39 @@ import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IEditInfo } from '../../../interface/board.tsx';
-import { EDIT_DATA } from '../../../data/boardDummyData.ts';
 
 const EditForm = () => {
   const navigate = useNavigate();
   const params = useParams();
   const postId = Number(params.postId);
-  const [info, setInfo] = useState<IEditInfo>(EDIT_DATA);
+  const [info, setInfo] = useState<IEditInfo>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   console.log(info);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
+      .then((res) => {
+        const { category, content, mate, postTag, status, title, member } = res.data;
+        const data = {
+          category,
+          content,
+          mate,
+          status,
+          title,
+          genderTag: { genderTagId: postTag.genderTagId },
+          foodTag: { foodTagId: postTag.foodTagId },
+          memberId: member.memberId,
+        };
+        console.log(res);
+        setInfo(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     const categoryRadios = document.getElementsByName('category');
@@ -43,19 +68,18 @@ const EditForm = () => {
         (statusRadios[i] as HTMLInputElement).checked = true;
       }
     }
-  }, []);
+  }, [info]);
 
   const patchSubmitInfo = () => {
-    navigate(`/board/posts/${postId}`);
-    // axios
-    //   .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/{post-id}/edit`, info)
-    //   .then((res) => {
-    //     console.log(res);
-    //     navigate(`/board/posts/${postId}`);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/edit`, info)
+      .then((res) => {
+        console.log(res);
+        navigate(`/board/posts/${postId}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -116,6 +140,10 @@ const EditForm = () => {
       patchSubmitInfo();
     }
   };
+
+  if (isLoading) {
+    return <div>LOADING..</div>;
+  }
 
   return (
     <form>

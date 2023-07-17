@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import axios from 'axios';
+import axios from 'axios';
 
 import InputRadio from '../../UI/InputRadio.tsx';
 import TextEditor from '../../TextEditor/TextEditor.tsx';
@@ -13,7 +13,7 @@ import { IPostInfo } from '../../../interface/board.tsx';
 const PostForm = () => {
   const navigate = useNavigate();
   const [info, setInfo] = useState<IPostInfo>({
-    memberId: 0, // 사용자 memberID
+    memberId: 1, // 사용자 memberID
     category: '',
     title: '',
     content: '',
@@ -26,16 +26,17 @@ const PostForm = () => {
   console.log(info);
 
   const postSubmitInfo = () => {
-    navigate(`/board`);
-    // axios
-    //   .post(`${import.meta.env.VITE_APP_API_URL}/boardpost`, info)
-    //   .then((res) => {
-    //     console.log(res);
-    //     navigate(res.Location);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts`, info)
+      .then((res) => {
+        console.log(res);
+        console.log(res.headers);
+        // const uri = res.headers.get('Location');
+        // navigate(uri);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;

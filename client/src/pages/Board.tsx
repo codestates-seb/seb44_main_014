@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 import { styled } from 'styled-components';
 // Components
 import SearchFilter from '../components/Board/SearchFilter.tsx';
@@ -9,45 +9,42 @@ import SortButtons from '../components/Board/SortButtons.tsx';
 import BoardList from '../components/Board/BoardList.tsx';
 import Pagination from '../components/Board/Pagination.tsx';
 // DUMMY DATA
-import { PAGINATION } from '../data/boardDummyData.ts';
-import { IBoardList, IFilterInfo } from '../interface/board.tsx';
+// import { PAGINATION } from '../data/boardDummyData.ts';
+import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.tsx';
 
 const Board = () => {
   const navigate = useNavigate();
-  // tabMenu active 상태 체크
-  const [tabLeft, setTabLeft] = useState<boolean>(true);
-  const [tabRight, setTabRight] = useState<boolean>(!tabLeft);
   // 정렬 active 상태 체크
   const [newer, setNewer] = useState<boolean>(true);
   const [mostViewed, setMostViewed] = useState<boolean>(!newer);
-  // 태그 active 상태 체크
-  const [activeGender, setActiveGender] = useState<number | null>();
-  const [activeFood, setActiveFood] = useState<number | null>();
   // 리스트 정렬
-  const [pageInfo, setPageInfo] = useState(PAGINATION.pageInfo);
-  const [lists, setLists] = useState<IBoardList[]>(PAGINATION.data);
+  const [pageInfo, setPageInfo] = useState<IPageInfo | object>({});
+  const [lists, setLists] = useState<IBoardList[]>([]);
   // endPoint 파라미터
   const [filterInfo, setFilterInfo] = useState<IFilterInfo>({
     page: 1,
-    category: '밥먹기',
+    category: 'EATING',
     genderTag: null,
     foodTag: null,
   });
-  const [currentApi, setCurrentApi] = useState<string>(`&size=10&category=밥먹기`);
+  const [currentApi, setCurrentApi] = useState<string>(`&category=EATING`);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log(filterInfo);
-    console.log(`${import.meta.env.VITE_APP_API_URL}/board?page=${filterInfo.page}${currentApi}`);
-    // axios
-    //   .get(`${import.meta.env.VITE_APP_API_URL}/board?page=${filterInfo.page}&size=10&category=밥먹기`)
-    //   .then((res) => {
-    //     console.log(res);
-    //     setPageInfo();
-    //     setLists();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    // console.log(filterInfo);
+    // console.log(`${import.meta.env.VITE_APP_API_URL}/board/search?page=${filterInfo.page}${currentApi}`);
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/board/search?page=${filterInfo.page}${currentApi}`)
+      .then((res) => {
+        console.log(res);
+        setPageInfo(res.data.pageInfo);
+        setLists(res.data.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   }, [filterInfo, currentApi]);
 
   // TODO: 임시. 사용자 로그인 상태 가져올 것
@@ -61,33 +58,18 @@ const Board = () => {
     }
   };
 
+  if (isLoading) {
+    return <div>LOADING..</div>;
+  }
+
   return (
     <>
       {/* 상단 검색, 태그 영역 */}
-      <SearchFilter
-        tabLeft={tabLeft}
-        activeGender={activeGender}
-        setActiveGender={setActiveGender}
-        activeFood={activeFood}
-        setActiveFood={setActiveFood}
-        filterInfo={filterInfo}
-        setFilterInfo={setFilterInfo}
-        setCurrentApi={setCurrentApi}
-      />
+      <SearchFilter filterInfo={filterInfo} setFilterInfo={setFilterInfo} setCurrentApi={setCurrentApi} />
 
       {/* 밥먹기, 장보기 탭메뉴 */}
       <ListLayout>
-        <TabMenu
-          tabLeft={tabLeft}
-          setTabLeft={setTabLeft}
-          tabRight={tabRight}
-          setTabRight={setTabRight}
-          setActiveGender={setActiveGender}
-          setActiveFood={setActiveFood}
-          filterInfo={filterInfo}
-          setFilterInfo={setFilterInfo}
-          setCurrentApi={setCurrentApi}
-        />
+        <TabMenu filterInfo={filterInfo} setFilterInfo={setFilterInfo} setCurrentApi={setCurrentApi} />
 
         {/* 게시판 영역 */}
         <ListsSection>

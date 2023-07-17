@@ -9,36 +9,30 @@ import { GENDER_TAGS, FOOD_TAGS } from '../../constant/constant.ts';
 import { IFilterInfo } from '../../interface/board.tsx';
 
 interface IFilterData {
-  tabLeft: boolean;
-  activeGender: number | null | undefined;
-  setActiveGender: React.Dispatch<React.SetStateAction<number | null | undefined>>;
-  activeFood: number | null | undefined;
-  setActiveFood: React.Dispatch<React.SetStateAction<number | null | undefined>>;
+  // tabLeft: boolean;
+  // activeGender: number | null | undefined;
+  // setActiveGender: React.Dispatch<React.SetStateAction<number | null | undefined>>;
+  // activeFood: number | null | undefined;
+  // setActiveFood: React.Dispatch<React.SetStateAction<number | null | undefined>>;
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
   setCurrentApi: React.Dispatch<React.SetStateAction<string>>;
-  // getSearchData: () => void;
-  // getGenderTagData: (e: React.MouseEvent<HTMLElement>) => void;
-  // getFoodTagData: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 const SearchFilter = ({
-  tabLeft,
-  activeGender,
-  setActiveGender,
-  activeFood,
-  setActiveFood,
+  // tabLeft,
+  // activeGender,
+  // setActiveGender,
+  // activeFood,
+  // setActiveFood,
   filterInfo,
   setFilterInfo,
   setCurrentApi,
-}: // getSearchData,
-// getGenderTagData,
-// getFoodTagData,
-IFilterData) => {
+}: IFilterData) => {
   const [keyword, setKeyword] = useState('');
   const getSearchData = () => {
     setFilterInfo({ ...filterInfo, page: 1 });
-    setCurrentApi(`&size=10&keyword=${keyword}&category=${filterInfo.category}`);
+    setCurrentApi(`&keyword=${keyword}&category=${filterInfo.category}`);
     setKeyword('');
   };
 
@@ -64,34 +58,30 @@ IFilterData) => {
               <button
                 key={tag.id}
                 value={tag.id}
-                className={activeGender === tag.id ? 'active' : ''}
+                className={filterInfo.genderTag === tag.id ? 'active' : ''}
                 onClick={(e: React.MouseEvent<HTMLElement>) => {
-                  setActiveGender(tag.id);
-                  setActiveFood(null);
+                  // setActiveGender(tag.id);
+                  // setActiveFood(null);
                   setFilterInfo({ ...filterInfo, page: 1, genderTag: tag.id, foodTag: null });
-                  setCurrentApi(
-                    `&size=10&genderTag=${(e.target as HTMLButtonElement).value}&category=${filterInfo.category}`
-                  );
+                  setCurrentApi(`&genderTag=${(e.target as HTMLButtonElement).value}&category=${filterInfo.category}`);
                 }}
               >
                 {tag.text}
               </button>
             ))}
           </TagsRow>
-          {tabLeft && (
+          {filterInfo.category !== '장보기' && (
             <TagsRow>
               {FOOD_TAGS.map((tag) => (
                 <button
                   key={tag.id}
                   value={tag.id}
-                  className={activeFood === tag.id ? 'active' : ''}
+                  className={filterInfo.foodTag === tag.id ? 'active' : ''}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    setActiveFood(tag.id);
-                    setActiveGender(null);
+                    // setActiveFood(tag.id);
+                    // setActiveGender(null);
                     setFilterInfo({ ...filterInfo, page: 1, foodTag: tag.id, genderTag: null });
-                    setCurrentApi(
-                      `&size=10&foodTag=${(e.target as HTMLButtonElement).value}&category=${filterInfo.category}`
-                    );
+                    setCurrentApi(`&foodTag=${(e.target as HTMLButtonElement).value}`);
                   }}
                 >
                   {tag.text}
@@ -109,7 +99,7 @@ const SeachSection = styled.section`
   width: 100%;
   height: 200px;
   padding: 0 1.875rem;
-  background-image: url('../../public/img/background_grocery.jpg');
+  background-image: url('/img/background_grocery.jpg');
   background-color: rgba(0, 0, 0, 0.3);
   background-size: cover;
   background-repeat: no-repeat;
