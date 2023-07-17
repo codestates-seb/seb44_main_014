@@ -122,11 +122,6 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    // 모든 회원 정보 조회
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
-    }
-
 
     /** 회원 마이페이지 정보 조회 **/
     public Member findMember(long memberId) {
@@ -163,9 +158,10 @@ public class MemberService {
         return member;
     }
 
-    // 작성한 게시글
-    public List<Post> findMyPosts() {
-        return postRepository.findAll();
+
+    /** 작성한 게시글들 조회 **/
+    public List<Post> findMyPosts(long memberId) {
+        return postRepository.findAllByMemberId(memberId);
     }
 
     //작성한 댓글

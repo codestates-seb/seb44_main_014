@@ -5,7 +5,6 @@ import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.post.dto.PostDto;
 import lombok.*;
-import org.springframework.util.Assert;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +12,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.bobfriends.bf.post.entity.Post.*;
 
 public class MemberDto {
     @Getter
@@ -130,12 +131,11 @@ public class MemberDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MemberPostResponseDto {
-        private long memberId;
         private long postId;
         private String title;
         private String content;
         private LocalDateTime createdAt;
-        private com.bobfriends.bf.post.entity.Post.recruitStatus status;
+        private recruitStatus status;
     }
 
     @Getter @Setter

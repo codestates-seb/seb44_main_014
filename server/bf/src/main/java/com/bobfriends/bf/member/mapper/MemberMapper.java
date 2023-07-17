@@ -121,8 +121,10 @@ public interface MemberMapper {
         return memberResponseDto;
     }
 
-    @Mapping(source = "post.postId", target = "postId")
-    List<MemberDto.MemberPostResponseDto> memberPostResponseDtos(List<Post> memberPosts);
+
+    MemberDto.MemberPostResponseDto memberToMemberPostResponse(Post post);
+
+    List<MemberDto.MemberPostResponseDto> memberPostResponseDtos(List<Post> posts);
 
     @Mapping(source = "comment.commentId", target = "commentId")
     @Mapping(source = "post.title", target = "title")
