@@ -4,7 +4,6 @@ import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
 import com.bobfriends.bf.auth.utils.GetAuthUserUtils;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.repository.CommentRepository;
-import com.bobfriends.bf.dto.MultiResponseDto;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.dto.MemberDto;
@@ -15,9 +14,6 @@ import com.bobfriends.bf.member.repository.MemberRepository;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
 import com.bobfriends.bf.tag.entity.FoodTag;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +57,8 @@ public class MemberService {
 
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
+
+        member.setImage("/users/image/defaultPofile.png");
 
         return memberRepository.save(member);
     }
