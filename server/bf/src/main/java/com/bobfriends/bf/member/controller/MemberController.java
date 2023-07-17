@@ -100,9 +100,14 @@ public class MemberController {
         List<MemberDto.MemberCommentResponseDto> memberCommentResponseDtoList = memberService.findMyComments();
         return ResponseEntity.ok(memberCommentResponseDtoList);
     }
-    @PatchMapping("/mypage/{member-id}") // eatStatus 수정
+
+
+    /** eatStatus 수정 **/
+    @PatchMapping("/mypage/{member-id}")
     public ResponseEntity<?> updateEatStatus(@PathVariable ("member-id") long memberId,
                                              @RequestParam boolean eatStatus) {
+
+        /*
         Optional<Member> optionalMember = memberRepository.findById(memberId);
 
         if (optionalMember.isEmpty()) {
@@ -113,7 +118,10 @@ public class MemberController {
         member.setEatStatus(eatStatus);
         memberRepository.save(member);
 
-        return ResponseEntity.ok().build();
+         */
+        Member member = memberService.updateEatStatus(memberId, eatStatus);
+
+        return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
 }

@@ -111,6 +111,17 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+
+    /** eatStatus 수정 **/
+    @Transactional
+    public Member updateEatStatus(long memberId, boolean eatStatus){
+
+        Member findMember = findVerifiedMember(memberId);
+        findMember.setEatStatus(eatStatus);
+
+        return memberRepository.save(findMember);
+    }
+
     // 모든 회원 정보 조회
     public List<Member> findMembers() {
         return memberRepository.findAll();
