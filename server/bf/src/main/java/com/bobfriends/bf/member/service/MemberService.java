@@ -4,7 +4,6 @@ import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
 import com.bobfriends.bf.auth.utils.GetAuthUserUtils;
 import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.comment.repository.CommentRepository;
-import com.bobfriends.bf.dto.MultiResponseDto;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.dto.MemberDto;
@@ -15,6 +14,7 @@ import com.bobfriends.bf.member.repository.MemberRepository;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
 import com.bobfriends.bf.tag.entity.FoodTag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
@@ -36,31 +37,31 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final MemberMapper memberMapper;
 
+    /** 회원 가입 **/
+    public Member createMember(MemberDto.Post post) {
 
-    public MemberService(MemberRepository memberRepository,
-                         PostRepository postRepository,
-                         CommentRepository commentRepository,
-                         MemberTagService memberTagService,
-                         PasswordEncoder passwordEncoder,
-                         CustomAuthorityUtils authorityUtils, MemberMapper memberMapper) {
-        this.memberRepository = memberRepository;
-        this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
-        this.memberTagService = memberTagService;
-        this.passwordEncoder = passwordEncoder;
-        this.authorityUtils = authorityUtils;
-        this.memberMapper = memberMapper;
-    }
+        verifyExistEmail(post.getEmail());
 
-    // 회원가입
-    public Member createMember(Member member) {
-        verifyExistEmail(member.getEmail());
+        Member member = new Member();
 
-        String encryptedPassword = passwordEncoder.encode(member.getPassword());
-        member.setPassword(encryptedPassword);
+        member.setEmail(post.getEmail());
 
-        List<String> roles = authorityUtils.createRoles(member.getEmail());
-        member.setRoles(roles);
+        if(!post.getPassword().equals(post.getSamePassword())){
+
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_NOT_SAME);
+
+        }else {
+
+            // 비밀번호 암호화
+            String encryptedPassword = passwordEncoder.encode(post.getPassword());
+            member.setPassword(encryptedPassword);
+
+            // Role 부여
+            List<String> roles = authorityUtils.createRoles(member.getEmail());
+            member.setRoles(roles);
+
+            member.setImage("/users/image/defaultProfile.png");
+        }
 
         return memberRepository.save(member);
     }
@@ -82,15 +83,17 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+
+    /** 최소 회원 정보 등록 **/
     @Transactional
     public Member updateInfo(MemberDto.PatchInfo requestBody) {
 
         Member findMember = findVerifiedMember(requestBody.getMemberId());
 
         findMember.setName(requestBody.getName());
+        findMember.setImage(requestBody.getImage());
         findMember.setGender(requestBody.getGender());
         findMember.setLocation(requestBody.getLocation());
-        findMember.setImage(requestBody.getImage());
 
         if (requestBody.getFoodTag() != null) {
 

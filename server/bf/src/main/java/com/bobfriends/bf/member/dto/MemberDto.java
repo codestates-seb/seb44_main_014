@@ -16,9 +16,6 @@ public class MemberDto {
     @NoArgsConstructor
     public static class Post {
 
-        @NotBlank
-        private String name;
-
         @Email
         @NotBlank
         @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$",
@@ -29,6 +26,9 @@ public class MemberDto {
         @Size(min = 8, message = "비밀번호는 특수문자 포함 8자 이상이어야합니다.")
         private String password;
 
+        @NotBlank
+        @Size(min = 8, message = "비밀번호 확인이 비밀번호와 일치하지 않습니다")
+        private String samePassword;
     }
 
     @Getter @Setter
@@ -70,6 +70,7 @@ public class MemberDto {
         private MemberTagDto.Response memberTag;
     }
 
+    /** 최초 등록 **/
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
@@ -81,23 +82,22 @@ public class MemberDto {
         private String location;
         private MemberTagDto.FoodTagMember foodTag;
 
-        public PatchInfo addMemberId(Long memberId){
-            Assert.notNull(memberId, "member id must not be null.");
+        public void addMemberId(long memberId){
             this.memberId = memberId;
-
-            return this;
         }
     }
 
+    /** 최초 등록 response **/
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PatchInfoResponse {
         private long memberId;
+        private String image;
+        private String email;
         private String name;
         private Member.genderStatus gender;
         private String location;
-        private String image;
         private MemberTagDto.Response memberTag;
     }
 

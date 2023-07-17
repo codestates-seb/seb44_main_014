@@ -28,19 +28,18 @@ public class MemberController {
     public final static String USER_DEFAULT_URL = "/users";
     private final MemberService memberService;
     private final MemberMapper memberMapper;
-    private boolean eatStatus;
 
     public MemberController(MemberService memberService, MemberMapper memberMapper) {
         this.memberService = memberService;
         this.memberMapper = memberMapper;
     }
 
-    @PostMapping("/signup") // 회원가입
-    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
-        Member member = memberMapper.memberPostDtoToMember(requestBody);
+    /** 회원 가입 **/
+    @PostMapping("/signup")
+    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post post) {
 
-        Member createdMember = memberService.createMember(member);
-        URI location = UriCreator.createUri(USER_DEFAULT_URL, createdMember.getMemberId());
+        Member member = memberService.createMember(post);
+        URI location = UriCreator.createUri(USER_DEFAULT_URL, member.getMemberId());
 
         return ResponseEntity.created(location).build();
     }
@@ -48,11 +47,12 @@ public class MemberController {
     @Autowired
     private MemberRepository memberRepository;
 
-    @PatchMapping("/userInfo/{member-id}")  // 최초 회원 정보 등록
+    /** 최초 회원 정보 등록 **/
+    @PatchMapping("/userInfo/{member-id}")
     public ResponseEntity memberInfo (@PathVariable("member-id") @Positive long memberId,
                                       @RequestBody MemberDto.PatchInfo patchInfo) {
-        patchInfo.addMemberId(memberId);
 
+        patchInfo.addMemberId(memberId);
         Member updateInfo = memberService.updateInfo(patchInfo);
 
         return new ResponseEntity<>(memberMapper.memberToMemberPatchInfoResponse(updateInfo), HttpStatus.OK);
