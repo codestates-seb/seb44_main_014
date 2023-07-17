@@ -1,6 +1,9 @@
 package com.bobfriends.bf.member.dto;
 
+import com.bobfriends.bf.comment.dto.CommentDto;
+import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.post.dto.PostDto;
 import lombok.*;
 import org.springframework.util.Assert;
 
@@ -9,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberDto {
     @Getter
@@ -89,19 +93,23 @@ public class MemberDto {
         private MemberTagDto.Response memberTag;
     }
 
+
+    /** 마이페이지 response **/
     @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class Response {
-        private long memberId;
         private String image;
         private String name;
         private String email;
-        private Member.genderStatus gender;
-        private String location;
-        private boolean eatStatus;
         private float avgStarRate;
-        private MemberTagDto.Response memberTag;
+        private MemberTagDto.FoodTagResponse foodTag;
+        private boolean eatStatus;
+        private List<PostDto.myPageResponse> posts;
+        private List<CommentDto.myPageResponse> comments;
+        private List<MateDto.myPageResponse> postMates; // 자기가 연 모임
+        private List<MateDto.myPageResponse> mates;  // 참여 중인 모임
     }
 
 

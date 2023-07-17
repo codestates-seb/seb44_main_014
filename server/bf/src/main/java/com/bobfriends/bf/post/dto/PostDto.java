@@ -166,4 +166,18 @@ public class PostDto {
 
         private PostTagDto.Response postTag;
     }
+
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class myPageResponse {
+
+        private long postId;
+
+        private String title;
+
+        private recruitStatus status;
+    }
 }

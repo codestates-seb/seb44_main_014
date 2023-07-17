@@ -116,7 +116,8 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    // 회원 정보 조회
+
+    /** 회원 마이페이지 정보 조회 **/
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
     }
@@ -128,7 +129,8 @@ public class MemberService {
         memberRepository.deleteById(findMember.getMemberId());
     }
 
-    // 이미 존재하는 회원인지 검증
+
+    /** 이미 존재하는 회원인지 검증 **/
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
@@ -136,7 +138,7 @@ public class MemberService {
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-    // 이미 등록된 이메일인지 검증
+    /** 이미 등록된 이메일인지 검증 **/
     public void verifyExistEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())

@@ -58,8 +58,10 @@ public class MemberController {
         return new ResponseEntity<>(memberMapper.memberToMemberPatchInfoResponse(updateInfo), HttpStatus.OK);
     }
 
-    @GetMapping("/mypage/{member-id}") // 회원 조회
-    public ResponseEntity<MemberDto.Response> getMember (@Positive @PathVariable("member-id") long memberId){
+
+    /** 회원 마이페이지 조회 **/
+    @GetMapping("/mypage/{member-id}")
+    public ResponseEntity getMember (@Positive @PathVariable("member-id") long memberId){
 
         Member member = memberService.findMember(memberId);
 
