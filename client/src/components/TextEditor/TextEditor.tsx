@@ -31,7 +31,7 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
       const formData = new FormData();
       console.log(file);
       if (file) {
-        formData.append('multipartFiles', file[0]);
+        formData.append('multipartFile', file[0]);
       }
       // FormData의 key 확인
       for (const key of formData.keys()) {
@@ -58,7 +58,7 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
         const quillEditor = quillRef.current.getEditor();
         quillEditor.setSelection(index, 1);
 
-        quillEditor.clipboard.dangerouslyPasteHTML(index, `<img src=${res.data} alt=${'alt text'} />`);
+        quillEditor.clipboard.dangerouslyPasteHTML(index, `<img src=${res.data[0]} alt=${'alt text'} />`);
       }
     };
   };
