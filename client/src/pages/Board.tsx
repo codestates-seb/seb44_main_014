@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { styled } from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 // Components
 import SearchFilter from '../components/Board/SearchFilter.tsx';
 import TabMenu from '../components/Board/TabMenu.tsx';
@@ -10,10 +11,13 @@ import BoardList from '../components/Board/BoardList.tsx';
 import Pagination from '../components/Board/Pagination.tsx';
 // DUMMY DATA
 // import { PAGINATION } from '../data/boardDummyData.ts';
+import { category } from '../store/listCategorySlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
 
 const Board = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isShopping = useSelector((state: RootState) => state.category.value);
   // 정렬 active 상태 체크
   const [newer, setNewer] = useState<boolean>(true);
   const [mostViewed, setMostViewed] = useState<boolean>(!newer);
@@ -23,16 +27,21 @@ const Board = () => {
   // endPoint 파라미터
   const [filterInfo, setFilterInfo] = useState<IFilterInfo>({
     page: 1,
-    category: 'EATING',
+    category: '',
     genderTag: null,
     foodTag: null,
   });
-  const [currentApi, setCurrentApi] = useState<string>(`&category=EATING`);
+  const [currentApi, setCurrentApi] = useState<string>(
+    isShopping === 'SHOPPING' ? `&category=SHOPPING` : `&category=EATING`
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // console.log(filterInfo);
-    // console.log(`${import.meta.env.VITE_APP_API_URL}/board/search?page=${filterInfo.page}${currentApi}`);
+    setFilterInfo({ ...filterInfo, category: isShopping });
+    dispatch(category('EATING'));
+  }, []);
+
+  useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/board/search?page=${filterInfo.page}${currentApi}`)
       .then((res) => {
