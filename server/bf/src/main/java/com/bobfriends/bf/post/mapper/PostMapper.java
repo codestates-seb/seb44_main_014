@@ -141,4 +141,8 @@ public interface PostMapper {
     PostDto.Response PostToPostResponseDto(Post post);
 
     List<PostDto.Response> PostsToPostResponseDtos(List<Post> posts);
+
+    PostDto.myPageResponse PostToMyPageResponseDto(Post post);
+
+    List<PostDto.myPageResponse> PostsToMyPageResponseDtos(List<Post> posts);
 }

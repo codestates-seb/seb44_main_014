@@ -30,13 +30,16 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
+
         Optional<Member> findMember = memberRepository.findByEmail(authentication.getName());
         Member member = findMember.orElseThrow(() -> new  BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        Long memberId = member.getMemberId();
-        String name = member.getName();
-        String email = member.getEmail();
+        long memberId = member.getMemberId();
 
+        String location = member.getLocation();
+        Member.genderStatus gender = member.getGender();
+
+        // 응답 본문에 포함
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
@@ -44,8 +47,8 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         try (PrintWriter writer = response.getWriter()){
             JsonObject json = new JsonObject();
             json.addProperty("memberId", memberId);
-            json.addProperty("name", name);
-            json.addProperty("email", email);
+            json.addProperty("location", location);
+            json.addProperty("gender", String.valueOf(gender));
             writer.write(json.toString());
         }
     }

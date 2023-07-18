@@ -42,23 +42,23 @@ public class Member extends Auditable {
 
     private boolean eatStatus=false;
 
-    @OneToMany(mappedBy = "rateMember")
+    @OneToMany(mappedBy = "rateMember", cascade = CascadeType.REMOVE)
     private List<MemberStarRate> rateMemberStarRates = new ArrayList<>();
 
     @JsonIgnoreProperties("mate")
-    @OneToMany(mappedBy = "postMember")
+    @OneToMany(mappedBy = "postMember", cascade = CascadeType.REMOVE)
     private List<MemberStarRate> postMemberStarRates = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MateMember> mateMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private MemberTag memberTag;
     @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Location locations;

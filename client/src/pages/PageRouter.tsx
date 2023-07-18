@@ -27,16 +27,8 @@ const PageRouter = () => {
         <Route path="/users/mypage/:memberId" element={<Mypage />} />
         <Route path="/users/mypage/:memberId/edit" element={<EditUserInfo />} />
         <Route path="/questions/:questionId/mate" element={<UserRating />} />
-        <Route
-          path="/users/mypage/:memberId/questions
-"
-          element={<MoreInfoWritings />}
-        />
-        <Route
-          path="/users/mypage/:memberId/comments
-"
-          element={<MoreInfoComments />}
-        />
+        <Route path="/users/mypage/:memberId/questions" element={<MoreInfoWritings />} />
+        <Route path="/users/mypage/:memberId/comments" element={<MoreInfoComments />} />
         <Route path="/board" element={<Board />} /> {/* 추후 수정 필요 */}
         <Route path="/board/posts/:postId" element={<BoardDetail />} />
         <Route path="/board/posts/:postId/edit" element={<EditBoard />} />

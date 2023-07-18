@@ -72,4 +72,14 @@ public class CommentDto {
         private String name;
         private LocalDateTime createdAt;
     }
+
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class myPageResponse {
+        private long postId;
+        private long commentId;
+        private String content;
+    }
 }
