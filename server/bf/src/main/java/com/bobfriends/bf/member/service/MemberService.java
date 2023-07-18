@@ -9,21 +9,15 @@ import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.entity.MemberTag;
-import com.bobfriends.bf.member.mapper.MemberMapper;
 import com.bobfriends.bf.member.repository.MemberRepository;
-import com.bobfriends.bf.member.repository.MemberTagRepository;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
 import com.bobfriends.bf.tag.entity.FoodTag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +30,6 @@ public class MemberService {
     private final MemberTagService memberTagService;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberMapper memberMapper;
 
     /** 회원 가입 **/
     public Member createMember(MemberDto.Post post) {
@@ -111,9 +104,15 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    // 모든 회원 정보 조회
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
+
+    /** eatStatus 수정 **/
+    @Transactional
+    public Member updateEatStatus(long memberId, boolean eatStatus){
+
+        Member findMember = findVerifiedMember(memberId);
+        findMember.setEatStatus(eatStatus);
+
+        return memberRepository.save(findMember);
     }
 
 
@@ -122,10 +121,12 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
-    // 회원 정보 삭제
-    public void deleteMember(long memberId) {
-        Member findMember = findVerifiedMember(memberId);
 
+    /** 회원 탈퇴 **/
+    @Transactional
+    public void deleteMember(long memberId) {
+
+        Member findMember = findVerifiedMember(memberId);
         memberRepository.deleteById(findMember.getMemberId());
     }
 
@@ -152,27 +153,16 @@ public class MemberService {
         return member;
     }
 
-    // 작성한 게시글
-    public List<Post> findMyPosts() {
-        return postRepository.findAll();
+
+    /** 작성한 게시글들 조회 **/
+    public List<Post> findMyPosts(long memberId) {
+        return postRepository.findAllByMemberId(memberId);
     }
 
-    //작성한 댓글
-    public List<MemberDto.MemberCommentResponseDto> findMyComments() {
-        List<Comment> comments = commentRepository.findAll();
-        List<MemberDto.MemberCommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
-        for (Comment comment : comments) {
-            MemberDto.MemberCommentResponseDto memberCommentResponseDto = new MemberDto.MemberCommentResponseDto();
-
-            memberCommentResponseDto.setMemberId(comment.getMember().getMemberId());
-            memberCommentResponseDto.setCommentId(comment.getCommentId());
-            memberCommentResponseDto.setContent(comment.getContent());
-            memberCommentResponseDto.setPostTitle(comment.getPost().getTitle());
-            commentResponseDtoList.add(memberCommentResponseDto);
-        }
-
-        return commentResponseDtoList;
+    /** 작성한 댓글들 조회 **/
+    public List<Comment> findMyComments(long memberId) {
+        return commentRepository.findAllByMemberId(memberId);
     }
 
 }

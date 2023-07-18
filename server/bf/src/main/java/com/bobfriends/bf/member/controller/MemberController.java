@@ -1,13 +1,12 @@
 package com.bobfriends.bf.member.controller;
 
+import com.bobfriends.bf.comment.entity.Comment;
 import com.bobfriends.bf.member.dto.MemberDto;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.mapper.MemberMapper;
-import com.bobfriends.bf.member.repository.MemberRepository;
 import com.bobfriends.bf.member.service.MemberService;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.utils.UriCreator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +16,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -43,9 +41,6 @@ public class MemberController {
 
         return ResponseEntity.created(location).build();
     }
-
-    @Autowired
-    private MemberRepository memberRepository;
 
     /** 최초 회원 정보 등록 **/
     @PatchMapping("/userInfo/{member-id}")
@@ -80,40 +75,44 @@ public class MemberController {
         return new ResponseEntity<>(memberMapper.memberToMemberPatchResponseDto(updateMember),HttpStatus.OK);
     }
 
-    @DeleteMapping("/mypage/{member-id}/edit") // 회원 삭제
-    public ResponseEntity deleteMember (@PathVariable("member-id") @Positive long memberId) {
+
+    /** 회원 탈퇴 **/
+    @DeleteMapping("/mypage/{member-id}/edit")
+    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
+
         memberService.deleteMember(memberId);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/mypage/{member-id}/posts") // 작성한 게시물 조회
-    public ResponseEntity getMyPost () {
-        List<Post> memberPosts = memberService.findMyPosts();
-        List<MemberDto.MemberPostResponseDto> memberPostResponseDtoList = memberMapper.memberPostResponseDtos(memberPosts);
 
-        return new ResponseEntity<>(memberPostResponseDtoList, HttpStatus.OK);
+    /** 작성한 게시물 조회 **/
+    @GetMapping("/mypage/{member-id}/posts")
+    public ResponseEntity getMyPost(@PathVariable("member-id") @Positive long memberId) {
+
+        List<Post> memberPosts = memberService.findMyPosts(memberId);
+
+        return new ResponseEntity<>(memberMapper.memberPostResponseDtos(memberPosts), HttpStatus.OK);
     }
 
-    @GetMapping("/mypage/{member-id}/comments") // 작성한 댓글 조회
-    public ResponseEntity<List<MemberDto.MemberCommentResponseDto>> getMyComment(@PathVariable("member-id") long memberId) {
-        List<MemberDto.MemberCommentResponseDto> memberCommentResponseDtoList = memberService.findMyComments();
-        return ResponseEntity.ok(memberCommentResponseDtoList);
+
+    /** 작성한 댓글들 조회 **/
+    @GetMapping("/mypage/{member-id}/comments")
+    public ResponseEntity getMyComment(@PathVariable("member-id") @Positive long memberId) {
+
+        List<Comment> memberComments = memberService.findMyComments(memberId);
+
+        return new ResponseEntity<>(memberMapper.memberToMemberCommentResponses(memberComments), HttpStatus.OK);
     }
-    @PatchMapping("/mypage/{member-id}") // eatStatus 수정
+
+
+    /** eatStatus 수정 **/
+    @PatchMapping("/mypage/{member-id}")
     public ResponseEntity<?> updateEatStatus(@PathVariable ("member-id") long memberId,
                                              @RequestParam boolean eatStatus) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
 
-        if (optionalMember.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+        Member member = memberService.updateEatStatus(memberId, eatStatus);
 
-        Member member = optionalMember.get();
-        member.setEatStatus(eatStatus);
-        memberRepository.save(member);
-
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(memberMapper.memberToMemberResponseDto(member), HttpStatus.OK);
     }
 
 }

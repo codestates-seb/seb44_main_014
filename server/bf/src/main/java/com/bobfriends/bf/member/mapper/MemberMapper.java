@@ -121,13 +121,16 @@ public interface MemberMapper {
         return memberResponseDto;
     }
 
-    @Mapping(source = "post.postId", target = "postId")
-    List<MemberDto.MemberPostResponseDto> memberPostResponseDtos(List<Post> memberPosts);
 
-    @Mapping(source = "comment.commentId", target = "commentId")
+    MemberDto.MemberPostResponseDto memberToMemberPostResponse(Post post);
+
+    List<MemberDto.MemberPostResponseDto> memberPostResponseDtos(List<Post> posts);
+
+    @Mapping(source = "post.postId", target = "postId")
     @Mapping(source = "post.title", target = "title")
-    @Mapping(source = "member.memberId", target = "memberId")
-    List<MemberDto.MemberCommentResponseDto> memberCommentResponseDtos(List<Comment> memberComments);
+    MemberDto.MemberCommentResponseDto memberToMemberCommentResponse(Comment comment);
+
+    List<MemberDto.MemberCommentResponseDto> memberToMemberCommentResponses(List<Comment> comments);
 
     MemberDto.DetailResponse memberToMemberDetailResponseDto(Member member);
 
