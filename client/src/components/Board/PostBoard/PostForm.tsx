@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import axios from 'axios';
+import axios from 'axios';
 
 import InputRadio from '../../UI/InputRadio.tsx';
 import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
-import { IPostInfo } from '../../../interface/board.tsx';
+import { IPostInfo } from '../../../interface/board.ts';
+import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
 
 const PostForm = () => {
   const navigate = useNavigate();
   const [info, setInfo] = useState<IPostInfo>({
-    memberId: 0, // 사용자 memberID
+    memberId: 1, // 사용자 memberID
     category: '',
     title: '',
     content: '',
@@ -26,34 +27,36 @@ const PostForm = () => {
   console.log(info);
 
   const postSubmitInfo = () => {
-    navigate(`/board`);
-    // axios
-    //   .post(`${import.meta.env.VITE_APP_API_URL}/boardpost`, info)
-    //   .then((res) => {
-    //     console.log(res);
-    //     navigate(res.Location);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  };
-  const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (target.checked) {
-      return target.value;
-    } else {
-      return '';
-    }
+    axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts`, info)
+      .then((res) => {
+        console.log(res);
+        console.log(res.headers);
+        // const uri = res.headers.get('Location');
+        // navigate(uri);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
-    const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i] !== e.target) {
-        (checkboxes[i] as HTMLInputElement).checked = false;
-      }
-    }
-  };
+  // const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
+  //   const target = e.target as HTMLInputElement;
+  //   if (target.checked) {
+  //     return target.value;
+  //   } else {
+  //     return '';
+  //   }
+  // };
+
+  // const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
+  //   const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
+  //   for (let i = 0; i < checkboxes.length; i++) {
+  //     if (checkboxes[i] !== e.target) {
+  //       (checkboxes[i] as HTMLInputElement).checked = false;
+  //     }
+  //   }
+  // };
 
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {
     const category = checkedValue(e);

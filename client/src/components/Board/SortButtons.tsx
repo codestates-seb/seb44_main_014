@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { styled } from 'styled-components';
-import { IBoardList } from '../../interface/board.tsx';
+import { IBoardList } from '../../interface/board.ts';
 
 interface IStyledProps {
   $isActive: boolean;

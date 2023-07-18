@@ -1,72 +1,81 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
+import axios from 'axios';
 // components
 import BoardDetailHeader from '../components/Board/BoardDetail/BoardDetailHeader.tsx';
 import ApplyParticipate from '../components/Board/BoardDetail/ApplyParticipate.tsx';
 import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
 // DUMMY DATA
-import { BOARD_DETAIL } from '../data/boardDummyData.ts';
-import { IBoardDetailData } from '../interface/board.tsx';
+// import { BOARD_DETAIL } from '../data/boardDummyData.ts';
+import { IBoardDetailData } from '../interface/board.ts';
 
 const BoardDetail = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const postId = Number(params.postId);
-  const [detailData, setDetailData] = useState<IBoardDetailData>(BOARD_DETAIL);
+  const [detailData, setDetailData] = useState<IBoardDetailData>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { content, mate, mateMembers, member, comments } = detailData;
-  // const [updateMate, setUpdateMate] = useState({
-  //   mate: mate,
-  //   mateMembers: mateMembers,
-  // });
+  const [updateMate, setUpdateMate] = useState({});
+  console.log(updateMate);
 
   // 임시 사용자 id
-  const userId = 3;
+  const userId = 1;
 
   useEffect(() => {
     getDetailData();
   }, []);
 
   const getDetailData = () => {
-    setDetailData(BOARD_DETAIL);
-    // axios
-    //   .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
-    //   .then((res) => {
-    //     console.log(res);
-    //     setDetailData(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
+      .then((res) => {
+        console.log(res);
+        const { mate, mateMembers } = res.data;
+        setDetailData(res.data);
+        setUpdateMate({ mate, mateMembers });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
 
-  // const applyData = {
-  //   memberId: 1, //사용자 멤버 아이디
-  // };
+  const applyData = {
+    memberId: 1, //사용자 멤버 아이디
+  };
 
   const postApplyData = () => {
-    // axios
-    //   .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/mate`, applyData)
-    //   .then((res) => {
-    //     console.log(res)
-    //     setUpdateMate({...updateMate, mate: res.mate})
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/mate`, applyData)
+      .then((res) => {
+        console.log(res);
+        setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deletePost = () => {
-    // axios
-    //   .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
-    //   .then((res) => {
-    //     console.log(res)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
+      .then((res) => {
+        console.log(res);
+        navigate('/board');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  if (isLoading) {
+    return <div>LOADING..</div>;
+  }
 
   return (
     <DetailContainer>
@@ -76,7 +85,7 @@ const BoardDetail = () => {
         <ContentsWrapper>
           {/* 내용 영역 */}
           <TextContainer>
-            <TextArea>{content}</TextArea>
+            <TextArea dangerouslySetInnerHTML={{ __html: content }} />
             {userId === member.memberId && (
               <ModifyButtons>
                 <Link to={`/board/posts/${postId}/edit`}>수정</Link>
@@ -92,6 +101,7 @@ const BoardDetail = () => {
             mateMembers={mateMembers}
             postApplyData={postApplyData}
             getDetailData={getDetailData}
+            updateMate={updateMate.mate}
           />
         </ContentsWrapper>
         {/* 작성자 프로필 영역 */}

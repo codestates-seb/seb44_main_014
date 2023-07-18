@@ -4,14 +4,12 @@ import { styled } from 'styled-components';
 // import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import { IFilterInfo, IPageInfo /*, IBoardList*/ } from '../../interface/board.tsx';
+import { IFilterInfo, IPageInfo /*, IBoardList*/ } from '../../interface/board.ts';
 
 interface IPaginationProps {
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
   pageInfo: IPageInfo;
-  // setLists: React.Dispatch<React.SetStateAction<IBoardList[]>>;
-  // currentApi: string;
 }
 
 const Pagination = ({ filterInfo, setFilterInfo, pageInfo /*, setLists, currentApi */ }: IPaginationProps) => {
@@ -34,7 +32,7 @@ const Pagination = ({ filterInfo, setFilterInfo, pageInfo /*, setLists, currentA
   //   .catch((error) => console.error('Error', error));
   // };
 
-  const handlePageChange = (e) => {
+  const handlePageChange = (e: React.MouseEvent<HTMLElement>) => {
     // setCurrentPage(e.selected);
     setFilterInfo({
       ...filterInfo,

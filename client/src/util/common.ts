@@ -16,3 +16,23 @@ export const timeStamp = (date: Date) => {
   const years = days / 365;
   return `${Math.floor(years)}년 전`;
 };
+
+// get input checkbox, radio value
+export const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
+  const target = e.target as HTMLInputElement;
+  if (target.checked) {
+    return target.value;
+  } else {
+    return '';
+  }
+};
+
+// check only one input checkbox
+export const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
+  const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i] !== e.target) {
+      (checkboxes[i] as HTMLInputElement).checked = false;
+    }
+  }
+};

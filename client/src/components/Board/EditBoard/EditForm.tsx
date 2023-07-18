@@ -1,22 +1,48 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import axios from 'axios';
+import axios from 'axios';
 
 import InputRadio from '../../UI/InputRadio.tsx';
 import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
-import { IEditInfo } from '../../../interface/board.tsx';
-import { EDIT_DATA } from '../../../data/boardDummyData.ts';
+import { IEditInfo } from '../../../interface/board.ts';
+import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
 
 const EditForm = () => {
   const navigate = useNavigate();
   const params = useParams();
   const postId = Number(params.postId);
-  const [info, setInfo] = useState<IEditInfo>(EDIT_DATA);
+  const [info, setInfo] = useState<IEditInfo>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   console.log(info);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
+      .then((res) => {
+        const { category, content, mate, postTag, status, title, member } = res.data;
+        const data = {
+          category,
+          content,
+          mate,
+          status,
+          title,
+          genderTag: { genderTagId: postTag.genderTagId },
+          foodTag: { foodTagId: postTag.foodTagId },
+          memberId: member.memberId,
+        };
+        console.log(res);
+        setInfo(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     const categoryRadios = document.getElementsByName('category');
@@ -43,37 +69,37 @@ const EditForm = () => {
         (statusRadios[i] as HTMLInputElement).checked = true;
       }
     }
-  }, []);
+  }, [info]);
 
   const patchSubmitInfo = () => {
-    navigate(`/board/posts/${postId}`);
-    // axios
-    //   .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/{post-id}/edit`, info)
-    //   .then((res) => {
-    //     console.log(res);
-    //     navigate(`/board/posts/${postId}`);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  };
-  const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (target.checked) {
-      return target.value;
-    } else {
-      return '';
-    }
+    axios
+      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/edit`, info)
+      .then((res) => {
+        console.log(res);
+        navigate(`/board/posts/${postId}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
-    const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i] !== e.target) {
-        (checkboxes[i] as HTMLInputElement).checked = false;
-      }
-    }
-  };
+  // const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
+  //   const target = e.target as HTMLInputElement;
+  //   if (target.checked) {
+  //     return target.value;
+  //   } else {
+  //     return '';
+  //   }
+  // };
+
+  // const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
+  //   const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
+  //   for (let i = 0; i < checkboxes.length; i++) {
+  //     if (checkboxes[i] !== e.target) {
+  //       (checkboxes[i] as HTMLInputElement).checked = false;
+  //     }
+  //   }
+  // };
 
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {
     const category = checkedValue(e);
@@ -116,6 +142,10 @@ const EditForm = () => {
       patchSubmitInfo();
     }
   };
+
+  if (isLoading) {
+    return <div>LOADING..</div>;
+  }
 
   return (
     <form>

@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { IMateMember } from '../../../interface/board.tsx';
+import { IMateMember } from '../../../interface/board.ts';
 
 interface IMate {
   findNum: number;
@@ -10,10 +10,11 @@ interface IApplyParticipateProps {
   mateMembers: IMateMember[];
   postApplyData: () => void;
   getDetailData: () => void;
+  updateMate: IMate;
 }
-const ApplyParticipate = ({ mate, mateMembers, postApplyData, getDetailData }: IApplyParticipateProps) => {
+const ApplyParticipate = ({ mate, mateMembers, postApplyData, getDetailData, updateMate }: IApplyParticipateProps) => {
   // 임시 사용자 id
-  const userId = 3;
+  const userId = 1;
 
   const showParticipant = mateMembers.filter((member) => member.mateMemberId === userId).length;
 
@@ -22,7 +23,7 @@ const ApplyParticipate = ({ mate, mateMembers, postApplyData, getDetailData }: I
       <ApplyParticipant>
         모집인원
         <span>
-          {mate.findNum} / {mate.mateNum}
+          {updateMate.findNum} / {updateMate.mateNum}
         </span>
         <button
           type="button"
