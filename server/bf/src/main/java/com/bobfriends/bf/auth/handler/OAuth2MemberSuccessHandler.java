@@ -31,7 +31,10 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
 
+        // Resource Owner의 이메일 주소를 얻는다
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+
+        // 권한 정보 생성
         List<String> roles = authorityUtils.createRoles(email);
 
         Member member = makeMember(email, roles);
@@ -41,6 +44,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         } else {
             member = memberRepository.save(member);
         }
+
+        // Access Token과 Refresh Token을 생성해서 Frontend 애플리케이션에 전달하기 위해 Redirect
         redirect(request, response, member, roles);
     }
 
@@ -62,6 +67,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setHeader("Authorization", headerValue);
         response.setHeader("Refresh", refreshToken);
 
+        // Front 쪽으로 리다이렉트
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
@@ -103,8 +109,11 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
+//                .host("localhost")
+//                .host("ec2-43-201-8-99.ap-northeast-2.compute.amazonaws.com")
                 .host("localhost")
-//                .port(80)
+//                .port(80)   //-> aws로 배포했을 때 사용
+                .port(3000)   //-> local 테스트용
                 .path("/oauth2")  // 리다이렉트 주소 (토큰이 포함된 url 을 받는 주소)
                 .queryParams(queryParams)
                 .build()

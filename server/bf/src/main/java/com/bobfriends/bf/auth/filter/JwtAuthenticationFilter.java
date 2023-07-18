@@ -56,44 +56,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         Member member = (Member) authResult.getPrincipal();
 
-        String accessToken = delegateAccessToken(member);
-        String refreshToken = delegateRefreshToken(member);
+        String accessToken = jwtTokenizer.delegateAccessToken(member);
+        String refreshToken = jwtTokenizer.delegateRefreshToken(member);
 
         // response header에 AccessToken, RefreshToken 추가
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);
-    }
-
-
-    /** Access Token 생성 **/
-    private String delegateAccessToken(Member member) {
-        Map<String, Object> claims = new HashMap<>();
-
-        claims.put("memberId", member.getMemberId()); // 식별자 포함
-        claims.put("username", member.getEmail());
-        claims.put("roles", member.getRoles());
-
-        String subject = member.getEmail();
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
-        return accessToken;
-    }
-
-
-    /** Refresh Token 생성 **/
-    private String delegateRefreshToken(Member member) {
-        String subject = member.getEmail();
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-
-        return refreshToken;
     }
 }
