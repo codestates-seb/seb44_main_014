@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import axios from 'axios';
 
 import BoardList from './Board/BoardList.tsx';
-import { IBoardList } from '../interface/board.tsx';
+import { IBoardList } from '../interface/board.ts';
 
 const AfterLogin = () => {
+  const navigate = useNavigate();
   const [lists, setLists] = useState<IBoardList[]>([]);
   useEffect(() => {
     axios
@@ -27,7 +29,7 @@ const AfterLogin = () => {
         <ListBlock>
           <TitleArea>
             <TitleH3>밥 먹기 최신 글</TitleH3>
-            <MoreButton>더 보기</MoreButton>
+            <MoreButton onClick={() => navigate('/board')}>더 보기</MoreButton>
           </TitleArea>
           <ul>
             {lists
@@ -41,7 +43,7 @@ const AfterLogin = () => {
         <ListBlock>
           <TitleArea>
             <TitleH3>장 보기 최신 글</TitleH3>
-            <MoreButton>더 보기</MoreButton>
+            <MoreButton onClick={() => navigate('/board')}>더 보기</MoreButton>
           </TitleArea>
           <ul>
             {lists
@@ -55,7 +57,7 @@ const AfterLogin = () => {
         <ListBlock>
           <TitleArea>
             <TitleH3># 한식 최신 글</TitleH3>
-            <MoreButton>더 보기</MoreButton>
+            <MoreButton onClick={() => navigate('/board')}>더 보기</MoreButton>
           </TitleArea>
           <ul>
             {lists

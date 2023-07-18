@@ -8,7 +8,8 @@ import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
-import { IEditInfo } from '../../../interface/board.tsx';
+import { IEditInfo } from '../../../interface/board.ts';
+import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
 
 const EditForm = () => {
   const navigate = useNavigate();
@@ -81,23 +82,24 @@ const EditForm = () => {
         console.log(err);
       });
   };
-  const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    if (target.checked) {
-      return target.value;
-    } else {
-      return '';
-    }
-  };
 
-  const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
-    const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
-    for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i] !== e.target) {
-        (checkboxes[i] as HTMLInputElement).checked = false;
-      }
-    }
-  };
+  // const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
+  //   const target = e.target as HTMLInputElement;
+  //   if (target.checked) {
+  //     return target.value;
+  //   } else {
+  //     return '';
+  //   }
+  // };
+
+  // const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
+  //   const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
+  //   for (let i = 0; i < checkboxes.length; i++) {
+  //     if (checkboxes[i] !== e.target) {
+  //       (checkboxes[i] as HTMLInputElement).checked = false;
+  //     }
+  //   }
+  // };
 
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {
     const category = checkedValue(e);

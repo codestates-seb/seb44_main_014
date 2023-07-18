@@ -5,7 +5,7 @@ import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { RangeStatic } from 'quill';
-import { IEditInfo } from '../../interface/board.tsx';
+import { IEditInfo } from '../../interface/board.ts';
 
 interface IEditor {
   // htmlStr: string;
@@ -23,14 +23,24 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
     // file input 임의 생성
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
     input.click();
 
     input.onchange = async () => {
       const file = input.files;
       const formData = new FormData();
-
+      console.log(file);
       if (file) {
         formData.append('multipartFiles', file[0]);
+      }
+      // FormData의 key 확인
+      for (const key of formData.keys()) {
+        console.log(key);
+      }
+
+      // FormData의 value 확인
+      for (const value of formData.values()) {
+        console.log(value);
       }
 
       // file 데이터 담아서 서버에 전달하여 이미지 업로드

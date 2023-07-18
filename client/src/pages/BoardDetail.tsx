@@ -9,7 +9,7 @@ import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
 // DUMMY DATA
 // import { BOARD_DETAIL } from '../data/boardDummyData.ts';
-import { IBoardDetailData } from '../interface/board.tsx';
+import { IBoardDetailData } from '../interface/board.ts';
 
 const BoardDetail = () => {
   const navigate = useNavigate();

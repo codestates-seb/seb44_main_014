@@ -3,8 +3,8 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
 
-import { IBoardDetailData } from '../../../interface/board.tsx';
-import { timeStamp } from '../../../util/commonFunction.ts';
+import { IBoardDetailData } from '../../../interface/board.ts';
+import { timeStamp } from '../../../util/common.ts';
 
 type BoardInfoProps = {
   boardInfo: IBoardDetailData;

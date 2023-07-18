@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { IMateMember } from '../../../interface/board.tsx';
+import { IMateMember } from '../../../interface/board.ts';
 
 interface IMate {
   findNum: number;

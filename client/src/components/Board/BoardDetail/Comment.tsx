@@ -5,8 +5,8 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-import { IComments } from '../../../interface/board.tsx';
-import { timeStamp } from '../../../util/commonFunction.ts';
+import { IComments } from '../../../interface/board.ts';
+import { timeStamp } from '../../../util/common.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments;

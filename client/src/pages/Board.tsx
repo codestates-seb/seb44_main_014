@@ -10,7 +10,7 @@ import BoardList from '../components/Board/BoardList.tsx';
 import Pagination from '../components/Board/Pagination.tsx';
 // DUMMY DATA
 // import { PAGINATION } from '../data/boardDummyData.ts';
-import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.tsx';
+import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
 
 const Board = () => {
   const navigate = useNavigate();

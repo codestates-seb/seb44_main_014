@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faWheatAwn } from '@fortawesome/free-solid-svg-icons';
 
-import { IFilterInfo } from '../../interface/board.tsx';
+import { IFilterInfo } from '../../interface/board.ts';
 
 interface IStyledProps {
   $isActive: boolean;

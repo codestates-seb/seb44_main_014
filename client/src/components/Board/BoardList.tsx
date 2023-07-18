@@ -3,8 +3,8 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
 
-import { timeStamp } from '../../util/commonFunction.ts';
-import { IBoardList } from '../../interface/board.tsx';
+import { timeStamp } from '../../util/common.ts';
+import { IBoardList } from '../../interface/board.ts';
 
 type BoardListProps = {
   list: IBoardList;

@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 // import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import { IFilterInfo, IPageInfo /*, IBoardList*/ } from '../../interface/board.tsx';
+import { IFilterInfo, IPageInfo /*, IBoardList*/ } from '../../interface/board.ts';
 
 interface IPaginationProps {
   filterInfo: IFilterInfo;

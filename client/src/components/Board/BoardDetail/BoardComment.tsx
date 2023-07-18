@@ -4,7 +4,7 @@ import { styled } from 'styled-components';
 import axios from 'axios';
 import Comment from './Comment.tsx';
 
-import { IComments } from '../../../interface/board.tsx';
+import { IComments } from '../../../interface/board.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments[];

@@ -6,32 +6,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../../constant/constant.ts';
-import { IFilterInfo } from '../../interface/board.tsx';
+import { IFilterInfo } from '../../interface/board.ts';
 
 interface IFilterData {
-  // tabLeft: boolean;
-  // activeGender: number | null | undefined;
-  // setActiveGender: React.Dispatch<React.SetStateAction<number | null | undefined>>;
-  // activeFood: number | null | undefined;
-  // setActiveFood: React.Dispatch<React.SetStateAction<number | null | undefined>>;
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
   setCurrentApi: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SearchFilter = ({
-  // tabLeft,
-  // activeGender,
-  // setActiveGender,
-  // activeFood,
-  // setActiveFood,
-  filterInfo,
-  setFilterInfo,
-  setCurrentApi,
-}: IFilterData) => {
+const SearchFilter = ({ filterInfo, setFilterInfo, setCurrentApi }: IFilterData) => {
   const [keyword, setKeyword] = useState('');
   const getSearchData = () => {
-    setFilterInfo({ ...filterInfo, page: 1 });
+    setFilterInfo({ ...filterInfo, page: 1, foodTag: null, genderTag: null });
     setCurrentApi(`&keyword=${keyword}&category=${filterInfo.category}`);
     setKeyword('');
   };
@@ -60,8 +46,6 @@ const SearchFilter = ({
                 value={tag.id}
                 className={filterInfo.genderTag === tag.id ? 'active' : ''}
                 onClick={(e: React.MouseEvent<HTMLElement>) => {
-                  // setActiveGender(tag.id);
-                  // setActiveFood(null);
                   setFilterInfo({ ...filterInfo, page: 1, genderTag: tag.id, foodTag: null });
                   setCurrentApi(`&genderTag=${(e.target as HTMLButtonElement).value}&category=${filterInfo.category}`);
                 }}
@@ -78,8 +62,6 @@ const SearchFilter = ({
                   value={tag.id}
                   className={filterInfo.foodTag === tag.id ? 'active' : ''}
                   onClick={(e: React.MouseEvent<HTMLElement>) => {
-                    // setActiveFood(tag.id);
-                    // setActiveGender(null);
                     setFilterInfo({ ...filterInfo, page: 1, foodTag: tag.id, genderTag: null });
                     setCurrentApi(`&foodTag=${(e.target as HTMLButtonElement).value}`);
                   }}
