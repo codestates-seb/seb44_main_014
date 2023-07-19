@@ -57,4 +57,11 @@ public class AuthService {
         }
 
     }
+
+
+    /** 로그아웃 **/
+    public void logout(HttpServletRequest request) {
+
+
+    }
 }
