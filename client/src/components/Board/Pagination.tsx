@@ -4,42 +4,20 @@ import { styled } from 'styled-components';
 // import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-import { IFilterInfo, IPageInfo /*, IBoardList*/ } from '../../interface/board.ts';
+import { IFilterInfo, IPageInfo } from '../../interface/board.ts';
 
 interface IPaginationProps {
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
-  pageInfo: IPageInfo;
+  pageInfo: IPageInfo | object;
 }
 
-const Pagination = ({ filterInfo, setFilterInfo, pageInfo /*, setLists, currentApi */ }: IPaginationProps) => {
-  // const [pageCount, setPageCount] = useState<number>(pageInfo.totalPages);
-  // const [currentPage, setCurrentPage] = useState(0);
-  // useEffect(() => {
-  // setPageCount(pageInfo.totalPages);
-  //   handleFetch();
-  // }, [currentPage]);
-
-  // const handleFetch = () => {
-  //   const page = currentPage + 1;
-  // console.log(`${import.meta.env.VITE_APP_API_URL}/board?page=${page}${currentApi}`);
-  // axios
-  //   .get(currentApi)
-  //   .then((res) => {
-  //     setLists([...res.hits]);
-  //     setPageCount(res.nbPages);
-  //   })
-  //   .catch((error) => console.error('Error', error));
-  // };
-
+const Pagination = ({ filterInfo, setFilterInfo, pageInfo }: IPaginationProps) => {
   const handlePageChange = (e: React.MouseEvent<HTMLElement>) => {
-    // setCurrentPage(e.selected);
     setFilterInfo({
       ...filterInfo,
       page: e.selected + 1,
     });
-    // handleFetch();
-    // console.log(filterInfo);
   };
 
   return (

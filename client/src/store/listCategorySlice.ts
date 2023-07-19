@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+export interface ICategoryState {
+  category: {
+    value: string;
+  };
+}
+
 export const listCategorySlice = createSlice({
   name: 'listCategorySlice',
   initialState: {
