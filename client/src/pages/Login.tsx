@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import postLogin from '../fetch/postLogin.tsx';
-import { setCookie } from '../util/cookie/index.tsx';
-import { login } from '../store/userSlice.tsx';
+import { setCookie } from '../util/cookie/index.ts';
+import { login } from '../store/userSlice.ts';
 
-interface UserInfo {
-  gender: string;
-  memberId: string;
-}
+// interface UserInfo {
+//   gender: string;
+//   memberId: string;
+// }
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -77,9 +77,11 @@ const Login = () => {
         // 가입안되어있으면 null오고
         // 비밀번호틀리면 401에러
         if (error.response.status === 401) {
-          alert('비밀번호가 일치하지 않습니다');
+          alert(error.response.message);
+          // alert('비밀번호가 일치하지 않습니다');
         } else {
-          alert('존재하지 않는 계정입니다.');
+          alert(error.response.message);
+          // alert('존재하지 않는 계정입니다.');
         }
       }
     }
