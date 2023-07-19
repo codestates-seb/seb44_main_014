@@ -9,6 +9,8 @@ import TabMenu from '../components/Board/TabMenu.tsx';
 import SortButtons from '../components/Board/SortButtons.tsx';
 import BoardList from '../components/Board/BoardList.tsx';
 import Pagination from '../components/Board/Pagination.tsx';
+import Loading from '../components/Loading.tsx';
+import NoBoardList from '../components/Board/NoBoardList.tsx';
 
 import { category, ICategoryState } from '../store/listCategorySlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
@@ -66,10 +68,6 @@ const Board = () => {
     }
   };
 
-  if (isLoading) {
-    return <div>LOADING..</div>;
-  }
-
   return (
     <>
       {/* 상단 검색, 태그 영역 */}
@@ -95,12 +93,21 @@ const Board = () => {
           />
 
           {/* 게시글 리스트 */}
-          <ul>
-            {lists.map((list, idx) => (
-              <BoardList key={idx} list={list} />
-            ))}
-          </ul>
-          <Pagination filterInfo={filterInfo} setFilterInfo={setFilterInfo} pageInfo={pageInfo} />
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <div>
+              <ul>
+                {lists.length === 0 && <NoBoardList />}
+                {lists.map((list, idx) => (
+                  <BoardList key={idx} list={list} />
+                ))}
+              </ul>
+              {lists.length !== 0 && (
+                <Pagination filterInfo={filterInfo} setFilterInfo={setFilterInfo} pageInfo={pageInfo} />
+              )}
+            </div>
+          )}
         </ListsSection>
       </ListLayout>
     </>

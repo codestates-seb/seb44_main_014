@@ -40,24 +40,6 @@ const PostForm = () => {
       });
   };
 
-  // const checkedValue = (e: React.MouseEvent<HTMLInputElement>) => {
-  //   const target = e.target as HTMLInputElement;
-  //   if (target.checked) {
-  //     return target.value;
-  //   } else {
-  //     return '';
-  //   }
-  // };
-
-  // const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
-  //   const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
-  //   for (let i = 0; i < checkboxes.length; i++) {
-  //     if (checkboxes[i] !== e.target) {
-  //       (checkboxes[i] as HTMLInputElement).checked = false;
-  //     }
-  //   }
-  // };
-
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {
     const category = checkedValue(e);
     setInfo({ ...info, category: category, foodTag: null });

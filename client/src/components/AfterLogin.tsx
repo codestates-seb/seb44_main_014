@@ -5,6 +5,8 @@ import { styled } from 'styled-components';
 import axios from 'axios';
 
 import BoardList from './Board/BoardList.tsx';
+import Loading from './Loading.tsx';
+import NoBoardList from './Board/NoBoardList.tsx';
 import { IBoardList } from '../interface/board.ts';
 import { category } from '../store/listCategorySlice.ts';
 
@@ -12,15 +14,19 @@ const AfterLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [lists, setLists] = useState<IBoardList[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/home`)
       .then((res) => {
         console.log(res.data);
         setLists(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   }, []);
   return (
@@ -41,14 +47,19 @@ const AfterLogin = () => {
               더 보기
             </MoreButton>
           </TitleArea>
-          <ul>
-            {lists
-              .filter((list) => list.category === 'EATING')
-              .slice(0, 4)
-              .map((list, idx) => (
-                <BoardList key={idx} list={list} />
-              ))}
-          </ul>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <ul>
+              {lists.length === 0 && <NoBoardList />}
+              {lists
+                .filter((list) => list.category === 'EATING')
+                .slice(0, 4)
+                .map((list, idx) => (
+                  <BoardList key={idx} list={list} />
+                ))}
+            </ul>
+          )}
         </ListBlock>
         <ListBlock>
           <TitleArea>
@@ -62,14 +73,19 @@ const AfterLogin = () => {
               더 보기
             </MoreButton>
           </TitleArea>
-          <ul>
-            {lists
-              .filter((list) => list.category === 'SHOPPING')
-              .slice(0, 4)
-              .map((list, idx) => (
-                <BoardList key={idx} list={list} />
-              ))}
-          </ul>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <ul>
+              {lists.length === 0 && <NoBoardList />}
+              {lists
+                .filter((list) => list.category === 'SHOPPING')
+                .slice(0, 4)
+                .map((list, idx) => (
+                  <BoardList key={idx} list={list} />
+                ))}
+            </ul>
+          )}
         </ListBlock>
       </ListSection>
     </>
