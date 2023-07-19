@@ -37,7 +37,7 @@ cloud:
       accessKey: ${AWS_ACCESS_KEY}
       secretKey: ${AWS_SECRET_ACCESS_KEY}
     s3:
-      bucket: bobimage # 버킷 이름 수정
+      bucket: bobimage
     stack:
       auto-: false
     region:
