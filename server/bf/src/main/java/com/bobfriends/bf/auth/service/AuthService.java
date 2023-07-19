@@ -1,6 +1,8 @@
 package com.bobfriends.bf.auth.service;
 
+import com.bobfriends.bf.auth.entity.RefreshToken;
 import com.bobfriends.bf.auth.jwt.JwtTokenizer;
+import com.bobfriends.bf.auth.repository.RefreshTokenRepository;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.member.entity.Member;
@@ -24,22 +26,35 @@ public class AuthService {
 
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    /** Access Token 재발급 **/
-    // 문제점 : 재발급 전의 토큰 유효기간 남아있으면 전 토큰으로도 가능
-    // but, 클라이언트 측에서 남아있는 시간 계산해서 만료되었을 때에만 재발급 요청 보내주면 해결 가능하긴 함
-    public void reissue(HttpServletRequest request, HttpServletResponse response) {
+    /** Access Token 재발급
+     *  요청 header로 memberId가 올지 RefreshToken이 올지 고민
+     * **/
+    // 클라이언트 에서 시간 계산후 만료되었을때 재발급 요청
+    public void reissue (HttpServletRequest request, HttpServletResponse response) {
 
         String refreshToken = request.getHeader("Refresh");
+        System.out.println("refreshToken = " + refreshToken);
 
         Jws<Claims> claims = jwtTokenizer.verifySignature(refreshToken);
 
         String email = claims.getBody().getSubject();
+
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         Member member = optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        String newAccessToken = jwtTokenizer.delegateAccessToken(member);
-        response.setHeader("Authroization", "Bearer " + newAccessToken);
+        RefreshToken refreshTokenDb = refreshTokenRepository.findRefreshTokenByMemberId(member.getMemberId());
+        System.out.println("refreshTokenDb = " + refreshTokenDb);
+
+        // 만약 header로 온 refreshToken과 DB에 저장된 refreshToken이 같다면 재발급
+        if (refreshToken.equals(refreshTokenDb.getJws())) {
+            String newAccessToken = jwtTokenizer.delegateAccessToken(member);
+            response.setHeader("Authorization", "Bearer " + newAccessToken);
+        }else {
+            throw new BusinessLogicException(ExceptionCode.REFRESH_TOKEN_NOT_SAME);
+        }
+
     }
 }

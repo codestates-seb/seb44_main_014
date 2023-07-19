@@ -21,7 +21,9 @@ public enum ExceptionCode {
     CANNOT_CHANGE_COMMENT(403, "Comment can not change"),
     CANNOT_CREATE_MATEMEMBER(403, "MateMember can not create"),
     CANNOT_CREATE_SAME_MATEMEMBER(403, "Same MateMember can not create"),
-    PASSWORD_NOT_SAME(403, "Password not same");
+    PASSWORD_NOT_SAME(403, "Password not same"),
+
+    REFRESH_TOKEN_NOT_SAME(401, "REFRESH TOKEN NOT SAME");
 
     @Getter
     private int status;

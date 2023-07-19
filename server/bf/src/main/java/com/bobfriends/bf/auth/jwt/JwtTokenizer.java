@@ -1,6 +1,5 @@
 package com.bobfriends.bf.auth.jwt;
 
-import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
