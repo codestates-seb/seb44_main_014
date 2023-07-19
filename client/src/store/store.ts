@@ -3,15 +3,17 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import { listCategorySlice } from './listCategorySlice.ts';
+import { userSlice } from './userSlice.ts';
 
 const reducers = combineReducers({
   category: listCategorySlice.reducer,
+  user: userSlice.reducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: [],
+  whitelist: [user],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
