@@ -112,8 +112,9 @@ public class JwtTokenizer {
     public Jws<Claims> verifySignature(String jws){
 
         try {
+            //Key secretKey = getKeyFromBase64EncodedKey(getSecretKey());
             return Jwts.parserBuilder()
-                    .setSigningKey(getKeyFromBase64EncodedKey(getSecretKey()))
+                    .setSigningKey(secretKey.getBytes())
                     .build()
                     .parseClaimsJws(jws);
         } catch (ExpiredJwtException exception) {

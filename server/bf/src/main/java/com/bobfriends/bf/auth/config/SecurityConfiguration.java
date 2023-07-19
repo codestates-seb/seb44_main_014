@@ -4,6 +4,7 @@ import com.bobfriends.bf.auth.filter.JwtAuthenticationFilter;
 import com.bobfriends.bf.auth.filter.JwtVerificationFilter;
 import com.bobfriends.bf.auth.handler.*;
 import com.bobfriends.bf.auth.jwt.JwtTokenizer;
+import com.bobfriends.bf.auth.repository.RefreshTokenRepository;
 import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class SecurityConfiguration  {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -116,7 +118,7 @@ public class SecurityConfiguration  {
 
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, refreshTokenRepository);
 
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler(memberRepository));

@@ -1,5 +1,6 @@
 package com.bobfriends.bf.auth.controller;
 
+import com.bobfriends.bf.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -15,10 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthService authService;
+
     /** Access token 재발급 **/
     @PostMapping("/reissue")
-    public ResponseEntity reissue(HttpServletRequest request) {
+    public ResponseEntity reissue(HttpServletRequest request, HttpServletResponse response) {
 
+        authService.reissue(request, response);
         return ResponseEntity.ok().build();
     }
 }

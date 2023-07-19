@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -24,19 +25,21 @@ public class AuthService {
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
 
-    public void reissue(HttpServletRequest request) {
+    /** Access Token 재발급 **/
+    // 문제점 : 재발급 전의 토큰 유효기간 남아있으면 전 토큰으로도 가능
+    // but, 클라이언트 측에서 남아있는 시간 계산해서 만료되었을 때에만 재발급 요청 보내주면 해결 가능하긴 함
+    public void reissue(HttpServletRequest request, HttpServletResponse response) {
 
         String refreshToken = request.getHeader("Refresh");
 
         Jws<Claims> claims = jwtTokenizer.verifySignature(refreshToken);
 
-        log.info("email로 member 조회");
         String email = claims.getBody().getSubject();
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         Member member = optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        // 새로 발급
-        String accessToken = jwtTokenizer.delegateAccessToken(member);
+        String newAccessToken = jwtTokenizer.delegateAccessToken(member);
+        response.setHeader("Authroization", "Bearer " + newAccessToken);
     }
 }
