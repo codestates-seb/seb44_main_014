@@ -1,6 +1,5 @@
 package com.bobfriends.bf.auth.jwt;
 
-import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -112,8 +111,9 @@ public class JwtTokenizer {
     public Jws<Claims> verifySignature(String jws){
 
         try {
+            //Key secretKey = getKeyFromBase64EncodedKey(getSecretKey());
             return Jwts.parserBuilder()
-                    .setSigningKey(getKeyFromBase64EncodedKey(getSecretKey()))
+                    .setSigningKey(secretKey.getBytes())
                     .build()
                     .parseClaimsJws(jws);
         } catch (ExpiredJwtException exception) {

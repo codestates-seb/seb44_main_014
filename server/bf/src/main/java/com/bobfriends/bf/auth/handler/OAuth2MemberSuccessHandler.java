@@ -26,6 +26,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
 
+    /** OAuth2 로그인 성공 **/
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -49,6 +50,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         redirect(request, response, member, roles);
     }
 
+
+    /** 주어진 이메일과 권한 정보 사용하여 Member 객체 생성 **/
     private Member makeMember(String email, List<String> roles) {
         Member member = new Member();
         member.updateEmail(email);
@@ -57,6 +60,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return member;
     }
 
+
+    /** 생성된 Access Token과 Refresh Token을 Response 헤더에 포함하여 Frontend 로 리다이렉트 **/
     private void redirect(HttpServletRequest request, HttpServletResponse response, Member member, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
@@ -71,6 +76,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
+
+    /** Access Token 생성 **/
     private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getEmail());
@@ -87,6 +94,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return accessToken;
     }
 
+
+    /** Refresh Token 생성 **/
     private String delegateRefreshToken(Member member) {
         String subject = member.getEmail();
 
@@ -98,6 +107,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return refreshToken;
     }
 
+
+    /** Redirect URI 생성 **/
     private URI createURI(HttpServletRequest request, String accessToken, String refreshToken) {
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
