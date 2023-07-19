@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +68,22 @@ public class Member extends Auditable {
     public MemberTag getMemberTag() {
         return memberTag;
     }
+
+    /** avgStarRate 계산 **/
+    public float calculateAvgStarRate() {
+
+        int sum = rateMemberStarRates
+                    .stream()
+                    .mapToInt(starRate -> starRate.getStarRate())
+                    .sum();
+
+        float avgStarRate = (float) sum / rateMemberStarRates.size();
+
+        float roundAvgStarRate = (float) (Math.round(avgStarRate * 10.0) / 10.0);
+
+        return roundAvgStarRate;
+    }
+
 
     public enum genderStatus {
         FEMALE("여성"),
