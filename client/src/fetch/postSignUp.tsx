@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-const postSignUp = async (email: string, password: string, copyPassword: string) => {
+const postSignUp = async (email: string, password: string, samePassword: string) => {
   try {
-    const response = await axios.post('/users/signup', { email, password, copyPassword });
-    return response.data;
+    return axios.post(`${import.meta.env.VITE_APP_API_URL}/users/signup`, {
+      email,
+      password,
+      samePassword,
+    });
   } catch (error) {
     throw new Error('이미 가입 되어있는 이메일 입니다.'); // You can customize the error message as per your requirements
   }
