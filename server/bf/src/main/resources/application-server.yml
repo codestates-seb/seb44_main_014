@@ -6,7 +6,7 @@ spring:
       on-profile: server
   jpa:
     hibernate:
-      ddl-auto: create  # (1) 스키마 자동 생성
+      ddl-auto: update  # (1) 스키마 자동 생성
     show-sql: true      # (2) SQL 쿼리 출력
     properties:
       hibernate:
@@ -22,7 +22,7 @@ spring:
         registration:
           google:
             clientId: ${GOOGLE_CLIENT_ID}
-            clientSecret: ${GOOGLE_CLIENT_SECTET}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -47,5 +47,5 @@ mail:
 jwt:
   key:
     secret: ${JWT_SECRET_KEY}      # jwt 사용할때 필요
-  access-token-expiration-minutes: 40
-  refresh-token-expiration-minutes: 420
+  access-token-expiration-minutes: 60
+  refresh-token-expiration-minutes: 20160

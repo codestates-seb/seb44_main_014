@@ -28,27 +28,16 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    /** Access Token 재발급
-     *  요청 header로 memberId가 올지 RefreshToken이 올지 고민
-     * **/
+    /** Access Token 재발급 **/
     // 클라이언트 에서 시간 계산후 만료되었을때 재발급 요청
     public void reissue (HttpServletRequest request, HttpServletResponse response) {
 
         String refreshToken = request.getHeader("Refresh");
-        System.out.println("refreshToken = " + refreshToken);
 
-        Jws<Claims> claims = jwtTokenizer.verifySignature(refreshToken);
-
-        String email = claims.getBody().getSubject();
-
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        Member member = optionalMember.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        Member member = findMemberByRefreshToken(refreshToken);
 
         RefreshToken refreshTokenDb = refreshTokenRepository.findRefreshTokenByMemberId(member.getMemberId());
-        System.out.println("refreshTokenDb = " + refreshTokenDb);
-
-        // 만약 header로 온 refreshToken과 DB에 저장된 refreshToken이 같다면 재발급
+        
         if (refreshToken.equals(refreshTokenDb.getJws())) {
             String newAccessToken = jwtTokenizer.delegateAccessToken(member);
             response.setHeader("Authorization", "Bearer " + newAccessToken);
@@ -62,6 +51,23 @@ public class AuthService {
     /** 로그아웃 **/
     public void logout(HttpServletRequest request) {
 
+        String refreshToken = request.getHeader("Refresh");
 
+        Member member = findMemberByRefreshToken(refreshToken);
+
+        refreshTokenRepository.deleteRefreshTokenByMemberId(member.getMemberId());
+    }
+
+
+    public Member findMemberByRefreshToken(String refreshToken){
+
+        Jws<Claims> claims = jwtTokenizer.verifySignature(refreshToken);
+        String email = claims.getBody().getSubject();
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Member member = optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        return member;
     }
 }
