@@ -7,6 +7,7 @@ import BoardDetailHeader from '../components/Board/BoardDetail/BoardDetailHeader
 import ApplyParticipate from '../components/Board/BoardDetail/ApplyParticipate.tsx';
 import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
+import Loading from '../components/Loading.tsx';
 
 import { IBoardDetailData } from '../interface/board.ts';
 
@@ -19,7 +20,6 @@ const BoardDetail = () => {
 
   const { content, mate, mateMembers, member, comments } = detailData;
   const [updateMate, setUpdateMate] = useState({});
-  console.log(updateMate);
 
   // 임시 사용자 id
   const userId = 1;
@@ -73,7 +73,7 @@ const BoardDetail = () => {
   };
 
   if (isLoading) {
-    return <div>LOADING..</div>;
+    return <Loading />;
   }
 
   return (

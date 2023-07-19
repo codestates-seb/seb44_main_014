@@ -15,7 +15,6 @@ interface IStyledProps {
 }
 
 const BoardList = ({ list }: BoardListProps) => {
-  console.log(list);
   const { genderTagId, foodTagId } = list.postTag;
   let genderTag: string;
   if (genderTagId === 1) {
