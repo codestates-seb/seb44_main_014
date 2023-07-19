@@ -8,13 +8,10 @@ import { RangeStatic } from 'quill';
 import { IEditInfo } from '../../interface/board.ts';
 
 interface IEditor {
-  // htmlStr: string;
-  // setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
   info: IEditInfo;
   setInfo: React.Dispatch<React.SetStateAction<IEditInfo>>;
 }
 
-// const TextEditor = ({ htmlStr, setHtmlStr }: IEditor) => {
 const TextEditor = ({ info, setInfo }: IEditor) => {
   const quillRef = React.useRef<ReactQuill>(null);
 
@@ -29,18 +26,8 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
     input.onchange = async () => {
       const file = input.files;
       const formData = new FormData();
-      console.log(file);
       if (file) {
         formData.append('multipartFile', file[0]);
-      }
-      // FormData의 key 확인
-      for (const key of formData.keys()) {
-        console.log(key);
-      }
-
-      // FormData의 value 확인
-      for (const value of formData.values()) {
-        console.log(value);
       }
 
       // file 데이터 담아서 서버에 전달하여 이미지 업로드
@@ -88,11 +75,9 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
       theme="snow"
       modules={modules}
       formats={formats}
-      // value={htmlStr}
       value={info.content}
       placeholder="내용을 입력하세요."
       onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
-      // onChange={(content, delta, source, editor) => setHtmlStr(editor.getHTML())}
     />
   );
 };

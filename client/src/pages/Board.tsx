@@ -9,15 +9,14 @@ import TabMenu from '../components/Board/TabMenu.tsx';
 import SortButtons from '../components/Board/SortButtons.tsx';
 import BoardList from '../components/Board/BoardList.tsx';
 import Pagination from '../components/Board/Pagination.tsx';
-// DUMMY DATA
-// import { PAGINATION } from '../data/boardDummyData.ts';
-import { category } from '../store/listCategorySlice.ts';
+
+import { category, ICategoryState } from '../store/listCategorySlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
 
 const Board = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isShopping = useSelector((state: RootState) => state.category.value);
+  const isShopping = useSelector((state: ICategoryState) => state.category.value);
   // 정렬 active 상태 체크
   const [newer, setNewer] = useState<boolean>(true);
   const [mostViewed, setMostViewed] = useState<boolean>(!newer);
