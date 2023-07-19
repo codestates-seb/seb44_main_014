@@ -28,6 +28,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    /** 로그아웃 **/
     @DeleteMapping("/logout")
     public ResponseEntity logout (HttpServletRequest request) {
 
