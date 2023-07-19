@@ -45,7 +45,7 @@ cloud:
 
 mail:
   address:
-    admin: admin@gmail.com    # jwt 사용할때 필요
+    admin: admin@gmail.com 
 
 jwt:
   key:
