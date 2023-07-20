@@ -33,7 +33,16 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
 
         return new PageImpl<Post>(posts, pageable, query.fetchCount());
     }
+    @Override
+    public List<Post> findBySearchOptionNoPage(String keyword, String category, Long genderTag, Long foodTag) {
+        JPQLQuery<Post> query = queryFactory.selectFrom(post)
+                .where(eqCategory(category), containTitleOrContent(keyword), eqGenderTag(genderTag), eqFoodTag(foodTag));
 
+        // 페이징 x
+        List<Post> posts = query.fetch();
+
+        return posts;
+    }
 
     private BooleanExpression eqCategory(String category){
         if (category == null || category.isEmpty()) {

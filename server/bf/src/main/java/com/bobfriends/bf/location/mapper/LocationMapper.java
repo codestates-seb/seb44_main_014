@@ -7,9 +7,8 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.mapstruct.Mapper;
-
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface LocationMapper {
@@ -30,15 +29,24 @@ public interface LocationMapper {
            return location1;
 
    }
-    default LocationDto.Response LocationToLocationResponse(LocationDto.Post post){
+    default Location LocationPatchToLocation(LocationDto.Patch patch){
 
-       LocationDto.Response response = new LocationDto.Response();
+        Point location = geometryFactory.createPoint(new Coordinate(patch.getLongitude(), patch.getLatitude()));
 
-       response.setAddress(post.getAddress());
-       response.setLongitude(post.getLongitude());
-       response.setLatitude(post.getLatitude());
-       response.setMemberId(post.getMemberId());
+        Location location1 = new Location();
+        location1.setPoint(location);
 
-       return response;
+        Member member = new Member();
+        member.setMemberId(patch.getMemberId());
+        location1.setMember(member);
+        location1.setAddress(patch.getAddress());
+        location1.setLocationId(patch.getLocationId());
+
+        return location1;
+
     }
+   @Mapping(source = "point.y",target = "latitude")
+   @Mapping(source = "point.x", target = "longitude")
+   @Mapping(source = "member.memberId", target = "memberId")
+    LocationDto.Response LocationToLocationResponse(Location location);
 }

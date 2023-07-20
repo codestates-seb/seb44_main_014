@@ -1,7 +1,6 @@
 package com.bobfriends.bf.location.entity;
 
 import com.bobfriends.bf.member.entity.Member;
-import com.bobfriends.bf.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

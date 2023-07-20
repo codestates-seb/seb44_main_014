@@ -20,45 +20,49 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final JwtTokenizer jwtTokenizer;
 
+    /*** 댓글 생성 **/
 
-
-    public Comment createComment(Comment comment){
+    public Comment createComment(Comment comment) {
 
         return commentRepository.save(comment);
     }
 
+    /*** 댓글 수정 **/
     public Comment updateComment(Comment comment,CommentDto.Patch patch){
-        // 존재하는 댓글인지 검증
-        Comment findComment = findVerifiedComment(comment.getCommentId());
+
+        Comment verifiedComment = findVerifiedComment(comment.getCommentId());
 
         // 댓글 작성자 본인인지 검증
-        if(!Objects.equals(findComment.getMember().getMemberId(), patch.getMemberId())){
+        if(!Objects.equals(verifiedComment.getMember().getMemberId(), patch.getMemberId())){
             throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_COMMENT);
         }
 
         Optional.ofNullable(comment.getContent())
-                .ifPresent(findComment::setContent);
-        findComment.setModifiedAt(LocalDateTime.now());
+                .ifPresent(verifiedComment::setContent);
+        verifiedComment.setModifiedAt(LocalDateTime.now());
 
-        return commentRepository.save(findComment);
+        return commentRepository.save(verifiedComment);
     }
 
+    /*** 댓글 조회 **/
+    
     public Comment findComment(Long commentId){
-        // 존재하는 댓글인지 검증 후 리턴
+
         return findVerifiedComment(commentId);
     }
+    
+    /*** 댓글 삭제 **/
 
     public void deleteComment(Long commentId,String token){
-        // 존재하는 댓글인지 검증
-        Comment findComment = findVerifiedComment(commentId);
+
+        Comment verifiedComment = findVerifiedComment(commentId);
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
         long loginId = jwtTokenizer.getMemberIdFromToken(token, base64EncodedSecretKey);
 
-        long writerMemberId = findComment.getMember().getMemberId();
+        long writerMemberId = verifiedComment.getMember().getMemberId();
 
-        // 로그인 한 회원이 작성자이면
         if(loginId == writerMemberId){
             commentRepository.deleteById(commentId);
         }else {

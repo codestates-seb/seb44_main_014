@@ -1,9 +1,6 @@
 package com.bobfriends.bf.location.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 public class LocationDto {
     @Getter
@@ -18,6 +15,24 @@ public class LocationDto {
 
         public void addMemberId(Long memberId){
             this.memberId = memberId;
+        }
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Patch {
+        private double latitude;
+        private double longitude;
+        private String address;
+        private Long memberId;
+        private Long locationId;
+
+        public void addMemberId(Long memberId){
+            this.memberId = memberId;
+        }
+        public void addLocationId(Long locationId){
+            this.locationId = locationId;
         }
     }
     @Getter

@@ -54,11 +54,9 @@ public class CommentController {
         patch.addCommentId(commentId);
 
         Comment comment = commentMapper.CommentPatchToComment(patch);
-        
-        // 존재하는 게시글인지 검증
+
         comment.setPost(postService.findVerifiedPost(postId));
 
-        // 존재하는 회원인지 검증
         comment.setMember(memberService.findVerifiedMember(patch.getMemberId()));
 
         Comment response = commentService.updateComment(comment,patch);

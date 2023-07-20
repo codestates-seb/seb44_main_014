@@ -75,11 +75,13 @@ public class PostController {
                                      @RequestParam(required = false) String keyword,
                                      @RequestParam(required = false) String category,
                                      @RequestParam(required = false) Long genderTag,
-                                     @RequestParam(required = false) Long foodTag){
+                                     @RequestParam(required = false) Long foodTag,
+                                     @RequestHeader("authorization") String token){
 
+//       Todo : jwt로 로그인한 memberId 추출해서 service에 memberId도 넘김
         // custom pageRequest
         Pageable pageable = pageRequest.of();
-        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag);
+        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag,token);
 
         List<Post> posts = pagePosts.getContent();
 
