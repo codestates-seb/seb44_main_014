@@ -36,7 +36,6 @@ public class S3Uploader {
     }
 
     /** MultipartFile을 전달받아 File로 전환한 후 S3에 업로드 **/
-
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
 
         File uploadFile = convert(multipartFile)
@@ -62,7 +61,6 @@ public class S3Uploader {
 
 
     /** S3 버킷에 이미지 업로드 **/
-
     private String putS3(File uploadFile, String fileName) {
 
         amazonS3Client.putObject(
