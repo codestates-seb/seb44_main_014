@@ -99,7 +99,7 @@ public class SecurityConfiguration  {
         configuration.setAllowedHeaders(Arrays.asList("*"));
 
         // 응답 헤더에 노출
-        configuration.setExposedHeaders(Arrays.asList("*", "Authorization", "RefreshToken", "Location"));
+        configuration.setExposedHeaders(Arrays.asList("*", "Authorization", "Refresh", "Location"));
 
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(86400L);
