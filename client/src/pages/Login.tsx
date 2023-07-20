@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import postLogin from '../util/api/postLogin.tsx';
 import { setCookie } from '../util/cookie/index.ts';
 import { login } from '../store/userSlice.ts';
+import moment from 'moment';
 
 // interface UserInfo {
 //   gender: string;
@@ -54,8 +55,10 @@ const Login = () => {
         // const { accessToken } = responseData;
         // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-        // setCookie('accessToken', response.headers['Authorization']);
-        // setCookie('refreshToken', response.headers['Refresh']);
+        setCookie('accessToken', response.headers['Authorization']);
+        setCookie('refreshToken', response.headers['Refresh']);
+
+        localStorage.setItem('expiredAt', moment().add(1, 'hour').format('yyyy-MM-DD HH:mm:ss'));
 
         const responseData = response.data;
         alert('로그인에 성공했습니다.');
@@ -123,6 +126,10 @@ const LoginContainer = styled.article`
   flex-direction: column;
   margin: 3.125rem 1.875rem;
   font-size: 14px;
+  @media screen and (min-width: 768px) {
+    max-width: 500px;
+    margin: 50px auto;
+  }
 `;
 const InputContainer = styled.article`
   display: flex;
