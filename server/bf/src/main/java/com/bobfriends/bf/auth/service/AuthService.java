@@ -37,7 +37,7 @@ public class AuthService {
         Member member = findMemberByRefreshToken(refreshToken);
 
         RefreshToken refreshTokenDb = refreshTokenRepository.findRefreshTokenByMemberId(member.getMemberId());
-        
+
         if (refreshToken.equals(refreshTokenDb.getJws())) {
             String newAccessToken = jwtTokenizer.delegateAccessToken(member);
             response.setHeader("Authorization", "Bearer " + newAccessToken);

@@ -1,6 +1,8 @@
 package com.bobfriends.bf.auth.handler;
 
+import com.bobfriends.bf.auth.entity.RefreshToken;
 import com.bobfriends.bf.auth.jwt.JwtTokenizer;
+import com.bobfriends.bf.auth.repository.RefreshTokenRepository;
 import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.repository.MemberRepository;
@@ -25,6 +27,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /** OAuth2 로그인 성공 **/
     @Override
@@ -39,6 +42,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         List<String> roles = authorityUtils.createRoles(email);
 
         Member member = makeMember(email, roles);
+
         Optional<Member> findMember = memberRepository.findByEmail(email);
         if (findMember.isPresent()) {
             member = findMember.get();
@@ -67,6 +71,14 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String refreshToken = delegateRefreshToken(member);
 
         String uri = createURI(request, accessToken, refreshToken).toString();
+
+        // RefreshToken을 DB에 저장
+        RefreshToken saveRefreshToken = RefreshToken.builder()
+                .memberId(member.getMemberId())
+                .Jws(refreshToken)
+                .build();
+
+        refreshTokenRepository.save(saveRefreshToken);
 
         String headerValue = "Bearer" + accessToken;
         response.setHeader("Authorization", headerValue);
@@ -117,15 +129,17 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         String serverName = request.getServerName();
 
+        // 프론트로 리다이렉트
+        // Port 설정을 하지 않으면 기본값은 80 포트
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
+                .host("ec2-52-79-243-174.ap-northeast-2.compute.amazonaws.com")
 //                .host("localhost")
-//                .host("ec2-43-201-8-99.ap-northeast-2.compute.amazonaws.com")
-                .host("localhost")
 //                .port(80)   //-> aws로 배포했을 때 사용
-                .port(3000)   //-> local 테스트용
+                .port(8080)   //-> local 테스트용
                 .path("/oauth2")  // 리다이렉트 주소 (토큰이 포함된 url 을 받는 주소)
+//                .path("/receive-token.html")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
