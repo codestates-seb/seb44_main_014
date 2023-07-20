@@ -32,7 +32,6 @@ const BoardDetail = () => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
       .then((res) => {
-        console.log(res);
         const { mate, mateMembers } = res.data;
         setDetailData(res.data);
         setUpdateMate({ mate, mateMembers });
@@ -52,11 +51,16 @@ const BoardDetail = () => {
     axios
       .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/mate`, applyData)
       .then((res) => {
-        console.log(res);
         setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.status === 403) {
+          alert('이미 참여 신청한 모임입니다.');
+        }
+        // else if (err.response.status === 4xx) {
+        //   alert('성별이 달라 신청할 수 없습니다.');
+        // }
       });
   };
 

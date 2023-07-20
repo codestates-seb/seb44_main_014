@@ -77,7 +77,11 @@ const EditForm = () => {
       .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/edit`, info)
       .then((res) => {
         console.log(res);
-        navigate(`/board/posts/${postId}`);
+        if (info.status === 'END') {
+          navigate(`/questions/${postId}/mate`);
+        } else {
+          navigate(`/board/posts/${postId}`);
+        }
       })
       .catch((err) => {
         console.log(err);

@@ -70,15 +70,26 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
   const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'link', 'image'];
 
   return (
-    <CustomReactQuill
-      ref={quillRef}
-      theme="snow"
-      modules={modules}
-      formats={formats}
-      value={info.content}
-      placeholder="내용을 입력하세요."
-      onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
-    />
+    // <CustomReactQuill
+    //   ref={quillRef}
+    //   theme="snow"
+    //   $modules={modules}
+    //   $formats={formats}
+    //   value={info.content}
+    //   placeholder="내용을 입력하세요."
+    //   onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
+    // />
+    <CustomReactQuill>
+      <ReactQuill
+        ref={quillRef}
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        value={info.content}
+        placeholder="내용을 입력하세요."
+        onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
+      />
+    </CustomReactQuill>
   );
 };
 
