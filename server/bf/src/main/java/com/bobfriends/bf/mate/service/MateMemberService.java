@@ -36,9 +36,17 @@ public class MateMemberService {
         mateMember.setMate(post1.getMate());
         Mate mate = mateService.findVerifiedMate(mateMember.getMate().getMateId());
 
-        // 같은 회원은 같은 mate에 등록할 수 없음
+        // 이미 등록된 회원은 다시 등록할 수 없음
         if (post1.getMate().getMateMembers().stream().anyMatch(member -> member.getMember().getMemberId().equals(post.getMemberId()))) {
-            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_SAME_MATEMEMBER);
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_SAME_MATE_MEMBER);
+            // 작성자는 등록할 수 없음
+        } else if (findMember.getMemberId() == post1.getMember().getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MATE_MEMBER);
+            // 성별 확인
+        } else if (findMember.getGender().equals(Member.genderStatus.FEMALE) && findGenderTagByMate(mate) == 2) {
+            throw new BusinessLogicException(ExceptionCode.GENDER_DIFFERENT);
+        } else if (findMember.getGender().equals(Member.genderStatus.MALE) && findGenderTagByMate(mate) == 1) {
+            throw new BusinessLogicException(ExceptionCode.GENDER_DIFFERENT);
         }
 
         // 구해진 mate 인원
@@ -46,7 +54,7 @@ public class MateMemberService {
 
         if (mate.getMateNum() == findNum) post1.setStatus(COMPLETE);
         if (mate.getMateNum() < findNum) {
-            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MATEMEMBER);
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_MATE_MEMBER);
         }
         return mateMemberRepository.save(mateMember);
     }
@@ -65,5 +73,16 @@ public class MateMemberService {
 
         return mateMembers;
 
+    }
+
+    /** mate의 GenderTag find 메서드 **/
+    public Long findGenderTagByMate(Mate mate){
+
+        Long genderTagId = mate.getPost()
+                .getPostTag()
+                .getGenderTag()
+                .getGenderTagId();
+
+        return genderTagId;
     }
 }
