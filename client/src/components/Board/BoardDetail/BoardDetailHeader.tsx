@@ -101,10 +101,9 @@ const DetailTitleArea = styled.div`
 const TitleLeft = styled.div`
   display: flex;
   align-items: center;
-  width: calc(100% - 70px);
+  width: calc(100% - 80px);
   @media screen and (min-width: 768px) {
     width: auto;
-    max-width: calc(100% - 80px);
   }
   @media screen and (min-width: 1024px) {
     max-width: calc(100% - 90px);
@@ -126,7 +125,7 @@ const TitleH2 = styled.h2`
   width: calc(100% - 1.875rem);
   font-family: 'NanumSquare', sans-serif;
   font-size: 1rem;
-  line-height: 1;
+  line-height: 1.2;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
