@@ -80,15 +80,17 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
       {/* 수정 모드 */}
       {modifyComment && (
         <div>
-          <CommentTextbox
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
-              console.log(commentContent);
-            }}
-            value={commentContent.content}
-            placeholder="댓글을 작성해주세요."
-            max-length={100}
-          />
+          <CommentTextbox>
+            <textarea
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
+                console.log(commentContent);
+              }}
+              value={commentContent.content}
+              placeholder="댓글을 작성해주세요."
+              max-length={100}
+            />
+          </CommentTextbox>
           <ModifyButtons>
             {/* patch 요청 함수 연결 */}
             <button
@@ -151,12 +153,14 @@ const ModifyButtons = styled.div`
   }
 `;
 
-const CommentTextbox = styled.textarea`
-  width: 100%;
-  padding: 1.25rem;
-  border-radius: 5px;
-  border: 1px solid var(--color-gray);
-  box-sizing: border-box;
+const CommentTextbox = styled.div`
+  textarea {
+    width: 100%;
+    padding: 1.25rem;
+    border-radius: 5px;
+    border: 1px solid var(--color-gray);
+    box-sizing: border-box;
+  }
 `;
 
 export default Comment;

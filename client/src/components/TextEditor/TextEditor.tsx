@@ -96,7 +96,7 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
 export default TextEditor;
 
 // style
-const CustomReactQuill = styled(ReactQuill)`
+const CustomReactQuill = styled.div`
   .ql-toolbar {
     border-radius: 5px 5px 0 0;
   }

@@ -117,6 +117,7 @@ const ListH3 = styled.h3`
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
+  line-height: 1.2;
   @media screen and (min-width: 1024px) {
     font-size: 1rem;
   }

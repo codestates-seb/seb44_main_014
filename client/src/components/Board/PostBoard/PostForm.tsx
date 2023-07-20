@@ -14,7 +14,7 @@ import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
 const PostForm = () => {
   const navigate = useNavigate();
   const [info, setInfo] = useState<IPostInfo>({
-    memberId: 1, // 사용자 memberID
+    memberId: 2, // 사용자 memberID
     category: '',
     title: '',
     content: '',
@@ -24,16 +24,13 @@ const PostForm = () => {
       mateNum: 0,
     },
   });
-  console.log(info);
 
   const postSubmitInfo = () => {
     axios
       .post(`${import.meta.env.VITE_APP_API_URL}/board/posts`, info)
       .then((res) => {
-        console.log(res);
-        console.log(res.headers);
-        // const uri = res.headers.get('Location');
-        // navigate(uri);
+        const URI = res.headers.location;
+        navigate(URI);
       })
       .catch((err) => {
         console.log(err);
