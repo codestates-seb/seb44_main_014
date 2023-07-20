@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import { useState, useEffect } from 'react';
-import Button from '../components/UI/Button';
+import Button from '../components/UI/Button.tsx';
 import axios from 'axios';
 
 const Location = () => {

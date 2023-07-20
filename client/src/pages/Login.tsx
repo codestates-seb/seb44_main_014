@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import postLogin from '../fetch/postLogin.tsx';
+import postLogin from '../util/api/postLogin.tsx';
 import { setCookie } from '../util/cookie/index.ts';
 import { login } from '../store/userSlice.ts';
 
@@ -53,8 +53,9 @@ const Login = () => {
         const response = await postLogin(email, password);
         // const { accessToken } = responseData;
         // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        setCookie('accessToken', response.headers['Authorization']);
-        setCookie('refreshToken', response.headers['Refresh']);
+
+        // setCookie('accessToken', response.headers['Authorization']);
+        // setCookie('refreshToken', response.headers['Refresh']);
 
         const responseData = response.data;
         alert('로그인에 성공했습니다.');
