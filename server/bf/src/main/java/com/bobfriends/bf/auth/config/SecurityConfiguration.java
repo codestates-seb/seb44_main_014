@@ -60,19 +60,19 @@ public class SecurityConfiguration  {
                 // 권한 설정
                 .authorizeHttpRequests(authorize -> authorize
                         // 마이페이지 접근은, 회원만 가능
-                        .antMatchers(HttpMethod.GET, "/users/mypage/**").hasRole("USER")
+                        //.antMatchers(HttpMethod.GET, "/users/mypage/**").hasRole("USER")
                         // 게시글, 댓글 등록, 모집 인원 신청의 경우, 회원만 가능
-                        .antMatchers(HttpMethod.POST, "/board/posts").hasRole("USER")
+                        //.antMatchers(HttpMethod.POST, "/board/posts").hasRole("USER")
                         // 게시물, 댓글 수정의 경우, 회원만 가능
-                        .antMatchers(HttpMethod.PATCH, "/board/posts/**").hasRole("USER")
+                        //.antMatchers(HttpMethod.PATCH, "/board/posts/**").hasRole("USER")
                         // 게시물, 댓글 삭제의 경우, 회원만 가능
-                        .antMatchers(HttpMethod.DELETE, "/board/posts/**").hasRole("USER")
+                        //.antMatchers(HttpMethod.DELETE, "/board/posts/**").hasRole("USER")
                         //.antMatchers(HttpMethod.POST, "/*/login").permitAll()
                         //.antMatchers(HttpMethod.POST, "/*/signup").permitAll()
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository))
+                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository, refreshTokenRepository))
                 );
 
         return http.build();
