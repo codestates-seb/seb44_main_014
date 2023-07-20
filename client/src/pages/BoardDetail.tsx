@@ -55,10 +55,10 @@ const BoardDetail = () => {
       })
       .catch((err) => {
         console.log(err);
-        if (err.response.status === 403) {
+        if (err.response.status === 409) {
           alert('이미 참여 신청한 모임입니다.');
         }
-        // else if (err.response.status === 4xx) {
+        // else if (err.response.status === 403) {
         //   alert('성별이 달라 신청할 수 없습니다.');
         // }
       });
