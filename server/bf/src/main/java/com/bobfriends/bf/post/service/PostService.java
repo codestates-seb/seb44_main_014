@@ -128,10 +128,10 @@ public class PostService {
 
         // 음식 태그가 존재하지 않으면
         if(foodRepository.findById(requestBody.getPostTag().getFoodTag().getFoodTagId()) == null){
-            throw new BusinessLogicException(ExceptionCode.FOODTAG_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.FOOD_TAG_NOT_FOUND);
             // 성별 태그가 존재하지 않으면
         }else if(genderRepository.findById(requestBody.getPostTag().getGenderTag().getGenderTagId()) == null){
-            throw new BusinessLogicException(ExceptionCode.GENDERTAG_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.GENDER_TAG_NOT_FOUND);
         }
     }
 

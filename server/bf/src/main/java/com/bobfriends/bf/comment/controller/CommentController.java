@@ -31,7 +31,7 @@ public class CommentController {
     /** 댓글 생성 **/
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post post,
-                                      @PathVariable("post-id") @Positive Long postId){
+                                      @PathVariable("post-id") @Positive Long postId) {
         post.addPostId(postId);
 
         Comment comment = commentMapper.CommentPostToComment(post);
@@ -49,7 +49,7 @@ public class CommentController {
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@Valid @RequestBody CommentDto.Patch patch,
                                        @PathVariable("post-id")@Positive Long postId,
-                                       @PathVariable("comment-id")@Positive Long commentId){
+                                       @PathVariable("comment-id")@Positive Long commentId) {
         patch.addPostId(postId);
         patch.addCommentId(commentId);
 
@@ -69,7 +69,7 @@ public class CommentController {
     /** 댓글 조회 **/
     @GetMapping("/{comment-id}")
     public ResponseEntity getComment(@PathVariable("post-id")@Positive Long postId,
-                                        @PathVariable("comment-id")@Positive Long commentId){
+                                        @PathVariable("comment-id")@Positive Long commentId) {
 
         Comment response = commentService.findComment(commentId);
 
@@ -80,7 +80,7 @@ public class CommentController {
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@PathVariable("post-id")@Positive Long postId,
                                         @PathVariable("comment-id")@Positive Long commentId,
-                                        @RequestHeader("authorization") String token){
+                                        @RequestHeader("authorization") String token) {
 
         commentService.deleteComment(commentId,token);
 
