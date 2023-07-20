@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import { useState } from 'react';
-import postSignUp from '../fetch/postSignUp.tsx';
+import postSignUp from '../util/api/postSignUp.tsx';
 import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
@@ -56,9 +56,9 @@ const SignUp = () => {
         navigate('/login');
       } catch (error) {
         if (error.response.status === 409) {
-          alert('이미 가입되어 있는 이메일입니다.');
+          alert(error.response.message);
         } else {
-          alert('뭔가 이상해요');
+          alert(error.response.message);
         }
       }
     }
