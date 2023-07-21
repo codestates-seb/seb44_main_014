@@ -72,6 +72,9 @@ dependencies {
 	implementation 'commons-io:commons-io:2.6'
 	implementation 'commons-fileupload:commons-fileupload:1.4'
 
+	// 공간쿼리
+	implementation 'org.hibernate:hibernate-spatial:5.6.1.Final'
+
 }
 
 tasks.named('test') {
