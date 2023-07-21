@@ -21,6 +21,7 @@ public class MemberTagService {
 
     public MemberTag updateMemberFoodTag(Member member, MemberTagDto.FoodTagMember requestBody) {
 
+        // memberTag 삭제
         memberTagRepository.deleteById(member.getMemberTag().getMemberTagId());
 
         FoodTag foodTag = new FoodTag();

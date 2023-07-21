@@ -1,6 +1,10 @@
 package com.bobfriends.bf.mate.dto;
 
+import com.bobfriends.bf.post.entity.Post;
 import lombok.*;
+
+import javax.validation.constraints.Positive;
+import java.util.List;
 
 public class MateMemberDto {
 
@@ -13,5 +17,38 @@ public class MateMemberDto {
         private long mateMemberId;
 
         private String name;
+    }
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PostMateMember{
+        @Positive
+        private Long memberId;
+        private Long postId;
+        public void addPostId(Long postId){
+            this.postId = postId;
+        }
+    }
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MateMemberResponse{
+        private Long findNum;
+        private int mateNum;
+
+    }
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MateMemberGetResponse{
+        private Long memberId;
+        private String name;
+    }
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MateMemberGetResponses{
+        private List<MateMemberGetResponse> mate_member;
+        private Post.recruitStatus status;
     }
 }

@@ -2,7 +2,7 @@ export type Nullable<T> = T | null;
 
 // Page Board - borad list info
 export interface IBoardList {
-  questionId: number;
+  postId: number;
   memberId: number;
   name: string;
   avgStarRate: number;
@@ -12,24 +12,29 @@ export interface IBoardList {
   category: string;
   title: string;
   createdAt: string;
-  image?: string;
-  genderTag: {
+  postTag: {
+    postTagId: number;
     genderTagId: number;
-  };
-  foodTag: {
     foodTagId: number;
   };
 }
 
 export interface IFilterInfo {
+  page: number;
   category: string;
-  search: string;
   genderTag: Nullable<number>;
   foodTag: Nullable<number>;
 }
 
+export interface IPageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
 // Page BoardDetail - mate info
-interface IMateMember {
+export interface IMateMember {
   mateMemberId: number;
   name: string;
 }
@@ -67,12 +72,6 @@ export interface IBoardDetailData {
     foodTagId: number;
     genderTagId: number;
   };
-  genderTag: {
-    genderTagId: number;
-  };
-  foodTag: {
-    foodTagId: number;
-  };
   mate: {
     findNum: number;
     mateNum: number;
@@ -88,12 +87,17 @@ export interface IPostInfo {
   title: string;
   content: string;
   genderTag: {
-    genderTagId: Nullable<number>;
-  };
+    genderTagId?: number;
+  } | null;
   foodTag: {
     foodTagId?: number;
   } | null;
   mate: {
     mateNum: Nullable<number>;
   };
+}
+
+// Page Edit Board - edit info
+export interface IEditInfo extends IPostInfo {
+  status?: string;
 }

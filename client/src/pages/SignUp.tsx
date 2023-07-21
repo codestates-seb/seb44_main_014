@@ -1,17 +1,15 @@
 import { styled } from 'styled-components';
 import { useState } from 'react';
-// import SignUpPost from '../components/fetch/SignUpPost.tsx';
+import postSignUp from '../util/api/postSignUp.tsx';
 import { useNavigate } from 'react-router-dom';
 
-interface SignUpProps {}
-
-const SignUp: React.FC<SignUpProps> = () => {
+const SignUp = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [copyPassword, setCopyPassword] = useState<string>('');
+  const [samePassword, setSamePassword] = useState<string>('');
   const [emailErrMsg, setEmailErrMsg] = useState<string>('');
   const [pwdErrMsg, setPwdErrMsg] = useState<string>('');
-  const [copyPwdErrMsg, setCopyPwdErrMsg] = useState<string>('');
+  const [samePwdErrMsg, setSamePwdErrMsg] = useState<string>('');
 
   const navigate = useNavigate();
 
@@ -23,8 +21,8 @@ const SignUp: React.FC<SignUpProps> = () => {
     setPassword(e.target.value);
     return;
   };
-  const handleCopyPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCopyPassword(e.target.value);
+  const handleSamePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSamePassword(e.target.value);
     return;
   };
   const signUpValidate = async () => {
@@ -43,22 +41,25 @@ const SignUp: React.FC<SignUpProps> = () => {
       setPwdErrMsg('');
     }
 
-    if (password !== copyPassword) {
-      setCopyPwdErrMsg('비밀번호 확인이 비밀번호와 일치하지 않습니다.');
+    if (password !== samePassword) {
+      setSamePwdErrMsg('비밀번호 확인이 비밀번호와 일치하지 않습니다.');
       signUpErr = true;
     } else {
-      setCopyPwdErrMsg('');
+      setSamePwdErrMsg('');
     }
 
     if (!signUpErr) {
       try {
         //response.data쓸필요없잖아?
-        // const responseData = await SignUpPost(email, password, copyPassword);
+        await postSignUp(email, password, samePassword);
         alert('회원가입이 완료되었습니다.');
         navigate('/login');
       } catch (error) {
-        //409에러인가??
-        alert('이미 가입되어 있는 이메일입니다.');
+        if (error.response.status === 409) {
+          alert(error.response.message);
+        } else {
+          alert(error.response.message);
+        }
       }
     }
   };
@@ -78,8 +79,8 @@ const SignUp: React.FC<SignUpProps> = () => {
         </InputSection>
         <InputSection>
           <Title>비밀번호확인</Title>
-          <Input value={copyPassword} onChange={handleCopyPasswordChange} />
-          <ErrorMessage>{copyPwdErrMsg}</ErrorMessage>
+          <Input value={samePassword} onChange={handleSamePasswordChange} />
+          <ErrorMessage>{samePwdErrMsg}</ErrorMessage>
         </InputSection>
       </InputContainer>
       <SignUpButtonContainer onClick={signUpValidate}>회원가입</SignUpButtonContainer>

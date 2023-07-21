@@ -32,8 +32,6 @@ public class PostDto {
         @NotBlank
         private String content;
 
-        private String image;
-
         /** 태그 하나만 등록 가능 (선택)
          *  - default : 남녀노소
          */
@@ -65,8 +63,6 @@ public class PostDto {
         private String title;
 
         private String content;
-
-        private String image;
 
         private PostTagDto.GenderTagPost genderTag;
 
@@ -100,8 +96,6 @@ public class PostDto {
 
         private String content;
 
-        private String image;
-
         private PostTagDto.Response postTag;
 
         private MateDto.PatchResponse mate;
@@ -119,8 +113,6 @@ public class PostDto {
         private String title;
 
         private String content;
-
-        private String image;
 
         private LocalDateTime createdAt;
 
@@ -172,8 +164,20 @@ public class PostDto {
 
         private LocalDateTime createdAt;
 
-        private String image;
-
         private PostTagDto.Response postTag;
+    }
+
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class myPageResponse {
+
+        private long postId;
+
+        private String title;
+
+        private recruitStatus status;
     }
 }

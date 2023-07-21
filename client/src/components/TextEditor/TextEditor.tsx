@@ -5,16 +5,13 @@ import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { RangeStatic } from 'quill';
-import { IPostInfo } from '../../interface/board.tsx';
+import { IEditInfo } from '../../interface/board.ts';
 
 interface IEditor {
-  // htmlStr: string;
-  // setHtmlStr: React.Dispatch<React.SetStateAction<string>>;
-  info: IPostInfo;
-  setInfo: React.Dispatch<React.SetStateAction<IPostInfo>>;
+  info: IEditInfo;
+  setInfo: React.Dispatch<React.SetStateAction<IEditInfo>>;
 }
 
-// const TextEditor = ({ htmlStr, setHtmlStr }: IEditor) => {
 const TextEditor = ({ info, setInfo }: IEditor) => {
   const quillRef = React.useRef<ReactQuill>(null);
 
@@ -23,26 +20,22 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
     // file input 임의 생성
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
     input.click();
 
     input.onchange = async () => {
       const file = input.files;
       const formData = new FormData();
-
       if (file) {
-        formData.append('multipartFiles', file[0]);
+        formData.append('multipartFile', file[0]);
       }
 
       // file 데이터 담아서 서버에 전달하여 이미지 업로드
-      const res = await axios.post(
-        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/img',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/post/images/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log(res);
 
       if (quillRef.current) {
@@ -52,7 +45,7 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
         const quillEditor = quillRef.current.getEditor();
         quillEditor.setSelection(index, 1);
 
-        quillEditor.clipboard.dangerouslyPasteHTML(index, `<img src=${res.data} alt=${'alt text'} />`);
+        quillEditor.clipboard.dangerouslyPasteHTML(index, `<img src=${res.data[0]} alt=${'alt text'} />`);
       }
     };
   };
@@ -77,24 +70,33 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
   const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'link', 'image'];
 
   return (
-    <CustomReactQuill
-      ref={quillRef}
-      theme="snow"
-      modules={modules}
-      formats={formats}
-      // value={htmlStr}
-      value={info.content}
-      placeholder="내용을 입력하세요."
-      onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
-      // onChange={(content, delta, source, editor) => setHtmlStr(editor.getHTML())}
-    />
+    // <CustomReactQuill
+    //   ref={quillRef}
+    //   theme="snow"
+    //   $modules={modules}
+    //   $formats={formats}
+    //   value={info.content}
+    //   placeholder="내용을 입력하세요."
+    //   onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
+    // />
+    <CustomReactQuill>
+      <ReactQuill
+        ref={quillRef}
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        value={info.content}
+        placeholder="내용을 입력하세요."
+        onChange={(content, delta, source, editor) => setInfo({ ...info, content: editor.getHTML() })}
+      />
+    </CustomReactQuill>
   );
 };
 
 export default TextEditor;
 
 // style
-const CustomReactQuill = styled(ReactQuill)`
+const CustomReactQuill = styled.div`
   .ql-toolbar {
     border-radius: 5px 5px 0 0;
   }

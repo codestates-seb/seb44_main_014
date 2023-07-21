@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: local
   h2:
     console:
       enabled: true
@@ -13,24 +16,19 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL pretty print
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId:
+            clientSecret:
+            scope:
+              - email
+              - profile
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
-
-logging:
-  level:
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
-server:
-  servlet:
-    multipart:    # 파일 크기 지정
-      max-file-size: 20MB
-      max-request-size: 20MB
-    encoding:
-      force-response: true
 
 #AWS S3
 cloud:
@@ -39,7 +37,7 @@ cloud:
       accessKey: ${AWS_ACCESS_KEY}
       secretKey: ${AWS_SECRET_ACCESS_KEY}
     s3:
-      bucket: bobimage # 버킷 이름 수정
+      bucket: bobimage
     stack:
       auto-: false
     region:
@@ -47,9 +45,10 @@ cloud:
 
 mail:
   address:
-    admin: admin@gmail.com    # jwt 사용할때 필요
+    admin: admin@gmail.com 
 
 jwt:
-  key: ${JWT_SECRET_KEY}      # jwt 사용할때 필요
+  key:
+    secret: bobfriend132412341234123412341234123423412341234123412341234114123411234123412341234
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420

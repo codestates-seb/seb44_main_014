@@ -57,4 +57,10 @@ public interface CommentMapper {
     CommentDto.DetailResponse commentToCommentDetailResponse(Comment comment);
 
     List<CommentDto.DetailResponse> commentsToCommentDetailsResponse(List<Comment> comments);
+
+    @Mapping(source = "post.postId", target = "postId")
+    CommentDto.myPageResponse commentToCommentMyResponse(Comment comment);
+
+    List<CommentDto.myPageResponse> commentsToCommentMyResponses(List<Comment> comments);
+
 }

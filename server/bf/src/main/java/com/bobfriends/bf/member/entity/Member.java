@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,28 +43,47 @@ public class Member extends Auditable {
 
     private boolean eatStatus=false;
 
-    @OneToMany(mappedBy = "rateMember")
+    @OneToMany(mappedBy = "rateMember", cascade = CascadeType.REMOVE)
     private List<MemberStarRate> rateMemberStarRates = new ArrayList<>();
 
     @JsonIgnoreProperties("mate")
-    @OneToMany(mappedBy = "postMember")
+    @OneToMany(mappedBy = "postMember", cascade = CascadeType.REMOVE)
     private List<MemberStarRate> postMemberStarRates = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MateMember> mateMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private MemberTag memberTag;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     public MemberTag getMemberTag() {
         return memberTag;
     }
+
+    /** avgStarRate 계산 **/
+    public float calculateAvgStarRate() {
+
+        int sum = rateMemberStarRates
+                    .stream()
+                    .mapToInt(starRate -> starRate.getStarRate())
+                    .sum();
+
+        float avgStarRate = (float) sum / rateMemberStarRates.size();
+
+        float roundAvgStarRate = (float) (Math.round(avgStarRate * 10.0) / 10.0);
+
+        return roundAvgStarRate;
+    }
+
 
     public enum genderStatus {
         FEMALE("여성"),
@@ -78,5 +99,12 @@ public class Member extends Auditable {
             return status;
         }
     }
+
+    public void updateEmail(String email) {
+        this.email = email;
     }
+    public void updateRoles(List<String> roles) {
+        this.roles = roles;
+    }
+}
 

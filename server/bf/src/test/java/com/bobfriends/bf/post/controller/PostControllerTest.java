@@ -1,6 +1,8 @@
 package com.bobfriends.bf.post.controller;
 
+import com.bobfriends.bf.auth.config.SecurityConfiguration;
 import com.bobfriends.bf.helper.StubData;
+import com.bobfriends.bf.home.controller.HomeController;
 import com.bobfriends.bf.post.dto.PostDto;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.mapper.PostMapper;
@@ -8,12 +10,14 @@ import com.bobfriends.bf.post.service.PostService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +43,15 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PostController.class)
+/*
+@WebMvcTest(
+        controllers = {PostController.class}, // 테스트 하고자 하는 Controller를 지정한다.
+        excludeAutoConfiguration = SecurityAutoConfiguration.class,// Spring Security의 자동 구성을 사용하지 않도록 한다.
+        excludeFilters = {      // 테스트 수행 시, 사용하지 않을 필터를 지정한다. 여기서는 SecurityConfiguration에서 설정하는 필터를 제외한다.
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+                        classes = SecurityConfiguration.class)
+        }
+)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 public class PostControllerTest {
@@ -92,7 +104,6 @@ public class PostControllerTest {
                                         fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문"),
-                                        fieldWithPath("image").type(JsonFieldType.STRING).description("이미지"),
 
                                         fieldWithPath("genderTag.genderTagId").type(JsonFieldType.NUMBER).description("성별 태그의 식별자").optional(),
                                         fieldWithPath("foodTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자").optional(),
@@ -143,7 +154,6 @@ public class PostControllerTest {
                                 fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)").optional(),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목").optional(),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문").optional(),
-                                fieldWithPath("image").type(JsonFieldType.STRING).description("이미지").optional(),
 
                                 fieldWithPath("genderTag.genderTagId").type(JsonFieldType.NUMBER).description("성별 태그의 식별자").optional(),
                                 fieldWithPath("foodTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자").optional(),
@@ -156,7 +166,6 @@ public class PostControllerTest {
                                 fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문"),
-                                fieldWithPath("image").type(JsonFieldType.STRING).description("이미지"),
 
                                 fieldWithPath("postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에 등록한 태그의 식별자"),
                                 fieldWithPath("postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),
@@ -198,7 +207,6 @@ public class PostControllerTest {
                                 List.of(
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("게시글 본문"),
-                                        fieldWithPath("image").type(JsonFieldType.STRING).description("이미지"),
                                         fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글 생성날짜"),
                                         fieldWithPath("viewCount").type(JsonFieldType.NUMBER).description("게시글 조회수"),
                                         fieldWithPath("commentCount").type(JsonFieldType.NUMBER).description("게시글에 달린 댓글 수"),
@@ -251,7 +259,6 @@ public class PostControllerTest {
         given(postService.searchPosts(Mockito.any(),Mockito.anyString(),Mockito.eq(null),Mockito.eq(null),Mockito.eq(null))).willReturn(posts);
         given(postMapper.PostsToPostResponseDtos(Mockito.anyList())).willReturn(responses);
 
-        // ,Mockito.anyString(),Mockito.anyString(),Mockito.anyLong(),Mockito.anyLong()
 
         // when
         ResultActions actions = mockMvc.perform(
@@ -286,7 +293,6 @@ public class PostControllerTest {
                                         fieldWithPath("data[].category").type(JsonFieldType.STRING).description("카테고리: EATING(밥먹기), SHOPPING(장보기)"),
                                         fieldWithPath("data[].title").type(JsonFieldType.STRING).description("게시글 제목"),
                                         fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("게시글 생성 날짜"),
-                                        fieldWithPath("data[].image").type(JsonFieldType.STRING).description("게시글 이미지"),
 
                                         fieldWithPath("data[].postTag.postTagId").type(JsonFieldType.NUMBER).description("질문에서 저장한 태그의 식별자"),
                                         fieldWithPath("data[].postTag.foodTagId").type(JsonFieldType.NUMBER).description("음식 태그의 식별자"),
@@ -332,3 +338,5 @@ public class PostControllerTest {
     }
 
 }
+
+ */

@@ -2,56 +2,36 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faWheatAwn } from '@fortawesome/free-solid-svg-icons';
 
-import { IFilterInfo } from '../../interface/board.tsx';
+import { IFilterInfo } from '../../interface/board.ts';
 
 interface IStyledProps {
   $isActive: boolean;
 }
 
 interface ITabMenuProps {
-  tabLeft: boolean;
-  setTabLeft: React.Dispatch<React.SetStateAction<boolean>>;
-  tabRight: boolean;
-  setTabRight: React.Dispatch<React.SetStateAction<boolean>>;
-  setActiveGender: React.Dispatch<React.SetStateAction<number | null | undefined>>;
-  setActiveFood: React.Dispatch<React.SetStateAction<number | null | undefined>>;
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
+  setCurrentApi: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const TabMenu = ({
-  tabLeft,
-  setTabLeft,
-  tabRight,
-  setTabRight,
-  setActiveGender,
-  setActiveFood,
-  filterInfo,
-  setFilterInfo,
-}: ITabMenuProps) => {
+const TabMenu = ({ filterInfo, setFilterInfo, setCurrentApi }: ITabMenuProps) => {
   const handleClickEating = (e: React.MouseEvent<HTMLElement>) => {
-    setTabLeft(true);
-    setTabRight(false);
-    setActiveGender(null);
-    setActiveFood(null);
+    setCurrentApi(`&category=${(e.target as HTMLButtonElement).value}`);
     setFilterInfo({
       ...filterInfo,
+      page: 1,
       category: (e.target as HTMLButtonElement).value,
-      search: '',
       genderTag: null,
       foodTag: null,
     });
   };
 
   const handleClickShopping = (e: React.MouseEvent<HTMLElement>) => {
-    setTabLeft(false);
-    setTabRight(true);
-    setActiveGender(null);
-    setActiveFood(null);
+    setCurrentApi(`&category=${(e.target as HTMLButtonElement).value}`);
     setFilterInfo({
       ...filterInfo,
+      page: 1,
       category: (e.target as HTMLButtonElement).value,
-      search: '',
       genderTag: null,
       foodTag: null,
     });
@@ -63,8 +43,8 @@ const TabMenu = ({
         onClick={(e: React.MouseEvent<HTMLElement>) => {
           handleClickEating(e);
         }}
-        $isActive={tabLeft}
-        value="밥먹기"
+        $isActive={filterInfo.category === 'EATING' ? true : false}
+        value="EATING"
       >
         <FontAwesomeIcon icon={faUtensils} /> 밥 먹기
       </TabButton>
@@ -72,8 +52,8 @@ const TabMenu = ({
         onClick={(e: React.MouseEvent<HTMLElement>) => {
           handleClickShopping(e);
         }}
-        $isActive={tabRight}
-        value="장보기"
+        $isActive={filterInfo.category === 'SHOPPING' ? true : false}
+        value="SHOPPING"
       >
         <FontAwesomeIcon icon={faWheatAwn} /> 장 보기
       </TabButton>

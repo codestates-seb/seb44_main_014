@@ -1,18 +1,19 @@
 import { useState } from 'react';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-import { IComments } from '../../../pages/BoardDetail.tsx';
-import { timeStamp } from '../../../util/commonFunction.ts';
+import { IComments } from '../../../interface/board.ts';
+import { timeStamp } from '../../../util/common.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments;
 };
 
 const Comment = ({ commentInfo }: CommentInfoProps) => {
-  const { name, content, createdAt, avgStarRate, memberId /*, commemtId*/ } = commentInfo;
+  const { name, content, createdAt, avgStarRate, memberId, commentId } = commentInfo;
 
   const [modifyComment, setModifyComment] = useState(false);
   const [commentContent, setCommentContent] = useState({
@@ -20,8 +21,8 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
     content: content,
   });
 
-  // const params = useParams();
-  // const postId = Number(params.postId);
+  const params = useParams();
+  const postId = Number(params.postId);
 
   const newTime = timeStamp(new Date(createdAt));
 
@@ -29,26 +30,26 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   const userId = 1;
 
   const patchComment = () => {
-    // axios
-    //   .patch(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`, commentContent)
-    //   .then((res) => {
-    //     console.log(res);
-    //     setCommentContent({ ...commentContent, content: res.content });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`, commentContent)
+      .then((res) => {
+        console.log(res);
+        setCommentContent({ ...commentContent, content: res.data.content });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deleteComment = () => {
-    // axios
-    //   .delete(`${process.env.REACT_APP_API_URL}/board/posts/${postId}/comments/${commemtId}`)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -67,8 +68,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
       {!modifyComment && (
         <div>
           <CommentContent>{commentContent.content}</CommentContent>
-          {/* TODO: 작성자에게만 노출 */}
-          {/* 사용자, 작성자 memberId 비교 분기 처리 */}
+          {/* 작성자에게만 노출 */}
           {userId === memberId && (
             <ModifyButtons>
               <button onClick={() => setModifyComment(!modifyComment)}>수정</button>
@@ -80,15 +80,17 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
       {/* 수정 모드 */}
       {modifyComment && (
         <div>
-          <CommentTextbox
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
-              console.log(commentContent);
-            }}
-            value={commentContent.content}
-            placeholder="댓글을 작성해주세요."
-            max-length={100}
-          />
+          <CommentTextbox>
+            <textarea
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
+                console.log(commentContent);
+              }}
+              value={commentContent.content}
+              placeholder="댓글을 작성해주세요."
+              max-length={100}
+            />
+          </CommentTextbox>
           <ModifyButtons>
             {/* patch 요청 함수 연결 */}
             <button
@@ -151,12 +153,14 @@ const ModifyButtons = styled.div`
   }
 `;
 
-const CommentTextbox = styled.textarea`
-  width: 100%;
-  padding: 1.25rem;
-  border-radius: 5px;
-  border: 1px solid var(--color-gray);
-  box-sizing: border-box;
+const CommentTextbox = styled.div`
+  textarea {
+    width: 100%;
+    padding: 1.25rem;
+    border-radius: 5px;
+    border: 1px solid var(--color-gray);
+    box-sizing: border-box;
+  }
 `;
 
 export default Comment;

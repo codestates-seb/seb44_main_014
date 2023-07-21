@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Table(name = "MEMBER_STAR_RATE")
-public class MemberStarRate extends Auditable {
+public class MemberStarRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_star_rate_id")

@@ -3,8 +3,8 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
 
-import { IBoardDetailData } from '../../../interface/board.tsx';
-import { timeStamp } from '../../../util/commonFunction.ts';
+import { IBoardDetailData } from '../../../interface/board.ts';
+import { timeStamp } from '../../../util/common.ts';
 
 type BoardInfoProps = {
   boardInfo: IBoardDetailData;
@@ -16,25 +16,25 @@ interface IStyledProps {
 
 const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
   const navigate = useNavigate();
-  const { title, status, genderTag, foodTag, viewCount, commentCount, createdAt } = boardInfo;
+  const { title, status, postTag, viewCount, commentCount, createdAt } = boardInfo;
 
   let newGenderTag: string;
-  if (genderTag.genderTagId === 1) {
+  if (postTag.genderTagId === 1) {
     newGenderTag = '# 여자만';
-  } else if (genderTag.genderTagId === 2) {
+  } else if (postTag.genderTagId === 2) {
     newGenderTag = '# 남자만';
   } else {
     newGenderTag = '# 남녀노소';
   }
 
   let newFoodTag: string;
-  if (foodTag.foodTagId === 1) {
+  if (postTag.foodTagId === 1) {
     newFoodTag = '# 한식';
-  } else if (foodTag.foodTagId === 2) {
+  } else if (postTag.foodTagId === 2) {
     newFoodTag = '# 중식';
-  } else if (foodTag.foodTagId === 3) {
+  } else if (postTag.foodTagId === 3) {
     newFoodTag = '# 양식';
-  } else if (foodTag.foodTagId === 4) {
+  } else if (postTag.foodTagId === 4) {
     newFoodTag = '# 일식';
   } else {
     newFoodTag = '# 기타';
@@ -101,10 +101,9 @@ const DetailTitleArea = styled.div`
 const TitleLeft = styled.div`
   display: flex;
   align-items: center;
-  width: calc(100% - 70px);
+  width: calc(100% - 80px);
   @media screen and (min-width: 768px) {
     width: auto;
-    max-width: calc(100% - 80px);
   }
   @media screen and (min-width: 1024px) {
     max-width: calc(100% - 90px);
@@ -126,7 +125,7 @@ const TitleH2 = styled.h2`
   width: calc(100% - 1.875rem);
   font-family: 'NanumSquare', sans-serif;
   font-size: 1rem;
-  line-height: 1;
+  line-height: 1.2;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

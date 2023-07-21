@@ -1,7 +1,6 @@
 package com.bobfriends.bf.upload.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +27,15 @@ public class S3Uploader {
     private String bucket;
 
 
-    public String[] upload(MultipartFile file) throws IOException {
-        return new String[]{uploadFiles(file, "bob-friends"), bucket};
+    public String[] uploadPost(MultipartFile file) throws IOException {
+        return new String[]{uploadFiles(file, "post"), bucket};
+    }
+
+    public String[] uploadMember(MultipartFile file) throws IOException {
+        return new String[]{uploadFiles(file, "member"), bucket};
     }
 
     /** MultipartFile을 전달받아 File로 전환한 후 S3에 업로드 **/
-
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
 
         File uploadFile = convert(multipartFile)
@@ -59,7 +61,6 @@ public class S3Uploader {
 
 
     /** S3 버킷에 이미지 업로드 **/
-
     private String putS3(File uploadFile, String fileName) {
 
         amazonS3Client.putObject(

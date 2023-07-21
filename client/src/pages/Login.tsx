@@ -1,24 +1,25 @@
 import { styled } from 'styled-components';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import LoginPost from '../components/fetch/LoginPost.tsx';
+import postLogin from '../util/api/postLogin.tsx';
+import { setCookie } from '../util/cookie/index.ts';
+import { login } from '../store/userSlice.ts';
 
-interface UserInfo {
-  gender: string;
-  memberId: string;
-}
+// interface UserInfo {
+//   gender: string;
+//   memberId: string;
+// }
 
-interface LoginProps {}
-
-const Login: React.FC<LoginProps> = () => {
+const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailErrMsg, setEmailErrMsg] = useState<string>('');
   const [pwdErrMsg, setPwdErrMsg] = useState<string>('');
-  const [userInfo, setUserInfo] = useState<UserInfo>({ gender: '', memberId: '' });
+  // const [userInfo, setUserInfo] = useState<UserInfo>({ gender: '', memberId: '' });
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   // 이렇게 useEffect쓰는게 나은지 아니면 async await썼으니까 충분한지??
   // useEffect(() => {
   //   // if (UserInfo.gender) {
@@ -49,20 +50,40 @@ const Login: React.FC<LoginProps> = () => {
     //작동확인완료
     if (loginFormValid) {
       try {
-        // const responseData = await LoginPost(email, password);
+        const response = await postLogin(email, password);
+        // const { accessToken } = responseData;
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+        // setCookie('accessToken', response.headers['Authorization']);
+        // setCookie('refreshToken', response.headers['Refresh']);
+
+        const responseData = response.data;
         alert('로그인에 성공했습니다.');
         // setUserInfo(responseData);
-        // if (responseData.gender) {
-        //   navigate('/');
-        // } else {
-        //   navigate(`/users/userInfo/${responseData.memberId}`);
-        // }
+
+        dispatch(
+          login({
+            memberId: responseData.memberId,
+            isLogin: true,
+          })
+        );
+
+        if (responseData.gender && responseData.location) {
+          navigate('/');
+        } else {
+          navigate(`/users/userInfo/${responseData.memberId}`);
+        }
       } catch (error) {
         //가입안한거랑 비밀번호 틀린거랑 어떻게 구분하지? 에러코드가 다른가?
         // 가입안되어있으면 null오고
         // 비밀번호틀리면 401에러
-
-        alert('이미 가입되어 있는 이메일입니다.');
+        if (error.response.status === 401) {
+          alert(error.response.message);
+          // alert('비밀번호가 일치하지 않습니다');
+        } else {
+          alert(error.response.message);
+          // alert('존재하지 않는 계정입니다.');
+        }
       }
     }
   };

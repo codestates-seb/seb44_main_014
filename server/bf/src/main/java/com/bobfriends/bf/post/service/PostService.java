@@ -1,5 +1,6 @@
 package com.bobfriends.bf.post.service;
 
+import com.bobfriends.bf.auth.jwt.JwtTokenizer;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.mate.service.MateService;
@@ -37,12 +38,12 @@ public class PostService {
 
     private final MateService mateService;
 
+    private final JwtTokenizer jwtTokenizer;
+
     /**
      * 게시글 등록
-     * - [밥먹기] 성별 태그 / 음식 태그 선택 (default : 상관없음(3), 기타(5))
+     * - [밥먹기] 성별 태그 / 음식 태그 선택 (default : 남녀노소(3), 기타(5))
      * - [장보기] 음식 태그 사용 X
-     * - 등록 기본 status : 모집중
-     * TODO : 이미지
      */
     public Post createPost(Post requestBody){
 
@@ -55,8 +56,6 @@ public class PostService {
     /** 게시글 수정 **/
     public Post updatePost(long postId, PostDto.Patch patch){
 
-        // TODO : 로그인한 회원이 작성자인지 확인 (JWT)
-
         Post findPost = findVerifiedPost(postId);
 
         if(findPost.getMember().getMemberId() == patch.getMemberId()){
@@ -64,7 +63,6 @@ public class PostService {
             Optional.ofNullable(patch.getCategory()).ifPresent(category -> findPost.setCategory(category));
             Optional.ofNullable(patch.getTitle()).ifPresent(title -> findPost.setTitle(title));
             Optional.ofNullable(patch.getContent()).ifPresent(content -> findPost.setContent(content));
-            Optional.ofNullable(patch.getImage()).ifPresent(image -> findPost.setImage(image));
             Optional.ofNullable(patch.getStatus()).ifPresent(status -> findPost.setStatus(status));
 
             if(patch.getGenderTag() != null){
@@ -104,15 +102,24 @@ public class PostService {
         return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
     }
 
+
     /** 질문 삭제 **/
-    public void deletePost(long postId){
+    public void deletePost(long postId, String token){
 
         Post findPost = findVerifiedPost(postId);
 
-        // TODO : 로그인한 회원이 작성자인지 확인 (JWT)
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        long loginId = jwtTokenizer.getMemberIdFromToken(token, base64EncodedSecretKey);
+
         long writerMemberId = findPost.getMember().getMemberId();
 
-        postRepository.delete(findPost);
+        // 로그인 한 회원이 작성자이면
+        if(loginId == writerMemberId){
+            postRepository.delete(findPost);
+        }else {
+            throw new RuntimeException("등록한 작성자가 아닙니다");
+        }
     }
 
 
@@ -121,10 +128,10 @@ public class PostService {
 
         // 음식 태그가 존재하지 않으면
         if(foodRepository.findById(requestBody.getPostTag().getFoodTag().getFoodTagId()) == null){
-            throw new BusinessLogicException(ExceptionCode.FOODTAG_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.FOOD_TAG_NOT_FOUND);
             // 성별 태그가 존재하지 않으면
         }else if(genderRepository.findById(requestBody.getPostTag().getGenderTag().getGenderTagId()) == null){
-            throw new BusinessLogicException(ExceptionCode.GENDERTAG_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.GENDER_TAG_NOT_FOUND);
         }
     }
 
