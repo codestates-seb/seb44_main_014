@@ -1,20 +1,20 @@
 import { styled } from 'styled-components';
+import { useSelector } from 'react-redux';
 import { IMateMember } from '../../../interface/board.ts';
+import { IUserState } from '../../../store/userSlice.ts';
 
 interface IMate {
   findNum: number;
   mateNum: number;
 }
 interface IApplyParticipateProps {
-  mate: IMate;
   mateMembers: IMateMember[];
   postApplyData: () => void;
   getDetailData: () => void;
   updateMate: IMate;
 }
-const ApplyParticipate = ({ mate, mateMembers, postApplyData, getDetailData, updateMate }: IApplyParticipateProps) => {
-  // 임시 사용자 id
-  const userId = 1;
+const ApplyParticipate = ({ mateMembers, postApplyData, getDetailData, updateMate }: IApplyParticipateProps) => {
+  const userId = useSelector((state: IUserState) => state.user.memberId);
 
   const showParticipant = mateMembers.filter((member) => member.mateMemberId === userId).length;
 

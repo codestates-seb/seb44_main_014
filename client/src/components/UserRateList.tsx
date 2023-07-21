@@ -11,7 +11,7 @@ const UserRateList = ({ list }) => {
   const postId = Number(params.postId);
   const [userRateInfo, setUserRateInfo] = useState({
     rateMemberId: list.memberId,
-    starRate: '',
+    starRate: null,
   });
   const postStarRate = () => {
     axios
@@ -26,12 +26,12 @@ const UserRateList = ({ list }) => {
   console.log(userRateInfo);
 
   const handleRateValue = (e: React.MouseEvent<HTMLInputElement>) => {
-    setUserRateInfo({ ...userRateInfo, starRate: checkedValue(e) });
+    setUserRateInfo({ ...userRateInfo, starRate: Number(checkedValue(e)) });
   };
   return (
     <StarRateList>
       <RatingContainer>
-        <Username>홍길동</Username>
+        <Username>{list.name}</Username>
         <div className="rating-group">
           <label aria-label="0.5 stars" className="rating__label--half" htmlFor="starRate05">
             <FontAwesomeIcon icon={faStarHalf} />
