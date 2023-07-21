@@ -5,7 +5,7 @@ spring:
     activate:
       on-profile: server
   jpa:
-    open-in-view: false
+    open-in-view: false # .... 이부분
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: update  # (1) 스키마 자동 생성
