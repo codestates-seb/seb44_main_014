@@ -2,6 +2,7 @@ package com.bobfriends.bf.member.entity;
 
 import com.bobfriends.bf.audit.Auditable;
 import com.bobfriends.bf.comment.entity.Comment;
+import com.bobfriends.bf.location.entity.Location;
 import com.bobfriends.bf.mate.entity.MateMember;
 import com.bobfriends.bf.post.entity.Post;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -35,8 +36,6 @@ public class Member extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private genderStatus gender;
 
-    private String location;
-
     private float avgStarRate;
 
     private boolean eatStatus=false;
@@ -59,6 +58,9 @@ public class Member extends Auditable {
 
     @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private MemberTag memberTag;
+
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Location location;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();

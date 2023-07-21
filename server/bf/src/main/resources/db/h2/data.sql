@@ -15,13 +15,13 @@ VALUES
     ('기타');
 
  -- 테이블명: member (5)
-INSERT INTO member (image,name,email,password,gender,location,avg_star_rate,eat_status,created_at,modified_at)
+INSERT INTO member (image,name,email,password,gender,avg_star_rate,eat_status,created_at,modified_at)
 VALUES
-    ('이미지1','John Doe', 'john@example.com', 'password123!', 'FEMALE','서울','0','false','2022-04-15 10:30:00', '2022-06-18 10:35:00'),
-    ('이미지2','홍길동', 'sdfsg@example.com', 'password111!', 'FEMALE','경기','4','false','2022-05-15 10:30:00', '2022-07-18 10:35:00'),
-    ('이미지3','김코딩', 'sgd44@example.com', 'password222!', 'MALE','부산','0','true','2022-06-15 10:30:00', '2022-08-18 10:35:00'),
-    ('이미지4','박해커', 'bfhf3@example.com', 'password333!', 'MALE','울산','0','true','2022-07-15 10:30:00', '2022-09-18 10:35:00'),
-    ('이미지5','김이름', 'sggg66@example.com', 'password444!', 'FEMALE','대구','3','false','2022-08-15 10:30:00', '2022-10-18 10:35:00');
+    ('이미지1','John Doe', 'john@example.com', 'password123!', 'FEMALE','0','false','2022-04-15 10:30:00', '2022-06-18 10:35:00'),
+    ('이미지2','홍길동', 'sdfsg@example.com', 'password111!', 'FEMALE','4','false','2022-05-15 10:30:00', '2022-07-18 10:35:00'),
+    ('이미지3','김코딩', 'sgd44@example.com', 'password222!', 'MALE','0','true','2022-06-15 10:30:00', '2022-08-18 10:35:00'),
+    ('이미지4','박해커', 'bfhf3@example.com', 'password333!', 'MALE','0','true','2022-07-15 10:30:00', '2022-09-18 10:35:00'),
+    ('이미지5','김이름', 'sggg66@example.com', 'password444!', 'FEMALE','3','false','2022-08-15 10:30:00', '2022-10-18 10:35:00');
 
  -- 테이블명: member_tag (5)
 INSERT INTO member_tag (member_id,food_tag_id)
@@ -82,3 +82,12 @@ VALUES
     (null,1,3),
     (null,2,4),
     (5,2,5);
+
+-- 테이블명: location (5)
+INSERT INTO location (address, member_id)
+VALUES
+    ('서울',1),
+    ('경기',2),
+    ('부산',3),
+    ('울산',4),
+    ('대구',5);
