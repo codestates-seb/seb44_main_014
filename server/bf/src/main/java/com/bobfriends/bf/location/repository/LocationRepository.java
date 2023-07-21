@@ -18,6 +18,8 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Transactional
     List <Long> findByNativeQuery(@Param("point") Point point);
 
+
+    @Transactional
     @Query("SELECT l FROM Location l WHERE l.member.id = :memberId")
     Optional<Location> findByMemberId(@Param("memberId") Long memberId);
 }
