@@ -27,7 +27,7 @@ const PageRouter = () => {
         <Route path="/users/userInfo/:memberId" element={<UserInfo />} />
         <Route path="/users/mypage/:memberId" element={<Mypage />} />
         <Route path="/users/mypage/:memberId/edit" element={<EditUserInfo />} />
-        <Route path="/questions/:questionId/mate" element={<UserRating />} />
+        <Route path="/board/post/:postId/mate" element={<UserRating />} />
         <Route path="/users/mypage/:memberId/questions" element={<MoreInfoWritings />} />
         <Route path="/users/mypage/:memberId/comments" element={<MoreInfoComments />} />
         <Route path="/board" element={<Board />} />
