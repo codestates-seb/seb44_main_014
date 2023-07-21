@@ -22,8 +22,10 @@ public enum ExceptionCode {
     GENDER_DIFFERENT(403, "Not the corresponding gender"),
 
     PASSWORD_NOT_SAME(403, "Password not same"),
-    REFRESH_TOKEN_NOT_SAME(401, "Refresh token not same");
+    REFRESH_TOKEN_NOT_SAME(401, "Refresh token not same"),
 
+    CANNOT_CHANGE_LOCATION(403, "Location can not change"),
+    LOCATION_NOT_FOUND(403, "Location not registered Member");
     @Getter
     private int status;
 
