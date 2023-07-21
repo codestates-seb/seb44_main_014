@@ -2,7 +2,6 @@ package com.bobfriends.bf.member.entity;
 
 import com.bobfriends.bf.audit.Auditable;
 import com.bobfriends.bf.comment.entity.Comment;
-import com.bobfriends.bf.location.entity.Location;
 import com.bobfriends.bf.mate.entity.MateMember;
 import com.bobfriends.bf.post.entity.Post;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,9 +59,6 @@ public class Member extends Auditable {
 
     @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private MemberTag memberTag;
-
-    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Location locations;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
