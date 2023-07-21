@@ -2,6 +2,7 @@ package com.bobfriends.bf.location.repository;
 
 
 import com.bobfriends.bf.location.entity.Location;
+import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.post.entity.Post;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Transactional
     @Query("SELECT l FROM Location l WHERE l.member.id = :memberId")
     Optional<Location> findByMemberId(@Param("memberId") Long memberId);
+
+    Location findByMember(Member member);
 }

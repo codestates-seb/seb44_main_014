@@ -3,6 +3,8 @@ package com.bobfriends.bf.post.service;
 import com.bobfriends.bf.auth.jwt.JwtTokenizer;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
+import com.bobfriends.bf.location.repository.LocationRepository;
+import com.bobfriends.bf.location.service.LocationService;
 import com.bobfriends.bf.mate.service.MateService;
 import com.bobfriends.bf.member.service.MemberService;
 import com.bobfriends.bf.post.dto.PostDto;
@@ -13,12 +15,16 @@ import com.bobfriends.bf.tag.repository.FoodRepository;
 import com.bobfriends.bf.tag.repository.GenderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -37,6 +43,10 @@ public class PostService {
     private final MemberService memberService;
 
     private final MateService mateService;
+
+    private final LocationService locationService;
+
+    private final LocationRepository locationRepository;
 
     private final JwtTokenizer jwtTokenizer;
 
@@ -98,10 +108,36 @@ public class PostService {
 
 
     /** 전체 질문 검색 **/
-    public Page<Post> searchPosts(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag){
-        return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
-    }
+    public Page<Post> searchPosts(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag, String token){
 
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        long memberId = jwtTokenizer.getMemberIdFromToken(token, base64EncodedSecretKey);
+
+        // 현재 사용자의 위치를 가져옴
+        Point point = locationService.locationRegisteredMember(memberId).getPoint();
+
+        List<Long> memberIdList = locationRepository.findByNativeQuery(point);
+
+        List<Post> postsByMemberId = memberIdList.stream()
+                .flatMap(id -> postRepository.findAllByMemberId(id).stream())
+                .collect(Collectors.toList());
+
+        /** 여기까지가 위치로 뽑은 근방에 있는 member의 postList**/
+
+        List <Post> filteredPosts = postRepository.findBySearchOptionNoPage(keyword, category, genderTag, foodTag);
+
+        List<Post> commonPosts = postsByMemberId.stream()
+                .filter(filteredPosts::contains)
+                .collect(Collectors.toList());
+
+
+        if (memberIdList.size() < 3)
+            return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
+        else
+            return new PageImpl<>(commonPosts, pageable, commonPosts.size());
+
+    }
 
     /** 질문 삭제 **/
     public void deletePost(long postId, String token){

@@ -25,7 +25,8 @@ public enum ExceptionCode {
     REFRESH_TOKEN_NOT_SAME(401, "Refresh token not same"),
 
     CANNOT_CHANGE_LOCATION(403, "Location can not change"),
-    LOCATION_NOT_FOUND(403, "Location not registered Member");
+    LOCATION_NOT_FOUND(403, "Location not registered Member"),
+    CANNOT_CREATE_SAME_MEMEBER(409, "Same Member can not create");
     @Getter
     private int status;
 

@@ -7,6 +7,7 @@ import com.bobfriends.bf.home.service.HomeService;
 import com.bobfriends.bf.location.dto.LocationDto;
 import com.bobfriends.bf.location.entity.Location;
 import com.bobfriends.bf.location.repository.LocationRepository;
+import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.service.MemberService;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
@@ -29,6 +30,14 @@ public class LocationService {
     /*** 위치 등록 **/
 
     public Location createLocation(Location location) {
+
+        Member member = location.getMember();
+
+        // 이미 위치를 등록한 회원은 다시 등록할 수 없음
+
+        if (locationRepository.findByMember(member) != null) {
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CREATE_SAME_MEMEBER);
+        }
 
         return locationRepository.save(location);
     }
@@ -74,7 +83,7 @@ public class LocationService {
 
         Collections.sort(postsByMemberId, (post1, post2) -> post2.getCreatedAt().compareTo(post1.getCreatedAt()));
 
-        if (memberIdList.size() < 3)
+        if (memberIdList.size() <=1)
             return homeService.findPosts();
         else
             return postsByMemberId;
