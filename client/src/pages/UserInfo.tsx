@@ -138,6 +138,8 @@ const UserInfo = () => {
           withCredentials: true,
         });
 
+        await axios.post(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${memberId}/location/create`, location);
+
         alert('제출이 완료되었습니다.');
         // login 상태 들고 가야해
         navigate('/');
@@ -178,7 +180,7 @@ const UserInfo = () => {
           </GenderRadio>
           <ErrorMessage>{genderErrMsg}</ErrorMessage>
         </GenderContainer>
-        <ZipCodeInput locationErrMsg={locationErrMsg} />
+        <ZipCodeInput locationErrMsg={locationErrMsg} location={location} setLocation={setLocation} />
         <FoodTagContainer>
           <FoodTagTitle>음식 태그</FoodTagTitle>
           <FoodTagList>

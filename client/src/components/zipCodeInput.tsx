@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import DaumPostcode from 'react-daum-postcode';
 
-const ZipCodeInput = ({ locationErrMsg }) => {
+const ZipCodeInput = ({ location, setLocation, locationErrMsg }) => {
   const [openPostcode, setOpenPostcode] = useState(false);
-  const [location, setLocation] = useState({
-    latitude: null,
-    longitude: null,
-    address: '',
-  });
+  // const [location, setLocation] = useState({
+  //   latitude: null,
+  //   longitude: null,
+  //   address: '',
+  // });
 
   const geocoder = new kakao.maps.services.Geocoder();
 
@@ -50,7 +50,8 @@ const ZipCodeInput = ({ locationErrMsg }) => {
       setOpenPostcode(false);
     },
   };
-  console.log(location);
+  // console.log(location);
+  // await axios.post(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${memberId}/location/create`, location);
 
   // const handleLocationValue = (e) => {
   //   const location = e.target.value;
