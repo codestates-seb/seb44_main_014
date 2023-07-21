@@ -20,7 +20,7 @@ const api = async () => {
     });
     const response = await apiForm.post('/auth/reissue');
 
-    setCookie('accessToken', response.headers['Authorization']);
+    setCookie('accessToken', response.headers.authorization);
     localStorage.setItem('expiredAt', moment().add(1, 'hour').format('yyyy-MM-DD HH:mm:ss'));
   }
 
