@@ -78,7 +78,7 @@ const EditForm = () => {
       .then((res) => {
         console.log(res);
         if (info.status === 'END') {
-          navigate(`/questions/${postId}/mate`);
+          navigate(`/board/post/${postId}/mate`);
         } else {
           navigate(`/board/posts/${postId}`);
         }
