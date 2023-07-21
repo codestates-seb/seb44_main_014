@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
+// import authApi from '../../../util/api/authApi.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp } from '../../../util/common.ts';
+import { IUserState } from '../../../store/userSlice.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments;
@@ -14,7 +17,7 @@ type CommentInfoProps = {
 
 const Comment = ({ commentInfo }: CommentInfoProps) => {
   const { name, content, createdAt, avgStarRate, memberId, commentId } = commentInfo;
-
+  const userId = useSelector((state: IUserState) => state.user.memberId);
   const [modifyComment, setModifyComment] = useState(false);
   const [commentContent, setCommentContent] = useState({
     memberId: memberId,
@@ -25,9 +28,6 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   const postId = Number(params.postId);
 
   const newTime = timeStamp(new Date(createdAt));
-
-  // 임시 사용자 id
-  const userId = 1;
 
   const patchComment = () => {
     axios

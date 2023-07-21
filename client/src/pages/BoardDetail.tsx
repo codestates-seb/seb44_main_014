@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import axios from 'axios';
 // components
@@ -9,20 +10,21 @@ import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
 import Loading from '../components/Loading.tsx';
 
+// import authApi from '../util/api/authApi.tsx';
 import { IBoardDetailData } from '../interface/board.ts';
+import { IUserState } from '../store/userSlice.ts';
 
 const BoardDetail = () => {
   const navigate = useNavigate();
   const params = useParams();
   const postId = Number(params.postId);
+  const userId = useSelector((state: IUserState) => state.user.memberId);
+
   const [detailData, setDetailData] = useState<IBoardDetailData>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { content, mate, mateMembers, member, comments } = detailData;
+  const { content, mateMembers, member, comments } = detailData;
   const [updateMate, setUpdateMate] = useState({});
-
-  // 임시 사용자 id
-  const userId = 1;
 
   useEffect(() => {
     getDetailData();
@@ -44,7 +46,7 @@ const BoardDetail = () => {
   };
 
   const applyData = {
-    memberId: 1, //사용자 멤버 아이디
+    memberId: userId, //사용자 멤버 아이디
   };
 
   const postApplyData = () => {
@@ -99,7 +101,6 @@ const BoardDetail = () => {
           </TextContainer>
           {/* 참가 신청 영역 */}
           <ApplyParticipate
-            mate={mate}
             mateMembers={mateMembers}
             postApplyData={postApplyData}
             getDetailData={getDetailData}

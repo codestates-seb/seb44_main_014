@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import axios from 'axios';
 import Comment from './Comment.tsx';
 
+// import authApi from '../../../util/api/authApi.tsx';
 import { IComments } from '../../../interface/board.ts';
+import { IUserState } from '../../../store/userSlice.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments[];
@@ -13,8 +16,9 @@ type CommentInfoProps = {
 const BoardComment = ({ commentInfo }: CommentInfoProps) => {
   const params = useParams();
   const postId = Number(params.postId);
+  const memberId = useSelector((state: IUserState) => state.user.memberId);
   const [commentContent, setCommentContent] = useState({
-    memberId: 1, // 사용자 멤버 아이디
+    memberId: memberId, // 사용자 멤버 아이디
     content: '',
   });
   const comments = commentInfo.sort((a, b) => {

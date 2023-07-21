@@ -20,7 +20,7 @@ const UserRating = () => {
       .then((res) => {
         console.log(res);
         // const { mateMember: mate_member } = res.data;
-        // setUserLists(mateMember);
+        setUserLists(res.data.mate_member);
         setIsLoading(false);
       })
       .catch((err) => {

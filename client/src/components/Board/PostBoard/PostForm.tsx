@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import axios from 'axios';
 
@@ -7,14 +8,17 @@ import InputRadio from '../../UI/InputRadio.tsx';
 import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
+// import authApi from '../../../util/api/authApi.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IPostInfo } from '../../../interface/board.ts';
+import { IUserState } from '../../../store/userSlice.ts';
 import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
 
 const PostForm = () => {
   const navigate = useNavigate();
+  const userId = useSelector((state: IUserState) => state.user.memberId);
   const [info, setInfo] = useState<IPostInfo>({
-    memberId: 2, // 사용자 memberID
+    memberId: userId, // 사용자
     category: '',
     title: '',
     content: '',
