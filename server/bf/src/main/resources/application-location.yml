@@ -6,8 +6,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     url: jdbc:mysql://localhost:3306/locationdb?allowPublicKeyRetrieval=true&characterEncoding=UTF-8
-    username: root
-    password: tmddkwkd720!
+    username: 
+    password: 
   jpa:
     open-in-view: true
     defer-datasource-initialization: true
