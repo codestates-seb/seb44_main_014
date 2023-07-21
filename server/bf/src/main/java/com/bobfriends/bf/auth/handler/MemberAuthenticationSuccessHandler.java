@@ -2,6 +2,8 @@ package com.bobfriends.bf.auth.handler;
 
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
+import com.bobfriends.bf.location.entity.Location;
+import com.bobfriends.bf.location.repository.LocationRepository;
 import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import com.google.gson.JsonObject;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
    private final MemberRepository memberRepository;
+   private final LocationRepository locationRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -36,7 +39,13 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
 
         long memberId = member.getMemberId();
 
-        String location = member.getLocation();
+        Optional<Location> optionalLocation = locationRepository.findByMemberId(memberId);
+
+        String location = null;
+        if(optionalLocation.isPresent()) {
+            location = member.getLocation().getAddress();
+        }
+
         Member.genderStatus gender = member.getGender();
 
         // 응답 본문에 포함

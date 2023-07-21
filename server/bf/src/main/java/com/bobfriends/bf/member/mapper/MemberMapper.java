@@ -37,7 +37,7 @@ public interface MemberMapper {
         patchResponse.setName(member.getName());
         patchResponse.setEmail(member.getEmail());
         patchResponse.setGender(member.getGender());
-        patchResponse.setLocation(member.getLocation());
+        patchResponse.setLocation(member.getLocation().getAddress());
 
         patchResponse.setFoodTag(memberTagToMemberFoodTagResponseDto(member.getMemberTag()));
 
@@ -53,7 +53,6 @@ public interface MemberMapper {
         patchInfoResponse.setImage(member.getImage());
         patchInfoResponse.setEmail(member.getEmail());
         patchInfoResponse.setMemberId(member.getMemberId());
-        patchInfoResponse.setLocation(member.getLocation());
         patchInfoResponse.setGender(member.getGender());
         patchInfoResponse.setMemberTag(memberTagToMemberTagResponseDto(member.getMemberTag()));
         patchInfoResponse.setName(member.getName());
