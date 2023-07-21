@@ -119,7 +119,7 @@ public interface PostMapper {
             postResponseDto.setMate(mateDetailResponseDto);
         }
 
-        if (post.getMate().getMateMembers() != null){
+        if (post.getMate() != null && post.getMate().getMateMembers() != null){
             List<MateMemberDto.DetailResponse> mateMemberDetailResponseDtos
                     = mateMemberMapper.MateMembersToMateMemberDetailResponses(post.getMate().getMateMembers());
             postResponseDto.setMateMembers(mateMemberDetailResponseDtos);
