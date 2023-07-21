@@ -68,18 +68,19 @@ public class PostController {
         return new ResponseEntity<>(postMapper.PostToPostDetailResponseDto(post), HttpStatus.OK);
     }
 
-    
-    /** 질문 검색 (검색어, 태그) **/
+
+        /** 질문 검색 (검색어, 태그) **/
     @GetMapping("/search")
     public ResponseEntity searchPost(PageRequest pageRequest,
                                      @RequestParam(required = false) String keyword,
                                      @RequestParam(required = false) String category,
                                      @RequestParam(required = false) Long genderTag,
-                                     @RequestParam(required = false) Long foodTag){
+                                     @RequestParam(required = false) Long foodTag,
+                                     @RequestHeader("authorization") String token){
 
         // custom pageRequest
         Pageable pageable = pageRequest.of();
-        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag);
+        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag,token);
 
         List<Post> posts = pagePosts.getContent();
 
