@@ -46,6 +46,8 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
             location = member.getLocation().getAddress();
         }
 
+
+
         Member.genderStatus gender = member.getGender();
 
         // 응답 본문에 포함
