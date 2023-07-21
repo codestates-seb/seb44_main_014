@@ -55,8 +55,9 @@ const Login = () => {
         // const { accessToken } = responseData;
         // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-        setCookie('accessToken', response.headers['Authorization']);
-        setCookie('refreshToken', response.headers['Refresh']);
+        setCookie('accessToken', response.headers.authorization);
+        setCookie('refreshToken', response.headers.refresh);
+        // console.log(response.headers.refresh);
 
         localStorage.setItem('expiredAt', moment().add(1, 'hour').format('yyyy-MM-DD HH:mm:ss'));
 
@@ -68,6 +69,7 @@ const Login = () => {
           login({
             memberId: responseData.memberId,
             isLogin: true,
+            email: email,
           })
         );
 
