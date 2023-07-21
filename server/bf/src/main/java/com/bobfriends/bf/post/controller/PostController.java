@@ -69,24 +69,39 @@ public class PostController {
     }
 
     
-    /** 질문 검색 (검색어, 태그) **/
+//    /** 질문 검색 (검색어, 태그) **/
+//    @GetMapping("/search")
+//    public ResponseEntity searchPost(PageRequest pageRequest,
+//                                     @RequestParam(required = false) String keyword,
+//                                     @RequestParam(required = false) String category,
+//                                     @RequestParam(required = false) Long genderTag,
+//                                     @RequestParam(required = false) Long foodTag,
+//                                     @RequestHeader("authorization") String token){
+//
+////       Todo : jwt로 로그인한 memberId 추출해서 service에 memberId도 넘김
+//        // custom pageRequest
+//        Pageable pageable = pageRequest.of();
+//        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag,token);
+//
+//        List<Post> posts = pagePosts.getContent();
+//
+//        return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);
+//    }
     @GetMapping("/search")
     public ResponseEntity searchPost(PageRequest pageRequest,
-                                     @RequestParam(required = false) String keyword,
-                                     @RequestParam(required = false) String category,
-                                     @RequestParam(required = false) Long genderTag,
-                                     @RequestParam(required = false) Long foodTag,
-                                     @RequestHeader("authorization") String token){
+                                 @RequestParam(required = false) String keyword,
+                                 @RequestParam(required = false) String category,
+                                 @RequestParam(required = false) Long genderTag,
+                                 @RequestParam(required = false) Long foodTag){
 
-//       Todo : jwt로 로그인한 memberId 추출해서 service에 memberId도 넘김
-        // custom pageRequest
+    // custom pageRequest
         Pageable pageable = pageRequest.of();
-        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag,token);
+         Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag);
 
-        List<Post> posts = pagePosts.getContent();
+         List<Post> posts = pagePosts.getContent();
 
         return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);
-    }
+}
 
     /** 질문 삭제 **/
     @DeleteMapping("/posts/{post-id}")
