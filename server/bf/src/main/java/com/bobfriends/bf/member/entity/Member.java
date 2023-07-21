@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +36,6 @@ public class Member extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private genderStatus gender;
 
-    private String location;
-
     private float avgStarRate;
 
     private boolean eatStatus=false;
@@ -64,7 +60,7 @@ public class Member extends Auditable {
     private MemberTag memberTag;
 
     @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Location locations;
+    private Location location;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();

@@ -6,6 +6,7 @@ import com.bobfriends.bf.auth.handler.*;
 import com.bobfriends.bf.auth.jwt.JwtTokenizer;
 import com.bobfriends.bf.auth.repository.RefreshTokenRepository;
 import com.bobfriends.bf.auth.utils.CustomAuthorityUtils;
+import com.bobfriends.bf.location.repository.LocationRepository;
 import com.bobfriends.bf.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ public class SecurityConfiguration  {
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final LocationRepository locationRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -121,7 +123,7 @@ public class SecurityConfiguration  {
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, refreshTokenRepository);
 
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler(memberRepository));
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler(memberRepository, locationRepository));
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);

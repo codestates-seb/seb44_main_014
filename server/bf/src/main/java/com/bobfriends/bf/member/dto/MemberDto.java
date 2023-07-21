@@ -43,7 +43,6 @@ public class MemberDto {
 
         private long memberId;
         private String image;
-        private String location;
         private MemberTagDto.FoodTagMember foodTag;
 
         public void addMemberId(long memberId){
@@ -72,7 +71,6 @@ public class MemberDto {
         private String name;
         private String image;
         private Member.genderStatus gender;
-        private String location;
         private MemberTagDto.FoodTagMember foodTag;
 
         public void addMemberId(long memberId){
@@ -90,7 +88,6 @@ public class MemberDto {
         private String email;
         private String name;
         private Member.genderStatus gender;
-        private String location;
         private MemberTagDto.Response memberTag;
     }
 

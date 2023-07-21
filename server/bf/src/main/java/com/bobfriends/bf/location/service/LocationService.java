@@ -82,7 +82,7 @@ public class LocationService {
     /** 위치 등록한 회원인지 검증 **/
 
     public Location locationRegisteredMember(Long memberId) {
-        Optional<Location> optionalMember = Optional.ofNullable(memberService.findVerifiedMember(memberId).getLocations());
+        Optional<Location> optionalMember = Optional.ofNullable(memberService.findVerifiedMember(memberId).getLocation());
 
         return optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.LOCATION_NOT_FOUND));

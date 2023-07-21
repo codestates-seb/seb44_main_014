@@ -1,6 +1,9 @@
 package com.bobfriends.bf.location.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class LocationDto {
     @Getter

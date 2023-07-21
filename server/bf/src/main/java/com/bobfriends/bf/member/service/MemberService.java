@@ -66,8 +66,6 @@ public class MemberService {
         Member findMember = findVerifiedMember(memberId);
 
         Optional.ofNullable(patch.getImage()).ifPresent(image -> findMember.setImage(image));
-        Optional.ofNullable(patch.getLocation()).ifPresent(location -> findMember.setLocation(location));
-
 
         if (patch.getFoodTag() != null) {
             MemberTag memberTag = memberTagService.updateMemberFoodTag(findMember, patch.getFoodTag());
@@ -87,7 +85,6 @@ public class MemberService {
         findMember.setName(requestBody.getName());
         findMember.setImage(requestBody.getImage());
         findMember.setGender(requestBody.getGender());
-        findMember.setLocation(requestBody.getLocation());
 
         if (requestBody.getFoodTag() != null) {
 

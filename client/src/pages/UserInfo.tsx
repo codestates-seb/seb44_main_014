@@ -3,15 +3,23 @@ import Button from '../components/UI/Button.tsx';
 import InputRadio from '../components/UI/InputRadio.tsx';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 import React, { useState } from 'react';
-// import axios from 'axios';
-
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import ZipCodeInput from '../components/zipCodeInput.tsx';
+import { useNavigate } from 'react-router-dom';
+import { FOOD_TAGS } from '../constant/constant.ts';
 // login, signup, userinfo에서 모두 버튼을 누르면 다 validate해야하는데 하나의 컴포넌트로 묶을 수는 없을까?? 뭔가 form, input같은걸로 태그달면 할 수 있을 것 같은데
 interface IUserInfo {
   name: string;
   image: string;
   gender: string;
-  location: string;
   foodTag: number | null;
+}
+
+interface ILocation {
+  latitude: number | null;
+  longitude: number | null;
+  address: string;
 }
 
 const UserInfo = () => {
@@ -19,32 +27,45 @@ const UserInfo = () => {
     name: '',
     image: '',
     gender: '',
-    location: '',
     foodTag: null, //선택안할경우에는 초기값이 0? -> null
   });
   const [nameErrMsg, setNameErrMsg] = useState('');
   const [genderErrMsg, setGenderErrMsg] = useState('');
+  const [location, setLocation] = useState<ILocation>({
+    latitude: null,
+    longitude: null,
+    address: '',
+  });
   const [locationErrMsg, setLocationErrMsg] = useState('');
   /////////////////////////////////////////////////////////
   // const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0]; //formData써야하나?
-    // console.log(selectedImage);
-    // setImage(selectedImage);
-    setUserInfo({ ...userInfo, image: selectedImage });
+  const navigate = useNavigate();
+
+  const memberId = useSelector((state) => state.user.memberId);
+  const email = useSelector((state) => state.user.email);
+
+  const handleImageChange = async (e) => {
+    const selectedImage = e.target.files[0];
     setPreview(URL.createObjectURL(selectedImage));
-    // console.log(URL.createObjectURL(selectedImage));
+
+    const formData = new FormData();
+    formData.append('multipartFile', selectedImage);
+
+    const imageResponseUrl = await axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/users/images/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      })
+      .then((res) => res.data[0]);
+    setUserInfo({ ...userInfo, image: imageResponseUrl });
+    console.log(userInfo);
   };
   /////////////////////////////////////////////////////////
-  const foodTags = [
-    { id: 1, text: '# 한식' },
-    { id: 2, text: '# 중식' },
-    { id: 3, text: '# 양식' },
-    { id: 4, text: '# 일식' },
-    { id: 5, text: '# 기타' },
-  ];
+  const foodTags = FOOD_TAGS;
 
   const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
     const checkboxes = document.getElementsByName((e.target as HTMLInputElement).name);
@@ -74,39 +95,21 @@ const UserInfo = () => {
     setUserInfo({ ...userInfo, gender: gender });
   };
 
-  const handleLocationValue = (e) => {
-    const location = e.target.value;
-    setUserInfo({ ...userInfo, location: location });
-  };
-
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
     selectOneCheckbox(e);
     const foodTag = checkedValue(e);
-    setUserInfo({ ...userInfo, foodTag: Number(foodTag) });
+    setUserInfo({
+      ...userInfo,
+      foodTag: {
+        foodTagId: Number(foodTag),
+      },
+    });
   };
 
-  const makeUserInfoData = async () => {
-    const formData = new FormData();
-    const { image, ...data } = userInfo;
-    // console.log(image);
-    // console.log(data);
+  const userInfoValidate = async (e) => {
+    e.preventDefault();
+    e.persist();
 
-    formData.append('image', image);
-    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-    formData.append('data', blob);
-
-    // await axios({
-    //   method: 'POST',
-    //   url: `/users/userInfo/{member-id}`,
-    //   mode: 'cors',
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data', // Content-Type을 반드시 이렇게 하여야 한다.
-    //   },
-    //   data: formData, // data 전송시에 반드시 생성되어 있는 formData 객체만 전송 하여야 한다.
-    // });
-  };
-
-  const userInfoValidate = () => {
     let userInfoErr = false;
     if (!userInfo.name) {
       setNameErrMsg('활동명은 필수로 입력해야합니다.');
@@ -120,20 +123,26 @@ const UserInfo = () => {
     } else {
       setGenderErrMsg('');
     }
-    if (!userInfo.location) {
-      setLocationErrMsg('지역은 필수로 입력해야합니다.');
-      userInfoErr = true;
-    } else {
-      setLocationErrMsg('');
-    }
+    // if (location) {
+    //   setLocationErrMsg('지역은 필수로 입력해야합니다.');
+    //   userInfoErr = true;
+    // } else {
+    //   setLocationErrMsg('');
+    // }
     if (!userInfoErr) {
       try {
-        makeUserInfoData();
-        //  patch해서 활동명 중복되나 확인 &
-        // const responseData = await postUserInfo(userInfo.name, userInfo.gender, userInfo.location, userInfo.foodTag);
+        const submitData = userInfo;
+        console.log(submitData);
+
+        await axios.patch(`${import.meta.env.VITE_APP_API_URL}/users/userInfo/${memberId}`, submitData, {
+          withCredentials: true,
+        });
+
+        await axios.post(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${memberId}/location/create`, location);
+
         alert('제출이 완료되었습니다.');
         // login 상태 들고 가야해
-        // navigate('/');
+        navigate('/');
       } catch (error) {
         alert('이미 사용하고 있는 활동명입니다.');
       }
@@ -152,33 +161,26 @@ const UserInfo = () => {
       <InfoContainer>
         <EmailContainer>
           <EmailTitle>이메일</EmailTitle>
-          <EmailInput readOnly value="//ReadOnly:prop로 받아올것" />
+          <EmailInput readOnly value={email} />
         </EmailContainer>
         <NameContainer>
           <NameTitle>활동명 *</NameTitle>
-          <NameInput value={userInfo.name} onChange={handleNameValue}></NameInput>
+          <NameInput required value={userInfo.name} onChange={handleNameValue}></NameInput>
           <ErrorMessage>{nameErrMsg}</ErrorMessage>
         </NameContainer>
         <GenderContainer>
           <GenderTitle>성별 *</GenderTitle>
           <GenderRadio>
-            <InputRadio type="gender" value="MALE" handleGetValue={handleGenderRadio}>
+            <InputRadio required type="gender" value="MALE" handleGetValue={handleGenderRadio}>
               남성
             </InputRadio>
-            <InputRadio type="gender" value="FEMALE" handleGetValue={handleGenderRadio}>
+            <InputRadio required type="gender" value="FEMALE" handleGetValue={handleGenderRadio}>
               여성
             </InputRadio>
           </GenderRadio>
           <ErrorMessage>{genderErrMsg}</ErrorMessage>
         </GenderContainer>
-        <LocationContainer>
-          <LocationTitle>지역 선택 *</LocationTitle>
-          <LocationInputContainer>
-            <LocationInput value={userInfo.location} onChange={handleLocationValue}></LocationInput>
-            <LocationButton>우편번호</LocationButton>
-          </LocationInputContainer>
-          <ErrorMessage>{locationErrMsg}</ErrorMessage>
-        </LocationContainer>
+        <ZipCodeInput locationErrMsg={locationErrMsg} location={location} setLocation={setLocation} />
         <FoodTagContainer>
           <FoodTagTitle>음식 태그</FoodTagTitle>
           <FoodTagList>
@@ -229,7 +231,7 @@ const ProfileImgChangeText = styled.label`
     display: none;
   }
 `;
-const InfoContainer = styled.section`
+const InfoContainer = styled.article`
   display: flex;
   flex-direction: column;
   /* align-items: center; */
@@ -268,31 +270,6 @@ const GenderRadio = styled.section`
   flex-direction: row;
   label {
     margin: 0 25px 0 0;
-  }
-`;
-const LocationContainer = styled(EmailContainer)``;
-const LocationTitle = styled(EmailTitle)``;
-const LocationInputContainer = styled.section`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-const LocationInput = styled(EmailInput)`
-  margin: 0 10px 0 0;
-`;
-const LocationButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px;
-  height: 36px;
-  border-radius: 5px;
-  border: 1px solid var(--color-orange);
-  background: var(--color-orange);
-  color: #fff;
-  font-size: 14px;
-  &:hover {
-    background-color: #d8820a;
   }
 `;
 const FoodTagContainer = styled(EmailContainer)``;
