@@ -1,5 +1,7 @@
 package com.bobfriends.bf.mate.mapper;
 
+import com.bobfriends.bf.exception.BusinessLogicException;
+import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.mate.dto.MateDto;
 import com.bobfriends.bf.mate.dto.MateMemberDto;
 import com.bobfriends.bf.mate.entity.Mate;
@@ -20,15 +22,16 @@ public interface MateMapper {
     MateDto.DetailResponse MateToMateDetailResponseDto(Mate mate);
 
     default MateDto.myPageResponse MateToMateMyPageResponseDto(Mate mate){
+        if (mate == null) throw new BusinessLogicException(ExceptionCode.MATE_NOT_FOUND);
 
-        MateDto.myPageResponse myPageResponse =
-                MateDto.myPageResponse.builder()
-                        .mateId(mate.getMateId())
-                        .postId(mate.getPost().getPostId())
-                        .title(mate.getPost().getTitle())
-                        .postMemberId(mate.getPost().getMember().getMemberId())
-                        .postMemberName(mate.getPost().getMember().getName())
-                        .build();
+            MateDto.myPageResponse myPageResponse =
+                    MateDto.myPageResponse.builder()
+                            .mateId(mate.getMateId())
+                            .postId(mate.getPost().getPostId())
+                            .title(mate.getPost().getTitle())
+                            .postMemberId(mate.getPost().getMember().getMemberId())
+                            .postMemberName(mate.getPost().getMember().getName())
+                            .build();
 
         if(mate.getMateMembers() != null){
             List<MateMemberDto.MateMemberGetResponse> mateMemberGetResponses
