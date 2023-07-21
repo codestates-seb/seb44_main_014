@@ -13,7 +13,7 @@ const Header = () => {
   };
 
   return (
-    <div>
+    <>
       <HeaderContainer>
         <HeaderPositioner>
           <HeaderLeftContents>
@@ -45,7 +45,7 @@ const Header = () => {
         </HeaderPositioner>
       </HeaderContainer>
       {!isClicked && <HeaderNav />}
-    </div>
+    </>
   );
 };
 

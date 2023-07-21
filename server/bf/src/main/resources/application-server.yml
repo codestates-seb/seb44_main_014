@@ -12,7 +12,6 @@ spring:
     show-sql: true      # (2) SQL 쿼리 출력
     properties:
       hibernate:
-        dialect: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
         format_sql: true  # (3) SQL pretty print
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
