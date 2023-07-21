@@ -57,11 +57,9 @@ public class LocationController {
         return new ResponseEntity<>(locationMapper.LocationToLocationResponse(response), HttpStatus.OK);
     }
 
-    // TODO : URI 변경
-
     /** 위치 기반 게시글 조회 (Home) **/
 
-    @GetMapping("/home/location")
+    @GetMapping("/home")
     @Transactional
     public ResponseEntity getPostByLocation(@RequestHeader("authorization") String token){
 

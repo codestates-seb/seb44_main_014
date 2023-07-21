@@ -3,7 +3,6 @@ package com.bobfriends.bf.location.service;
 import com.bobfriends.bf.auth.jwt.JwtTokenizer;
 import com.bobfriends.bf.exception.BusinessLogicException;
 import com.bobfriends.bf.exception.ExceptionCode;
-import com.bobfriends.bf.home.service.HomeService;
 import com.bobfriends.bf.location.dto.LocationDto;
 import com.bobfriends.bf.location.entity.Location;
 import com.bobfriends.bf.location.repository.LocationRepository;
@@ -13,6 +12,7 @@ import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class LocationService {
     private final LocationRepository locationRepository;
     private final MemberService memberService;
-    private final HomeService homeService;
     private final PostRepository postRepository;
     private final JwtTokenizer jwtTokenizer;
 
@@ -83,8 +82,8 @@ public class LocationService {
 
         Collections.sort(postsByMemberId, (post1, post2) -> post2.getCreatedAt().compareTo(post1.getCreatedAt()));
 
-        if (memberIdList.size() <=1)
-            return homeService.findPosts();
+        if (memberIdList.size() < 3)
+            return  postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
         else
             return postsByMemberId;
     }
