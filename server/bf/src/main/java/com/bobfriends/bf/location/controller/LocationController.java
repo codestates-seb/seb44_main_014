@@ -57,7 +57,7 @@ public class LocationController {
         return new ResponseEntity<>(locationMapper.LocationToLocationResponse(response), HttpStatus.OK);
     }
 
-    // TODO : URI 변경
+    // TODO : URI 변경 예정
 
     /** 위치 기반 게시글 조회 (Home) **/
 

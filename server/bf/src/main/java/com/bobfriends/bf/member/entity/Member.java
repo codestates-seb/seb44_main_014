@@ -107,6 +107,7 @@ public class Member extends Auditable {
     public void updateEmail(String email) {
         this.email = email;
     }
+
     public void updateRoles(List<String> roles) {
         this.roles = roles;
     }

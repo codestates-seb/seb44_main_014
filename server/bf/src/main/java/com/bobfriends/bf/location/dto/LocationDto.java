@@ -35,6 +35,7 @@ public class LocationDto {
             this.locationId = locationId;
         }
     }
+
     @Getter
     @Setter
     @AllArgsConstructor

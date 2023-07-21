@@ -98,4 +98,5 @@ public class LocationService {
                         new BusinessLogicException(ExceptionCode.LOCATION_NOT_FOUND));
         return findLocation;
     }
+
 }

@@ -14,4 +14,5 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     @Query(value = "SELECT member_Id FROM location WHERE ST_Distance_Sphere(location.point,:point) <= 2000",nativeQuery = true)
     @Transactional
     List <Long> findByNativeQuery(@Param("point") Point point);
+
 }

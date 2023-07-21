@@ -20,6 +20,7 @@ public class Location {
     @Column(nullable = false, columnDefinition = "Point")
     private Point point;
     private String address;
+
     @OneToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
