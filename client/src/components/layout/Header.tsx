@@ -1,11 +1,19 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faBars, faX } from '@fortawesome/free-solid-svg-icons';
+import { IUserState } from '../../store/userSlice.ts';
 import HeaderNavLogin from './HeaderNavLogin.tsx';
+import HeaderNavLogout from './HeaderNavLogout.tsx';
+import Logout from '../Logout/Logout.tsx';
 
 const Header = () => {
+  const Loginstate = useSelector((state: IUserState) => {
+    state.user.isLogin;
+  });
+  
   const [isClicked, setIsClicked] = useState(true);
 
   const ClickHandler = () => {
@@ -33,9 +41,7 @@ const Header = () => {
             <Link to="/users/mypage/:memberId">
               <HeaderRightItems>마이페이지</HeaderRightItems>
             </Link>
-            <Link to="/">
-              <HeaderRightItems>로그아웃</HeaderRightItems>
-            </Link>
+            <HeaderRightItems>{Loginstate ? <Logout /> : <StyledLink to="/Login">로그인</StyledLink>}</HeaderRightItems>
             {isClicked ? (
               <HeaderHamburgerIcon icon={faBars} onClick={ClickHandler} />
             ) : (
@@ -44,7 +50,7 @@ const Header = () => {
           </HeaderRightContents>
         </HeaderPositioner>
       </HeaderContainer>
-      {!isClicked && <HeaderNav />}
+      {!isClicked && Loginstate ? <HeaderNavLogout /> : <HeaderNavLogin />}
     </>
   );
 };
@@ -152,6 +158,8 @@ const HeaderXIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const HeaderNav = styled(HeaderNavLogin)``;
+const StyledLink = styled(Link)`
+  color: #fff;
+`;
 
 export default Header;
