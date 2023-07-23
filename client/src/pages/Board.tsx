@@ -13,12 +13,15 @@ import Loading from '../components/Loading.tsx';
 import NoBoardList from '../components/Board/NoBoardList.tsx';
 
 import { category, ICategoryState } from '../store/listCategorySlice.ts';
+import { IUserState } from '../store/userSlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
+import { getCookie } from '../util/cookie/index.ts';
 
 const Board = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isShopping = useSelector((state: ICategoryState) => state.category.value);
+  const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
   // 정렬 active 상태 체크
   const [newer, setNewer] = useState<boolean>(true);
   const [mostViewed, setMostViewed] = useState<boolean>(!newer);
@@ -43,22 +46,42 @@ const Board = () => {
   }, []);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/board/search?page=${filterInfo.page}${currentApi}`)
-      .then((res) => {
-        console.log(res);
-        setPageInfo(res.data.pageInfo);
-        setLists(res.data.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    let URL: string;
+    if (isLoggedIn) {
+      URL = `${import.meta.env.VITE_APP_API_URL}/board/search?page=`;
+      console.log(URL);
+      axios
+        .get(`${URL}${filterInfo.page}${currentApi}`, {
+          headers: { Authorization: getCookie('accessToken') },
+        })
+        .then((res) => {
+          console.log(res);
+          setPageInfo(res.data.pageInfo);
+          setLists(res.data.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    } else {
+      URL = `${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=`;
+      console.log(URL);
+      axios
+        .get(`${URL}${filterInfo.page}${currentApi}`)
+        .then((res) => {
+          console.log(res);
+          setPageInfo(res.data.pageInfo);
+          setLists(res.data.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    }
   }, [filterInfo, currentApi]);
 
-  // TODO: 임시. 사용자 로그인 상태 가져올 것
-  const isLoggedIn = true;
   const handleNavigate = () => {
     if (!isLoggedIn) {
       alert('로그인 후 작성 가능합니다.');

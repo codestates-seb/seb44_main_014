@@ -13,6 +13,7 @@ import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IPostInfo } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
 import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
+import { getCookie } from '../../../util/cookie/index.ts';
 
 const PostForm = () => {
   const navigate = useNavigate();
@@ -31,7 +32,9 @@ const PostForm = () => {
 
   const postSubmitInfo = () => {
     axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts`, info)
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts`, info, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         const URI = res.headers.location;
         navigate(URI);

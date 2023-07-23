@@ -53,6 +53,7 @@ public interface MemberMapper {
         if(member.getImage() == null){
             patchInfoResponse.setImage("https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png");
         }
+        
          */
         patchInfoResponse.setImage(member.getImage());
         patchInfoResponse.setEmail(member.getEmail());

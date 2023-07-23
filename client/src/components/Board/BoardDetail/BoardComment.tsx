@@ -8,6 +8,7 @@ import Comment from './Comment.tsx';
 // import authApi from '../../../util/api/authApi.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
+import { getCookie } from '../../../util/cookie/index.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments[];
@@ -33,10 +34,11 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
 
   const postComment = () => {
     axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments`, commentContent)
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments`, commentContent, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
-        // setCommentContent({ ...commentContent, content: res.content });
       })
       .catch((err) => {
         console.log(err);
@@ -54,7 +56,6 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
           value={commentContent.content}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
-            console.log(commentContent);
           }}
           placeholder="댓글을 작성해주세요."
           max-length={100}
