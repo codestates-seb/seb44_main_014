@@ -11,9 +11,9 @@ import Logout from '../Logout/Logout.tsx';
 
 const Header = () => {
   const Loginstate = useSelector((state: IUserState) => {
-    state.user.IsLogin;
+    state.user.isLogin;
   });
-
+  
   const [isClicked, setIsClicked] = useState(true);
 
   const ClickHandler = () => {

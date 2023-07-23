@@ -1,7 +1,6 @@
 package com.bobfriends.bf.member.entity;
 
 import com.bobfriends.bf.tag.entity.FoodTag;
-import com.bobfriends.bf.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +16,7 @@ public class MemberTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_tag_id")
     private Long memberTagId;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
     @ManyToOne

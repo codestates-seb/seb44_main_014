@@ -1,0 +1,54 @@
+# 서버 환경에서 사용하는 정보들은 application-server.yml 파일에 설정합니다.
+# TODO MySQL DB 접속 정보를 아래에 설정하세요
+spring:
+  config:
+    activate:
+      on-profile: server
+  jpa:
+    open-in-view: true 
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
+        format_sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://bodfriends-db.cusuwxoxsiwr.ap-northeast-2.rds.amazonaws.com:3306/bobfriends?allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+    username: ${MYSQL_USERNAME}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+
+#AWS S3
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: bobimage # 버킷 이름 수정
+    stack:
+      auto-: false
+    region:
+      static: ap-northeast-2
+
+mail:
+  address:
+    admin: admin@gmail.com    # jwt 사용할때 필요
+
+jwt:
+  key:
+    secret: ${JWT_SECRET_KEY}      # jwt 사용할때 필요
+  access-token-expiration-minutes: 60
+  refresh-token-expiration-minutes: 20160

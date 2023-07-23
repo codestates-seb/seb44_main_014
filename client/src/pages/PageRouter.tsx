@@ -15,6 +15,7 @@ import EditUserInfo from './EditUserInfo.tsx';
 import MoreInfoComments from './MoreInfoComments.tsx';
 import MoreInfoWritings from './MoreInfoWritings.tsx';
 import UserRating from './UserRating.tsx';
+import PageNotFound from './PageNotFound.tsx';
 
 const PageRouter = () => {
   return (
@@ -26,22 +27,15 @@ const PageRouter = () => {
         <Route path="/users/userInfo/:memberId" element={<UserInfo />} />
         <Route path="/users/mypage/:memberId" element={<Mypage />} />
         <Route path="/users/mypage/:memberId/edit" element={<EditUserInfo />} />
-        <Route path="/questions/:questionId/mate" element={<UserRating />} />
-        <Route
-          path="/users/mypage/:memberId/questions
-"
-          element={<MoreInfoWritings />}
-        />
-        <Route
-          path="/users/mypage/:memberId/comments
-"
-          element={<MoreInfoComments />}
-        />
-        <Route path="/board" element={<Board />} /> {/* 추후 수정 필요 */}
-        <Route path="/board/questions/:questionId" element={<BoardDetail />} />
-        <Route path="/board/questions/:questionId/edit" element={<EditBoard />} />
-        <Route path="/board/questions" element={<PostBoard />} />
-        <Route path="/location" element={<Location />} /> {/* 추후 수정 필요 */}
+        <Route path="/board/post/:postId/mate" element={<UserRating />} />
+        <Route path="/users/mypage/:memberId/questions" element={<MoreInfoWritings />} />
+        <Route path="/users/mypage/:memberId/comments" element={<MoreInfoComments />} />
+        <Route path="/board" element={<Board />} />
+        <Route path="/board/posts/:postId" element={<BoardDetail />} />
+        <Route path="/board/posts/:postId/edit" element={<EditBoard />} />
+        <Route path="/board/posts" element={<PostBoard />} />
+        <Route path="/location" element={<Location />} />
+        <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </MainContainer>
   );
@@ -49,11 +43,11 @@ const PageRouter = () => {
 
 const MainContainer = styled.main`
   width: 100%;
-  margin: 50px auto 0;
+  min-height: calc(100vh - 200px);
+  margin: 0 auto;
   box-sizing: border-box;
-
-  @media screen and (min-width: 1280px) {
-    margin: 70px auto 0;
+  @media screen and (min-width: 1024px) {
+    min-height: calc(100vh - 220px);
   }
 `;
 

@@ -1,6 +1,7 @@
 package com.bobfriends.bf.member.entity;
 
-import com.bobfriends.bf.question.entity.Question;
+import com.bobfriends.bf.audit.Auditable;
+import com.bobfriends.bf.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,14 +18,17 @@ public class MemberStarRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_star_rate_id")
     private Long memberStarRateId;
+
     private int starRate;
-    @ManyToOne
-    @JoinColumn(name = "QUESTION_ID")
-    private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "QUESTION_MEMBER_ID")
-    private Member questionMember;
+    @JoinColumn(name = "POST_ID")
+    private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "POST_MEMBER_ID")
+    private Member postMember;
+
     @ManyToOne
     @JoinColumn(name = "RATE_MEMBER_ID")
     private Member rateMember;
