@@ -107,10 +107,10 @@ const Mypage = () => {
       .then((res) => {
         console.log(res);
         setUserData(res.data);
-        userFoodTag(userData);
-        userMeeting(userData);
-        userPosts(userData);
-        userComments(userData);
+        userFoodTag(res.data);
+        userMeeting(res.data);
+        userPosts(res.data);
+        userComments(res.data);
         // dataComments(userData);
         console.log(userData);
       })
@@ -183,8 +183,12 @@ const Mypage = () => {
         <UserContentsTitle>참여 중인 모임</UserContentsTitle>
         <UserContentBox className={'MeetingBox'}>
           <UserContents>
-            <UserContentsBoxTitle>{meetingTitle}</UserContentsBoxTitle>
-            <UserContentsBoxParagraph>{meetingMates}</UserContentsBoxParagraph>
+            <UserContentsBoxTitle>
+              <div>{meetingTitle}</div>
+            </UserContentsBoxTitle>
+            <UserContentsBoxParagraph>
+              <div>{meetingMates}</div>
+            </UserContentsBoxParagraph>
           </UserContents>
         </UserContentBox>
       </UserContainer>
@@ -198,7 +202,9 @@ const Mypage = () => {
         <UserContentBox className={'PostsBox'}>
           <UserContents>
             <UserContentsContainer>
-              <UserContentsBoxTitle>{posts}</UserContentsBoxTitle>
+              <UserContentsBoxTitle>
+                <div>{posts}</div>
+              </UserContentsBoxTitle>
             </UserContentsContainer>
           </UserContents>
         </UserContentBox>
@@ -212,8 +218,6 @@ const Mypage = () => {
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            {/* {userData.comments.map(dataComments)} */}
-            {/* <div>{comments}</div> */}
             <UserContentsContainer>
               <UserContentsBoxTitle>
                 <div>{comments}</div>
@@ -351,7 +355,7 @@ const UserContents = styled.div`
   }
 `;
 
-const UserContentsBoxTitle = styled.h1`
+const UserContentsBoxTitle = styled.div`
   margin-bottom: 15px;
   font-size: 16px;
 
@@ -360,7 +364,7 @@ const UserContentsBoxTitle = styled.h1`
   }
 `;
 
-const UserContentsBoxParagraph = styled.p`
+const UserContentsBoxParagraph = styled.div`
   color: var(--color-black);
   font-size: 14px;
   word-spacing: 10px;
