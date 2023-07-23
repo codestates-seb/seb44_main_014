@@ -107,7 +107,7 @@ const Login = () => {
         </InputSection>
         <InputSection>
           <Title>비밀번호</Title>
-          <Input value={password} onChange={handlePasswordChange} />
+          <Input type="password" value={password} onChange={handlePasswordChange} />
           <ErrorMessage>{pwdErrMsg}</ErrorMessage>
         </InputSection>
       </InputContainer>
