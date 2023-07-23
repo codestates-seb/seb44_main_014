@@ -1,10 +1,102 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import Tag from '../components/UI/Tag.tsx';
-import Toggle from '../components/UI/Toggle.tsx';
+import { styled } from 'styled-components';
+// import Tag from '../components/UI/Tag.tsx';
+// import Toggle from '../components/UI/Toggle.tsx';
+import { IUserState } from '../store/userSlice.ts';
+import authApi from '../util/api/authApi.tsx';
 
 const Mypage = () => {
+  const [userData, setUserData] = useState({
+    image: '',
+    name: '',
+    email: '',
+    avgStarRate: 0,
+    foodTag: {
+      foodTagId: 1,
+    },
+    eatStatus: '',
+    posts: [
+      {
+        postId: 1,
+        title: '',
+        status: '',
+      },
+    ],
+    comments: [
+      {
+        postId: 1,
+        title: '',
+        status: '',
+      },
+    ],
+    postMates: [
+      {
+        mateId: 1,
+        postId: 1,
+        title: '',
+        mateMembers: [
+          {
+            memberId: 1,
+            name: '',
+          },
+        ],
+      },
+    ],
+    mates: [
+      {
+        mateId: 1,
+        postId: 1,
+        title: '',
+        mateMembers: [
+          {
+            memberId: 1,
+            name: '',
+          },
+        ],
+      },
+    ],
+  });
+
+  const userId = useSelector((state: IUserState) => state.user.memberId);
+
+  useEffect(() => {
+    authApi
+      .get(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}`)
+      .then((res) => {
+        console.log(res);
+        setUserData(res.data);
+        console.log(userData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // const userPosts = ({ user: any }) => {
+  //   return (
+  //     <div key={user.posts.postId}>
+  //       <UserContentsBoxTitle>
+  //         <Link to="/board">{user.posts.title}</Link>
+  //       </UserContentsBoxTitle>
+  //       <UserContentsBoxParagraph>{user.posts.status}</UserContentsBoxParagraph>
+  //     </div>
+  //   );
+  // };
+
+  // const userComments = ({ user: any }) => {
+  //   return (
+  //     <div key={user.posts.commentId}>
+  //       <UserContentsContainer>
+  //         <UserContentsBoxTitle>
+  //           <Link to="/board">{user.comments.content}</Link>
+  //         </UserContentsBoxTitle>
+  //       </UserContentsContainer>
+  //     </div>
+  //   );
+  // };
+
   return (
     <BodyContainer>
       <UserProfileContainer>
@@ -15,23 +107,23 @@ const Mypage = () => {
           <UserContents className={'InfoContents'}>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle>이름</UserInfoTitle>
-              <UserInfoParagraph>홍길동</UserInfoParagraph>
+              <UserInfoParagraph>{userData.name}</UserInfoParagraph>
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle>이메일</UserInfoTitle>
-              <UserInfoParagraph>aaaa@aaaaa.com</UserInfoParagraph>
+              <UserInfoParagraph>{userData.email}</UserInfoParagraph>
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle>매너 별점</UserInfoTitle>
-              <UserInfoParagraph>4.6</UserInfoParagraph>
+              <UserInfoParagraph>{userData.avgStarRate}</UserInfoParagraph>
             </UserContentsContainer>
             <UserContentsContainer className={'Tag'}>
               <UserInfoTitle className={'Tag'}>태그</UserInfoTitle>
-              <Tag className={'Tag'}>4.6</Tag>
+              {/* <Tag className={'Tag'}>4.6</Tag> */}
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
-              <Toggle>4.6</Toggle>
+              {/* <Toggle>4.6</Toggle> */}
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Edit'}>
@@ -46,9 +138,9 @@ const Mypage = () => {
         <UserContentBox className={'MeetingBox'}>
           <UserContents>
             <UserContentsBoxTitle>
-              <Link to="/board">연남동 OO라멘 2인 선착순!</Link>
+              <Link to="/board"></Link>
             </UserContentsBoxTitle>
-            <UserContentsBoxParagraph>참여자: 마포호랑이 마포호랑이 마포호랑이</UserContentsBoxParagraph>
+            <UserContentsBoxParagraph></UserContentsBoxParagraph>
           </UserContents>
         </UserContentBox>
       </UserContainer>
@@ -61,24 +153,7 @@ const Mypage = () => {
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <Link to="/board">연남동 OO라멘 2인 선착순!</Link>
-              </UserContentsBoxTitle>
-              <UserContentsBoxParagraph>모집완료</UserContentsBoxParagraph>
-            </UserContentsContainer>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <Link to="/board">서교동 무한리필 고깃집 4인 구해요~</Link>
-              </UserContentsBoxTitle>
-              <UserContentsBoxParagraph>모집완료</UserContentsBoxParagraph>
-            </UserContentsContainer>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <Link to="/board">강남 XX버거 같이 웨이팅하실 분!!</Link>
-              </UserContentsBoxTitle>
-              <UserContentsBoxParagraph>모집완료</UserContentsBoxParagraph>
-            </UserContentsContainer>
+            <UserContentsContainer>{/*{userData.map(userPosts)}*/}</UserContentsContainer>
           </UserContents>
         </UserContentBox>
       </UserContainer>
@@ -90,23 +165,7 @@ const Mypage = () => {
           </Link>
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
-          <UserContents>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <Link to="/board">저요저요!</Link>
-              </UserContentsBoxTitle>
-            </UserContentsContainer>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <Link to="/board">혹시 자리 있나요?</Link>
-              </UserContentsBoxTitle>
-            </UserContentsContainer>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <Link to="/board">저도 초밥 좋아해요 ㅎㅎㅎ</Link>
-              </UserContentsBoxTitle>
-            </UserContentsContainer>
-          </UserContents>
+          {/* <UserContents>{userData.map(userComments)}</UserContents> */}
         </UserContentBox>
       </UserContainer>
     </BodyContainer>
@@ -122,14 +181,20 @@ const UserProfileContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: auto;
   height: 20.625rem;
   margin-bottom: 80px;
+
+  @media (max-width: 1024px) {
+    display: block;
+  }
 `;
 
 const UserImageContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin: auto;
   width: 20.625rem;
   height: 20.625rem;
 `;
@@ -144,10 +209,17 @@ const UserImage = styled.div`
 
 const UserInfoContainer = styled.div`
   width: 1090px;
-  min-width: 600px;
   height: 350px;
+  margin: auto;
   border: 1px solid var(--color-gray);
   border-radius: 10px;
+
+  @media (max-width: 1024px) {
+    max-width: 37.5rem;
+  }
+  @media (max-width: 768px) {
+    max-width: 19.6875rem;
+  }
 `;
 
 const UserInfoTitle = styled.h1`
@@ -183,6 +255,10 @@ const UserContainer = styled.div`
 
   &.MeetingContainer {
     height: 120px;
+
+    @media (max-width: 1024px) {
+      margin-top: 25rem;
+    }
   }
   &.PostsContainer {
     height: 160px;

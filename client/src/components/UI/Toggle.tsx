@@ -9,22 +9,22 @@ const Toggle = () => {
   };
 
   return (
-    <ToggleContainer onClick={ToggleHandler} value={isOn}>
+    <ToggleContainer onClick={ToggleHandler} isOn={isOn}>
       <ToggleBtn onClick={ToggleHandler} />
     </ToggleContainer>
   );
 };
 
-const ToggleContainer = styled.button`
+const ToggleContainer = styled.button<{ isOn: boolean }>`
   display: flex;
-  justify-content: ${(props) => (props.value ? 'flex-start' : 'flex-end')};
+  justify-content: ${(props) => (props.isOn ? 'flex-start' : 'flex-end')};
   align-items: center;
   z-index: 0;
   width: 45px;
   height: 24px;
-  background: ${(props) => (props.value ? 'var(--color-gray)' : 'var(--color-orange)')};
+  background: ${(props) => (props.isOn ? 'var(--color-gray)' : 'var(--color-orange)')};
   border: 1px solid;
-  border-color: ${(props) => (props.value ? 'var(--color-gray)' : 'var(--color-orange)')};
+  border-color: ${(props) => (props.isOn ? 'var(--color-gray)' : 'var(--color-orange)')};
   border-radius: 1.25rem;
 `;
 

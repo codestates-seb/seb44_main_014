@@ -1,6 +1,11 @@
 import { styled } from 'styled-components';
 
-const Button = ({ children, onClick }) => {
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+const Button = ({ children, onClick }: ButtonProps) => {
   return (
     <BtnComponent type="button" onClick={onClick}>
       {children}
