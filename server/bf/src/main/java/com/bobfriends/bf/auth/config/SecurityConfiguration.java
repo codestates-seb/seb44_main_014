@@ -91,7 +91,7 @@ public class SecurityConfiguration  {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // 모든 출처에 대해 스크립트 기반의 HTTP 통신 허용
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/", "http://localhost:8080/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/", "http://localhost:8080/", "https://seb44-main-014.vercel.app/"));
 
         // 파라미터로 지정한 HTTP Method에 대한 HTTP 통신 허용
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));

@@ -48,7 +48,7 @@ public interface MemberMapper {
     MemberTagDto.FoodTagResponse memberTagToMemberFoodTagResponseDto (MemberTag memberTag);
     default MemberDto.PatchInfoResponse memberToMemberPatchInfoResponse(Member member){
         MemberDto.PatchInfoResponse patchInfoResponse = new MemberDto.PatchInfoResponse();
-        
+
         patchInfoResponse.setImage(member.getImage());
         patchInfoResponse.setEmail(member.getEmail());
         patchInfoResponse.setMemberId(member.getMemberId());
