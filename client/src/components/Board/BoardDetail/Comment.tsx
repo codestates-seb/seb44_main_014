@@ -46,13 +46,13 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   };
 
   const deleteComment = async () => {
-    await authApi
+    (await authApi)
       .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`)
-      .then((res) => {
+      .then((res: any) => {
         console.log(res);
         location.reload();
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
   };
