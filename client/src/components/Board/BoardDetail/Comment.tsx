@@ -10,6 +10,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
+import { getCookie } from '../../../util/cookie/index.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments;
@@ -43,9 +44,12 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 
   const deleteComment = () => {
     axios
-      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`)
+      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
+        location.reload();
       })
       .catch((err) => {
         console.log(err);
