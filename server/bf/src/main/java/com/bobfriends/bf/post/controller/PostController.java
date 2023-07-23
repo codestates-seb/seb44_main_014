@@ -69,7 +69,7 @@ public class PostController {
     }
 
 
-        /** 질문 검색 (검색어, 태그) **/
+    /** 질문 검색 (검색어, 태그) **/
     @GetMapping("/search")
     public ResponseEntity searchPost(PageRequest pageRequest,
                                      @RequestParam(required = false) String keyword,
