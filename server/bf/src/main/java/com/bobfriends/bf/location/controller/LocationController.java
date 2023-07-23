@@ -8,6 +8,7 @@ import com.bobfriends.bf.member.entity.Member;
 import com.bobfriends.bf.member.service.MemberService;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.mapper.PostMapper;
+import com.bobfriends.bf.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,7 +29,7 @@ public class LocationController {
 
     /** 위치 등록 **/
 
-    @PostMapping("/users/mypage/{member-id}/location/create")
+    @PostMapping("/users/mypage/{member-id}/location")
     public ResponseEntity postLocation(@RequestBody LocationDto.Post requestbody,
                                        @PathVariable("member-id")@Positive Long memberId){
         requestbody.addMemberId(memberId);
@@ -35,9 +37,11 @@ public class LocationController {
 
         Location location =locationMapper.LocationPostToLocation(requestbody);
         location.setMember(verifiedMember);
-        Location response = locationService.createLocation(location);
+        locationService.createLocation(location);
 
-        return new ResponseEntity<>(locationMapper.LocationToLocationResponse(response), HttpStatus.OK);
+        URI uri= UriCreator.createUri("/users/mypage/"+memberId+"/location", location.getLocationId());
+
+        return ResponseEntity.created(uri).build();
     }
 
     /** 위치 수정 **/

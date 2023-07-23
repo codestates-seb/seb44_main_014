@@ -45,6 +45,7 @@ public interface LocationMapper {
         return location1;
 
     }
+
     @Mapping(source = "point.y",target = "latitude")
     @Mapping(source = "point.x", target = "longitude")
     @Mapping(source = "member.memberId", target = "memberId")
