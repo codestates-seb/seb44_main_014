@@ -6,6 +6,7 @@ import postLogin from '../util/api/postLogin.tsx';
 import { setCookie } from '../util/cookie/index.ts';
 import { login } from '../store/userSlice.ts';
 import moment from 'moment';
+// import GoogleLoginButton from '../components/Login/GoogleLoginButton.tsx';
 
 // interface UserInfo {
 //   gender: string;
@@ -21,6 +22,8 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // const handleGoogleLogin = async () => {};
   // 이렇게 useEffect쓰는게 나은지 아니면 async await썼으니까 충분한지??
   // useEffect(() => {
   //   // if (UserInfo.gender) {
@@ -78,16 +81,17 @@ const Login = () => {
         } else {
           navigate(`/users/userInfo/${responseData.memberId}`);
         }
-      } catch (error) {
+      } catch (error: any) {
         //가입안한거랑 비밀번호 틀린거랑 어떻게 구분하지? 에러코드가 다른가?
         // 가입안되어있으면 null오고
         // 비밀번호틀리면 401에러
         if (error.response.status === 401) {
           alert(error.response.message);
-          // alert('비밀번호가 일치하지 않습니다');
+          alert('비밀번호가 일치하지 않습니다');
+          setPwdErrMsg('비밀번호가 일치하지 않습니다');
         } else {
           alert(error.response.message);
-          // alert('존재하지 않는 계정입니다.');
+          alert('존재하지 않는 계정입니다.');
         }
       }
     }
@@ -103,7 +107,7 @@ const Login = () => {
         </InputSection>
         <InputSection>
           <Title>비밀번호</Title>
-          <Input value={password} onChange={handlePasswordChange} />
+          <Input type="password" value={password} onChange={handlePasswordChange} />
           <ErrorMessage>{pwdErrMsg}</ErrorMessage>
         </InputSection>
       </InputContainer>
@@ -114,7 +118,13 @@ const Login = () => {
         </div>
       </SignUpTextContainer>
       <OAuthButtonContainer>
-        <OAuthButtonSection>Google</OAuthButtonSection>
+        {/* <OAuthButtonSection
+          href={`${import.meta.env.VITE_APP_API_URL}/oauth2/authorization/google`}
+          onClick={handleGoogleLogin}
+        >
+          google
+        </OAuthButtonSection> */}
+        {/* <GoogleLoginButton></GoogleLoginButton> */}
         <OAuthButtonSection>Kakao</OAuthButtonSection>
         <OAuthButtonSection>Naver</OAuthButtonSection>
       </OAuthButtonContainer>

@@ -54,7 +54,7 @@ const SignUp = () => {
         await postSignUp(email, password, samePassword);
         alert('회원가입이 완료되었습니다.');
         navigate('/login');
-      } catch (error) {
+      } catch (error: any) {
         if (error.response.status === 409) {
           alert(error.response.message);
         } else {
@@ -74,12 +74,12 @@ const SignUp = () => {
         </InputSection>
         <InputSection>
           <Title>비밀번호</Title>
-          <Input value={password} onChange={handlePasswordChange} />
+          <Input type="password" value={password} onChange={handlePasswordChange} />
           <ErrorMessage>{pwdErrMsg}</ErrorMessage>
         </InputSection>
         <InputSection>
           <Title>비밀번호확인</Title>
-          <Input value={samePassword} onChange={handleSamePasswordChange} />
+          <Input type="password" value={samePassword} onChange={handleSamePasswordChange} />
           <ErrorMessage>{samePwdErrMsg}</ErrorMessage>
         </InputSection>
       </InputContainer>
@@ -104,6 +104,10 @@ const SignUpContainer = styled.article`
   flex-direction: column;
   margin: 3.125rem 1.875rem; /* 50px 30px */
   font-size: 14px;
+  @media screen and (min-width: 768px) {
+    max-width: 500px;
+    margin: 50px auto;
+  }
 `;
 const InputContainer = styled.article`
   display: flex;
