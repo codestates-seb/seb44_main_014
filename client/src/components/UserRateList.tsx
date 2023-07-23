@@ -3,15 +3,26 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalf } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { checkedValue } from '../util/common.ts';
 
-const UserRateList = ({ list }) => {
+interface IStarRate {
+  rateMemberId: number;
+  starRate: number;
+}
+interface IMateInfo {
+  list: {
+    memberId: number;
+    name: string;
+  };
+}
+
+const UserRateList = ({ list }: IMateInfo) => {
   const params = useParams();
   const postId = Number(params.postId);
-  const [userRateInfo, setUserRateInfo] = useState({
+  const [userRateInfo, setUserRateInfo] = useState<IStarRate>({
     rateMemberId: list.memberId,
-    starRate: null,
+    starRate: 0,
   });
   const postStarRate = () => {
     axios
@@ -23,7 +34,7 @@ const UserRateList = ({ list }) => {
         console.log(err);
       });
   };
-  console.log(userRateInfo);
+  console.log(list);
 
   const handleRateValue = (e: React.MouseEvent<HTMLInputElement>) => {
     setUserRateInfo({ ...userRateInfo, starRate: Number(checkedValue(e)) });
