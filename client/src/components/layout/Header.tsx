@@ -10,10 +10,8 @@ import HeaderNavLogout from './HeaderNavLogout.tsx';
 import Logout from '../Logout/Logout.tsx';
 
 const Header = () => {
-  const Loginstate = useSelector((state: IUserState) => {
-    state.user.isLogin;
-  });
-  
+  const Loginstate = useSelector((state: IUserState) => state.user.isLogin);
+
   const [isClicked, setIsClicked] = useState(true);
 
   const ClickHandler = () => {
