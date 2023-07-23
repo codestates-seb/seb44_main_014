@@ -9,11 +9,12 @@ import { IFilterInfo, IPageInfo } from '../../interface/board.ts';
 interface IPaginationProps {
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
-  pageInfo: IPageInfo | object;
+  pageInfo: IPageInfo;
 }
 
 const Pagination = ({ filterInfo, setFilterInfo, pageInfo }: IPaginationProps) => {
   const handlePageChange = (e: React.MouseEvent<HTMLElement>) => {
+    console.log(e);
     setFilterInfo({
       ...filterInfo,
       page: e.selected + 1,

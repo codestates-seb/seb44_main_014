@@ -29,8 +29,8 @@ export interface IFilterInfo {
 export interface IPageInfo {
   page: number;
   size: number;
-  totalElements: number;
-  totalPages: number;
+  totalElements: Nullable<number>;
+  totalPages: Nullable<number>;
 }
 
 // Page BoardDetail - mate info
@@ -82,7 +82,7 @@ export interface IBoardDetailData {
 
 // Page PostBoard - post info
 export interface IPostInfo {
-  memberId: number;
+  memberId: Nullable<number>;
   category: string;
   title: string;
   content: string;
