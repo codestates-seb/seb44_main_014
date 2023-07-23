@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faBars, faX } from '@fortawesome/free-solid-svg-icons';
 import HeaderNavLogin from './HeaderNavLogin.tsx';
+import Logout from '../Logout/Logout.tsx';
 
 const Header = () => {
   const [isClicked, setIsClicked] = useState(true);
@@ -34,7 +35,9 @@ const Header = () => {
               <HeaderRightItems>마이페이지</HeaderRightItems>
             </Link>
             <Link to="/">
-              <HeaderRightItems>로그아웃</HeaderRightItems>
+              <HeaderRightItems>
+                <Logout />
+              </HeaderRightItems>
             </Link>
             {isClicked ? (
               <HeaderHamburgerIcon icon={faBars} onClick={ClickHandler} />
