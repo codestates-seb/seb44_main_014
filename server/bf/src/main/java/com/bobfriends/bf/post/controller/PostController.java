@@ -85,7 +85,8 @@ public class PostController {
         return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);
     }
 
-        /** 로그인 후(위치 적용) -> 질문 검색 (검색어, 태그) **/
+
+    /** 로그인 후(위치 적용) -> 질문 검색 (검색어, 태그) **/
     @GetMapping("/search")
     public ResponseEntity searchPost(PageRequest pageRequest,
                                      @RequestParam(required = false) String keyword,
