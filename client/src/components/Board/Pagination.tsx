@@ -1,7 +1,5 @@
-// import { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import { styled } from 'styled-components';
-// import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { IFilterInfo, IPageInfo } from '../../interface/board.ts';

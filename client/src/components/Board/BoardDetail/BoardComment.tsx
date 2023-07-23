@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
-import axios from 'axios';
 import Comment from './Comment.tsx';
 
-// import authApi from '../../../util/api/authApi.tsx';
+import authApi from '../../../util/api/authApi.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
-import { getCookie } from '../../../util/cookie/index.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments[];
@@ -32,11 +30,9 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
     }
   });
 
-  const postComment = () => {
-    axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments`, commentContent, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
+  const postComment = async () => {
+    (await authApi)
+      .post(`/board/posts/${postId}/comments`, commentContent)
       .then((res) => {
         console.log(res);
       })

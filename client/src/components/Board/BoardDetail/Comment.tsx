@@ -2,15 +2,12 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
-import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
-// import authApi from '../../../util/api/authApi.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
-import { getCookie } from '../../../util/cookie/index.ts';
 import authApi from '../../../util/api/authApi.tsx';
 
 type CommentInfoProps = {
@@ -31,11 +28,9 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 
   const newTime = timeStamp(new Date(createdAt));
 
-  const patchComment = () => {
-    axios
-      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`, commentContent, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
+  const patchComment = async () => {
+    (await authApi)
+      .patch(`/board/posts/${postId}/comments/${commentId}`, commentContent)
       .then((res) => {
         console.log(res);
         setCommentContent({ ...commentContent, content: res.data.content });
@@ -48,11 +43,11 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   const deleteComment = async () => {
     (await authApi)
       .delete(`/board/posts/${postId}/comments/${commentId}`)
-      .then((res: any) => {
+      .then((res) => {
         console.log(res);
         location.reload();
       })
-      .catch((err: any) => {
+      .catch((err) => {
         console.log(err);
       });
   };

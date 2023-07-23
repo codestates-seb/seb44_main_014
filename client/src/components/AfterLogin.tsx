@@ -2,15 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
-import axios from 'axios';
 
 import BoardList from './Board/BoardList.tsx';
 import Loading from './Loading.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import { IBoardList } from '../interface/board.ts';
 import { category } from '../store/listCategorySlice.ts';
-import { getCookie } from '../util/cookie/index.ts';
 import { IUserState } from '../store/userSlice.ts';
+import authApi from '../util/api/authApi.tsx';
 
 const AfterLogin = () => {
   const navigate = useNavigate();
@@ -20,11 +19,9 @@ const AfterLogin = () => {
   const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      axios
-        .get(`${import.meta.env.VITE_APP_API_URL}/home`, {
-          headers: { Authorization: getCookie('accessToken') },
-        })
+    const getBoarList = async () => {
+      (await authApi)
+        .get(`/home`)
         .then((res) => {
           console.log(res.data);
           setLists(res.data);
@@ -34,6 +31,9 @@ const AfterLogin = () => {
           console.log(err);
           setIsLoading(false);
         });
+    };
+    if (isLoggedIn) {
+      getBoarList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
