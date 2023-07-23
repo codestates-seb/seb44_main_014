@@ -12,7 +12,7 @@ const Logout = () => {
 
   const doLogout = async () => {
     await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
-      headers: { Refresh: getCookie('refreshToken'), Authorization: getCookie('accessToken') },
+      headers: { Refresh: getCookie('refreshToken') },
     });
     removeCookie('accessToken');
     removeCookie('refreshToken');
@@ -29,17 +29,11 @@ const Logout = () => {
 
     navigate('/'); //로그인 유저가 바뀔 때 발생하는 버그를 막기위해 reload설정
   };
-  return (
-    <LogoutButton onClick={doLogout}>
-      <div>로그아웃</div>
-    </LogoutButton>
-  );
+  return <LogoutButton onClick={doLogout}>로그아웃</LogoutButton>;
 };
 
 export default Logout;
 
 const LogoutButton = styled.div`
-  margin-left: 1.875rem;
-  color: #fff;
-  font-size: 1rem;
+  cursor: pointer;
 `;

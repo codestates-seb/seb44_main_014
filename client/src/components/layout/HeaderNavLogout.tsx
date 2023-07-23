@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faTableList, faUser, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import Logout from '../Logout/Logout.tsx';
 
 const HeaderNavLogout = () => {
   return (
@@ -21,7 +22,7 @@ const HeaderNavLogout = () => {
         </HeaderNavItems>
         <HeaderNavItems>
           <HeaderNavIcons icon={faArrowRightFromBracket} />
-          <Link to="/">로그아웃</Link>
+          <Logout />
         </HeaderNavItems>
       </HeaderNavContents>
     </HeaderNavContainer>
