@@ -1,15 +1,19 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { removeCookie } from '../../util/cookie/index.ts';
+import { removeCookie, getCookie } from '../../util/cookie/index.ts';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/userSlice.ts';
 import { locationLogout } from '../../store/locationSlice.ts';
+import axios from 'axios';
 
 const Logout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const doLogout = () => {
+  const doLogout = async () => {
+    await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
+      headers: { Refresh: getCookie('refreshToken') },
+    });
     removeCookie('accessToken');
     removeCookie('refreshToken');
     localStorage.clear();
@@ -20,7 +24,9 @@ const Logout = () => {
         email: null,
       })
     );
+
     dispatch(locationLogout({ locationId: null }));
+
     navigate('/'); //로그인 유저가 바뀔 때 발생하는 버그를 막기위해 reload설정
   };
   return (
