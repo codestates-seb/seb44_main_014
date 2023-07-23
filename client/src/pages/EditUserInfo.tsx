@@ -1,10 +1,20 @@
 import { styled } from 'styled-components';
-import InputRadio from '../components/UI/InputRadio';
-import Input from '../components/UI/Input';
-import TagCheckbox from '../components/UI/TagCheckbox';
-import Button from '../components/UI/Button';
+// import InputRadio from '../components/UI/InputRadio.tsx';
+import Input from '../components/UI/Input.tsx';
+import TagCheckbox from '../components/UI/TagCheckbox.tsx';
+import Button from '../components/UI/Button.tsx';
+import { checkedValue, selectOneCheckbox } from '../util/common.ts';
 
 const EditUserInfo = () => {
+  const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
+    selectOneCheckbox(e);
+    const foodTag = checkedValue(e);
+    console.log(foodTag);
+  };
+
+  const Check = () => {
+    console.log(1);
+  };
   return (
     <MainContainer>
       <UserImgContainer>
@@ -24,30 +34,40 @@ const EditUserInfo = () => {
       <UserGenderEditContainer>
         <EditorTitle className={'GenderTitle'}>성별</EditorTitle>
         <UserGenderEditPositioner>
-          <StyledRadio type={'gender'} id={'남성'}>
+          {/* <InputRadio type={'gender'} value={'MALE'}>
             남성
-          </StyledRadio>
-          <StyledRadio type={'gender'} id={'여성'}>
+          </InputRadio>
+          <InputRadio type={'gender'} value={'FEMALE'}>
             여성
-          </StyledRadio>
+          </InputRadio> */}
         </UserGenderEditPositioner>
       </UserGenderEditContainer>
       <UserLocationEditContainer>
         <EditorTitle className={'GenderTitle'}>지역 선택</EditorTitle>
-        <StyledInput placeholder={'지역을 입력하세요'}></StyledInput>
+        <StyledInput></StyledInput>
       </UserLocationEditContainer>
       <UserTagEditContainer>
         <EditorTitle className={'GenderTitle'}>음식 태그</EditorTitle>
         <UserTagBox>
-          <UserTag type={'food'}># 한식</UserTag>
-          <UserTag type={'food'}># 중식</UserTag>
-          <UserTag type={'food'}># 일식</UserTag>
-          <UserTag type={'food'}># 양식</UserTag>
-          <UserTag type={'food'}># 기타</UserTag>
+          <TagCheckbox type="food" value={1} handleGetValue={handleFoodTag}>
+            # 한식
+          </TagCheckbox>
+          <TagCheckbox type="food" value={2} handleGetValue={handleFoodTag}>
+            # 중식
+          </TagCheckbox>
+          <TagCheckbox type="food" value={3} handleGetValue={handleFoodTag}>
+            # 일식
+          </TagCheckbox>
+          <TagCheckbox type="food" value={4} handleGetValue={handleFoodTag}>
+            # 양식
+          </TagCheckbox>
+          <TagCheckbox type="food" value={5} handleGetValue={handleFoodTag}>
+            # 기타
+          </TagCheckbox>
         </UserTagBox>
       </UserTagEditContainer>
       <ButtonContainer>
-        <StyledBtn className={'EditUser'}>저장</StyledBtn>
+        <Button onClick={Check}>저장</Button>
       </ButtonContainer>
     </MainContainer>
   );
@@ -132,8 +152,6 @@ const StyledInput = styled(Input)`
   width: 300px;
 `;
 
-const StyledRadio = styled(InputRadio)``;
-
 const UserLocationEditContainer = styled.div`
   width: 9.375rem;
   height: 3.75rem;
@@ -152,22 +170,9 @@ const UserTagBox = styled.div`
   display: flex;
 `;
 
-const UserTag = styled(TagCheckbox)`
-  padding: 10px;
-  margin: 10px;
-`;
-
 const ButtonContainer = styled.div`
   margin-left: 0.9375rem;
   margin-top: 30px;
-`;
-
-const StyledBtn = styled(Button)`
-  width: 43.75rem;
-
-  &.EditUser {
-    width: 43.75rem;
-  }
 `;
 
 export default EditUserInfo;
