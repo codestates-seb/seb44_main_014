@@ -13,10 +13,10 @@ export const userSlice = createSlice({
       state.isLogin = action.payload.isLogin;
       state.email = action.payload.email;
     },
-    logout: (state) => {
-      state.memberId = null;
-      state.isLogin = false;
-      state.email = null;
+    logout: (state, action) => {
+      state.memberId = action.payload.memberId;
+      state.isLogin = action.payload.isLogin;
+      state.email = action.payload.email;
     },
   },
 });

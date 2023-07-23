@@ -4,10 +4,11 @@ import InputRadio from '../components/UI/InputRadio.tsx';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ZipCodeInput from '../components/zipCodeInput.tsx';
 import { useNavigate } from 'react-router-dom';
 import { FOOD_TAGS } from '../constant/constant.ts';
+import { locationPost } from '../store/locationSlice.ts';
 // login, signup, userinfo에서 모두 버튼을 누르면 다 validate해야하는데 하나의 컴포넌트로 묶을 수는 없을까?? 뭔가 form, input같은걸로 태그달면 할 수 있을 것 같은데
 interface IUserInfo {
   name: string;
@@ -42,6 +43,7 @@ const UserInfo = () => {
   const [preview, setPreview] = useState(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const memberId = useSelector((state) => state.user.memberId);
   const email = useSelector((state) => state.user.email);
@@ -138,7 +140,11 @@ const UserInfo = () => {
           withCredentials: true,
         });
 
-        await axios.post(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${memberId}/location/create`, location);
+        const response = await axios.post(
+          `${import.meta.env.VITE_APP_API_URL}/users/mypage/${memberId}/location`,
+          location
+        );
+        dispatch(locationPost({ locationId: response.data.locationId }));
 
         alert('제출이 완료되었습니다.');
         // login 상태 들고 가야해
