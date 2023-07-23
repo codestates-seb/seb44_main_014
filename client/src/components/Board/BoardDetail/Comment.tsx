@@ -11,6 +11,7 @@ import { IComments } from '../../../interface/board.ts';
 import { timeStamp } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
 import { getCookie } from '../../../util/cookie/index.ts';
+import authApi from '../../../util/api/authApi.tsx';
 
 type CommentInfoProps = {
   commentInfo: IComments;
@@ -44,11 +45,9 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
       });
   };
 
-  const deleteComment = () => {
-    axios
-      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
+  const deleteComment = async () => {
+    await authApi
+      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`)
       .then((res) => {
         console.log(res);
         location.reload();
