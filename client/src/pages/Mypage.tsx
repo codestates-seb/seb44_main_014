@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import Tag from '../components/UI/Tag.tsx';
+// import Tagcheckbox from '../components/UI/Tagcheckbox.tsx';
 // import Toggle from '../components/UI/Toggle.tsx';
 import { IUserState } from '../store/userSlice.ts';
 import axios from 'axios';
@@ -28,8 +28,8 @@ const Mypage = () => {
     comments: [
       {
         postId: 1,
-        title: '',
-        status: '',
+        commentId: 1,
+        content: '',
       },
     ],
     postMates: [
@@ -59,8 +59,45 @@ const Mypage = () => {
       },
     ],
   });
-
   const userId = useSelector((state: IUserState) => state.user.memberId);
+  const [foodTagName, setFoodTagName] = useState('# 한식');
+  const [meetingTitle, setMeetingTitle] = useState('참여 중인 모임이 없습니다.');
+  const [meetingMates, setMeetingMates] = useState('참여자가 없습니다.');
+  const [posts, setPosts] = useState('작성한 게시글이 없습니다.');
+  const [comments, setComments] = useState('작성한 댓글이 없습니다.');
+
+  const userFoodTag = (data: any) => {
+    if (data.foodTag.foodTagId === 1) {
+      setFoodTagName('# 한식');
+    } else if (data.foodTag.foodTagId === 2) {
+      setFoodTagName('# 중식');
+    } else if (data.foodTag.foodTagId === 3) {
+      setFoodTagName('# 일식');
+    } else if (data.foodTag.foodTagId === 4) {
+      setFoodTagName('# 양식');
+    } else {
+      setFoodTagName('기타');
+    }
+  };
+
+  const userMeeting = (data: any) => {
+    if (data.mates[0].postId === 1) {
+      setMeetingTitle(data.mates[0].title);
+      setMeetingMates(`참여자: ${data.mates[0].mateMembers[0].name}`);
+    }
+  };
+
+  const userPosts = (data: any) => {
+    if (data.posts[0].postId != 0) {
+      setPosts(data.posts[0].title);
+    }
+  };
+
+  const userComments = (data: any) => {
+    if (data.comments[0].commentId != 0) {
+      setComments(data.comments[0].content);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -70,6 +107,12 @@ const Mypage = () => {
       .then((res) => {
         console.log(res);
         setUserData(res.data);
+        userFoodTag(userData);
+        userMeeting(userData);
+        userPosts(userData);
+        userComments(userData);
+        // dataComments(userData);
+        console.log(userData);
       })
       .catch((err) => {
         console.log(err);
@@ -88,7 +131,7 @@ const Mypage = () => {
   //   );
   // };
 
-  // const userComments = ({ user: any }) => {
+  // const dataComments = ({ user: any }) => {
   //   return (
   //     <div key={user.posts.commentId}>
   //       <UserContentsContainer>
@@ -122,11 +165,11 @@ const Mypage = () => {
             </UserContentsContainer>
             <UserContentsContainer className={'Tag'}>
               <UserInfoTitle className={'Tag'}>태그</UserInfoTitle>
-              {/* <Tag className={'Tag'}>4.6</Tag> */}
+              <div>{foodTagName}</div>
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
-              {/* <Toggle>4.6</Toggle> */}
+              {/* <Toggle></Toggle> */}
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Edit'}>
@@ -140,10 +183,8 @@ const Mypage = () => {
         <UserContentsTitle>참여 중인 모임</UserContentsTitle>
         <UserContentBox className={'MeetingBox'}>
           <UserContents>
-            <UserContentsBoxTitle>
-              <Link to="/board"></Link>
-            </UserContentsBoxTitle>
-            <UserContentsBoxParagraph></UserContentsBoxParagraph>
+            <UserContentsBoxTitle>{meetingTitle}</UserContentsBoxTitle>
+            <UserContentsBoxParagraph>{meetingMates}</UserContentsBoxParagraph>
           </UserContents>
         </UserContentBox>
       </UserContainer>
@@ -156,7 +197,9 @@ const Mypage = () => {
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            <UserContentsContainer>{/*{userData.map(userPosts)}*/}</UserContentsContainer>
+            <UserContentsContainer>
+              <UserContentsBoxTitle>{posts}</UserContentsBoxTitle>
+            </UserContentsContainer>
           </UserContents>
         </UserContentBox>
       </UserContainer>
@@ -168,7 +211,15 @@ const Mypage = () => {
           </Link>
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
-          {/* <UserContents>{userData.map(userComments)}</UserContents> */}
+          <UserContents>
+            {/* {userData.comments.map(dataComments)} */}
+            {/* <div>{comments}</div> */}
+            <UserContentsContainer>
+              <UserContentsBoxTitle>
+                <div>{comments}</div>
+              </UserContentsBoxTitle>
+            </UserContentsContainer>
+          </UserContents>
         </UserContentBox>
       </UserContainer>
     </BodyContainer>
