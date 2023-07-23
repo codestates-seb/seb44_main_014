@@ -9,12 +9,13 @@ import ZipCodeInput from '../components/zipCodeInput.tsx';
 import { useNavigate } from 'react-router-dom';
 import { FOOD_TAGS } from '../constant/constant.ts';
 import { locationPost } from '../store/locationSlice.ts';
+import { IUserState } from '../store/userSlice.ts';
 // login, signup, userinfo에서 모두 버튼을 누르면 다 validate해야하는데 하나의 컴포넌트로 묶을 수는 없을까?? 뭔가 form, input같은걸로 태그달면 할 수 있을 것 같은데
 interface IUserInfo {
   name: string;
   image: string;
   gender: string;
-  foodTag: number | null;
+  foodTag: { foodTagId: number } | null;
 }
 
 interface ILocation {
@@ -30,26 +31,27 @@ const UserInfo = () => {
     gender: '',
     foodTag: null, //선택안할경우에는 초기값이 0? -> null
   });
-  const [nameErrMsg, setNameErrMsg] = useState('');
-  const [genderErrMsg, setGenderErrMsg] = useState('');
+  const [nameErrMsg, setNameErrMsg] = useState<string>('');
+  const [genderErrMsg, setGenderErrMsg] = useState<string>('');
   const [location, setLocation] = useState<ILocation>({
     latitude: null,
     longitude: null,
     address: '',
   });
-  const [locationErrMsg, setLocationErrMsg] = useState('');
+  const [locationErrMsg, setLocationErrMsg] = useState<string>('');
   /////////////////////////////////////////////////////////
   // const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState<string | undefined>('');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const memberId = useSelector((state) => state.user.memberId);
-  const email = useSelector((state) => state.user.email);
+  const memberId = useSelector((state: IUserState) => state.user.memberId);
+  const email = useSelector((state: IUserState) => state.user.email);
 
-  const handleImageChange = async (e) => {
-    const selectedImage = e.target.files[0];
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files?.[0];
+    if (!selectedImage) return;
     setPreview(URL.createObjectURL(selectedImage));
 
     const formData = new FormData();
@@ -78,7 +80,7 @@ const UserInfo = () => {
     }
   };
 
-  const handleNameValue = (e) => {
+  const handleNameValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     setUserInfo({ ...userInfo, name: name });
   };
@@ -108,7 +110,7 @@ const UserInfo = () => {
     });
   };
 
-  const userInfoValidate = async (e) => {
+  const userInfoValidate = async (e: React.MouseEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.persist();
 
@@ -125,12 +127,12 @@ const UserInfo = () => {
     } else {
       setGenderErrMsg('');
     }
-    // if (location) {
-    //   setLocationErrMsg('지역은 필수로 입력해야합니다.');
-    //   userInfoErr = true;
-    // } else {
-    //   setLocationErrMsg('');
-    // }
+    if (location) {
+      setLocationErrMsg('지역은 필수로 입력해야합니다.');
+      userInfoErr = true;
+    } else {
+      setLocationErrMsg('');
+    }
     if (!userInfoErr) {
       try {
         const submitData = userInfo;
@@ -167,7 +169,7 @@ const UserInfo = () => {
       <InfoContainer>
         <EmailContainer>
           <EmailTitle>이메일</EmailTitle>
-          <EmailInput readOnly value={email} />
+          <EmailInput readOnly defaultValue={email || ''} />
         </EmailContainer>
         <NameContainer>
           <NameTitle>활동명 *</NameTitle>
@@ -177,10 +179,10 @@ const UserInfo = () => {
         <GenderContainer>
           <GenderTitle>성별 *</GenderTitle>
           <GenderRadio>
-            <InputRadio required type="gender" value="MALE" handleGetValue={handleGenderRadio}>
+            <InputRadio type="gender" value="MALE" handleGetValue={handleGenderRadio}>
               남성
             </InputRadio>
-            <InputRadio required type="gender" value="FEMALE" handleGetValue={handleGenderRadio}>
+            <InputRadio type="gender" value="FEMALE" handleGetValue={handleGenderRadio}>
               여성
             </InputRadio>
           </GenderRadio>
