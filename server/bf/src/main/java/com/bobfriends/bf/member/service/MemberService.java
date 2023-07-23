@@ -78,7 +78,6 @@ public class MemberService {
     /** 최소 회원 정보 등록 **/
     @Transactional
     public Member updateInfo(MemberDto.PatchInfo requestBody) {
-
         Member findMember = findVerifiedMember(requestBody.getMemberId());
 
         findMember.setName(requestBody.getName());
@@ -91,19 +90,16 @@ public class MemberService {
         findMember.setGender(requestBody.getGender());
 
         if (requestBody.getFoodTag() != null) {
-
             FoodTag foodTag = new FoodTag();
             foodTag.setFoodTagId(requestBody.getFoodTag().getFoodTagId());
-
             MemberTag memberTag = new MemberTag();
             memberTag.setFoodTag(foodTag);
             memberTag.setMember(findMember);
-
             findMember.setMemberTag(memberTag);
         }
-
         return memberRepository.save(findMember);
     }
+
 
 
     /** eatStatus 수정 **/

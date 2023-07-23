@@ -46,7 +46,6 @@ public interface MemberMapper {
 
     @Mapping(source = "foodTag.foodTagId", target = "foodTagId")
     MemberTagDto.FoodTagResponse memberTagToMemberFoodTagResponseDto (MemberTag memberTag);
-
     default MemberDto.PatchInfoResponse memberToMemberPatchInfoResponse(Member member){
         MemberDto.PatchInfoResponse patchInfoResponse = new MemberDto.PatchInfoResponse();
 
@@ -54,7 +53,7 @@ public interface MemberMapper {
         if(member.getImage() == null){
             patchInfoResponse.setImage("https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png");
         }
-
+        
          */
         patchInfoResponse.setImage(member.getImage());
         patchInfoResponse.setEmail(member.getEmail());
@@ -62,7 +61,6 @@ public interface MemberMapper {
         patchInfoResponse.setGender(member.getGender());
         patchInfoResponse.setMemberTag(memberTagToMemberTagResponseDto(member.getMemberTag()));
         patchInfoResponse.setName(member.getName());
-
         return patchInfoResponse;
     }
 
