@@ -9,6 +9,7 @@ import Loading from './Loading.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import { IBoardList } from '../interface/board.ts';
 import { category } from '../store/listCategorySlice.ts';
+import { getCookie } from '../util/cookie/index.ts';
 
 const AfterLogin = () => {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ const AfterLogin = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/home`)
+      .get(`${import.meta.env.VITE_APP_API_URL}/home`, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res.data);
         setLists(res.data);

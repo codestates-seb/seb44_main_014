@@ -27,9 +27,16 @@ const WriterProfile = ({ profileInfo }: ProfileInfoProps) => {
     userGender = '남성';
   }
 
+  let profileImage: string;
+  if (image === '') {
+    profileImage = 'https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png';
+  } else {
+    profileImage = image;
+  }
+
   return (
     <ProfileContainer>
-      <img src={image} alt="" />
+      <img src={profileImage} alt="" />
       <ProfileInfo>
         <InfoRow>
           <InfoId>{name}</InfoId>
