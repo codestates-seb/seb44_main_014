@@ -2,15 +2,29 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import DaumPostcode from 'react-daum-postcode';
 
-const ZipCodeInput = ({ location, setLocation, locationErrMsg }) => {
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+interface ILocation {
+  latitude: number | null;
+  longitude: number | null;
+  address: string;
+}
+interface IZipCodeInputProps {
+  location: ILocation;
+  setLocation: React.Dispatch<React.SetStateAction<ILocation>>;
+  locationErrMsg: string;
+}
+interface IGeocoderResult {
+  x: number;
+  y: number;
+}
+const ZipCodeInput: React.FC<IZipCodeInputProps> = ({ location, setLocation, locationErrMsg }) => {
   const [openPostcode, setOpenPostcode] = useState(false);
-  // const [location, setLocation] = useState({
-  //   latitude: null,
-  //   longitude: null,
-  //   address: '',
-  // });
 
-  const geocoder = new kakao.maps.services.Geocoder();
+  const geocoder = new window.kakao.maps.services.Geocoder();
 
   const handle = {
     // 버튼 클릭 이벤트
@@ -34,13 +48,13 @@ const ZipCodeInput = ({ location, setLocation, locationErrMsg }) => {
         fullAddress += `${extraAddress !== '' ? ` ${extraAddress}` : ''}`;
       }
 
-      geocoder.addressSearch(data.address, function (results, status) {
+      geocoder.addressSearch(data.address, function (results: IGeocoderResult[], status: any) {
         // 정상적으로 검색이 완료됐으면
-        if (status === daum.maps.services.Status.OK) {
+        if (status === window.kakao.maps.services.Status.OK) {
           const result = results[0]; //첫번째 결과의 값을 활용
 
           // 해당 주소에 대한 좌표를 받아서
-          const coords = new daum.maps.LatLng(result.y, result.x);
+          const coords = new window.kakao.maps.LatLng(result.y, result.x);
           const message =
             '클릭한 위치의 위도는 ' + coords.getLat() + ' 이고, ' + '경도는 ' + coords.getLng() + ' 입니다';
           console.log(message);

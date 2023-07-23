@@ -54,7 +54,7 @@ const SearchFilter = ({ filterInfo, setFilterInfo, setCurrentApi }: IFilterData)
               </button>
             ))}
           </TagsRow>
-          {filterInfo.category !== '장보기' && (
+          {filterInfo.category !== 'SHOPPING' && (
             <TagsRow>
               {FOOD_TAGS.map((tag) => (
                 <button

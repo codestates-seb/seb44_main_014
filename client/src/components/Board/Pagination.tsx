@@ -6,14 +6,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { IFilterInfo, IPageInfo } from '../../interface/board.ts';
 
+interface ISelected {
+  selected: number;
+}
 interface IPaginationProps {
   filterInfo: IFilterInfo;
   setFilterInfo: React.Dispatch<React.SetStateAction<IFilterInfo>>;
-  pageInfo: IPageInfo | object;
+  pageInfo: IPageInfo;
 }
 
 const Pagination = ({ filterInfo, setFilterInfo, pageInfo }: IPaginationProps) => {
-  const handlePageChange = (e: React.MouseEvent<HTMLElement>) => {
+  const handlePageChange = (e: ISelected) => {
     setFilterInfo({
       ...filterInfo,
       page: e.selected + 1,

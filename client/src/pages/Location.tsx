@@ -3,41 +3,65 @@ import { useState, useEffect } from 'react';
 import Button from '../components/UI/Button.tsx';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { ILocationState } from '../store/locationSlice.ts';
+
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+interface IKakaoGeocoderResult {
+  road_address: {
+    address_name: string;
+  };
+  address: {
+    address_name: string;
+  };
+}
+interface IKakaoMouseEvent {
+  latLng: {
+    getLat: () => number;
+    getLng: () => number;
+  };
+}
+// declare enum KakaoGeocoderStatus {
+//   OK = 'OK',
+//   ERROR = 'ERROR',
+// }
 
 const Location = () => {
   const [coordinate, setCoordinate] = useState({ latitude: 0, longitude: 0 });
   const [address, setAddress] = useState('');
 
-  const memberId = useSelector((state) => state.user.memberId);
-  const locationId = useSelector((state) => state.location.locationId);
+  const locationId = useSelector((state: ILocationState) => state.location.locationId);
   console.log(locationId);
 
   useEffect(() => {
     const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(37.563115742175256, 126.9226833612614), //지도의 중심좌표.
+      center: new window.kakao.maps.LatLng(37.563115742175256, 126.9226833612614), //지도의 중심좌표.
       level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
-    const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    const map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     //////////////////////////////////////
     // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
-    const mapTypeControl = new kakao.maps.MapTypeControl();
+    const mapTypeControl = new window.kakao.maps.MapTypeControl();
 
     // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
     // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+    map.addControl(mapTypeControl, window.kakao.maps.ControlPosition.TOPRIGHT);
 
     // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-    const zoomControl = new kakao.maps.ZoomControl();
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+    const zoomControl = new window.kakao.maps.ZoomControl();
+    map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
     //////////////////////////////////////
     // 마커가 표시될 위치입니다
-    const markerPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+    const markerPosition = new window.kakao.maps.LatLng(33.450701, 126.570667);
 
     // 마커를 생성합니다
-    const marker = new kakao.maps.Marker({
+    const marker = new window.kakao.maps.Marker({
       position: markerPosition,
     });
 
@@ -47,12 +71,14 @@ const Location = () => {
     // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
     // marker.setMap(null);
 
-    function getAddr(lat, lng) {
-      const geocoder = new kakao.maps.services.Geocoder();
+    function getAddr(lat: number, lng: number) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
 
-      const coord = new kakao.maps.LatLng(lat, lng);
-      const callback = function (result, status) {
-        if (status === kakao.maps.services.Status.OK) {
+      const coord = new window.kakao.maps.LatLng(lat, lng);
+      const callback = function (result: IKakaoGeocoderResult[], status: any) {
+        if (status === window.kakao.maps.services.Status.OK) {
+          //window.kakao.maps.services.Status
+          //KakaoGeocoderStatus
           const addr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
           console.log(addr);
           setAddress(addr);
@@ -63,7 +89,7 @@ const Location = () => {
 
     // 지도에 클릭 이벤트를 등록합니다
     // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-    kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+    window.kakao.maps.event.addListener(map, 'click', function (mouseEvent: IKakaoMouseEvent) {
       // 클릭한 위도, 경도 정보를 가져옵니다
       const latlng = mouseEvent.latLng;
 
@@ -80,7 +106,7 @@ const Location = () => {
     });
   }, []);
 
-  const saveLocation = (latitude, longitude, address) => {
+  const saveLocation = (latitude: number, longitude: number, address: string) => {
     try {
       const response = axios.patch(`${import.meta.env.VITE_APP_API_URL}${locationId}`, {
         latitude,

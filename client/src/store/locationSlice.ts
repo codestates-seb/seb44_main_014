@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+export interface ILocationState {
+  location: {
+    locationId: string | null;
+  };
+}
+
 export const locationSlice = createSlice({
   name: 'location',
   initialState: {

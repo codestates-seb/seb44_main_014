@@ -136,12 +136,14 @@ public class PostService {
                 .collect(Collectors.toList());
 
         Collections.sort(commonPosts, (post1, post2) -> post2.getCreatedAt().compareTo(post1.getCreatedAt()));
-
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), commonPosts.size());
 
         if (memberIdList.size() < 3)
             return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
         else
-            return new PageImpl<>(commonPosts, pageable, commonPosts.size());
+            return new PageImpl<>(commonPosts.subList(start, end), pageable, commonPosts.size());
+
 
     }
 

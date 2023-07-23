@@ -68,7 +68,7 @@ const BoardList = ({ list }: BoardListProps) => {
           <ListUserInfo>
             <span>{list.name}</span>
             <span>
-              <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {list.avgStarRate}
+              <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {list.avgStarRate.toFixed(1)}
             </span>
             <span>
               <FontAwesomeIcon icon={faEye} /> {list.viewCount}

@@ -15,20 +15,58 @@ import { IBoardDetailData } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { getCookie } from '../util/cookie/index.ts';
 
+interface IMember {
+  memberId: number;
+  name: string;
+}
+
 const BoardDetail = () => {
   const navigate = useNavigate();
   const params = useParams();
   const postId = Number(params.postId);
   const userId = useSelector((state: IUserState) => state.user.memberId);
 
-  const [detailData, setDetailData] = useState<IBoardDetailData>({});
+  const [detailData, setDetailData] = useState<IBoardDetailData>({
+    title: '',
+    content: '',
+    image: '',
+    createdAt: '',
+    viewCount: 0,
+    commentCount: 0,
+    status: '',
+    category: '',
+    member: {
+      memberId: 0,
+      image: '',
+      name: '',
+      gender: '',
+      avgStarRate: 0,
+      eatStatus: false,
+    },
+    postTag: {
+      postTagId: 0,
+      foodTagId: 0,
+      genderTagId: 0,
+    },
+    mate: {
+      findNum: 0,
+      mateNum: 0,
+    },
+    mateMembers: [],
+    comments: [],
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { content, mateMembers, member, comments } = detailData;
-  const [updateMate, setUpdateMate] = useState({});
+  const { content, member, comments } = detailData;
+  const [updateMate, setUpdateMate] = useState({ mate: { findNum: 0, mateNum: 0 } });
+  const [mateData, setMateData] = useState<IMember[] | []>([]);
+
+  const showParticipant = mateData.filter((mate) => mate.memberId === userId).length;
 
   useEffect(() => {
     getDetailData();
+    getMateData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getDetailData = () => {
@@ -36,14 +74,27 @@ const BoardDetail = () => {
       .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
       .then((res) => {
         console.log(res.data);
-        const { mate, mateMembers } = res.data;
+        const { mate } = res.data;
         setDetailData(res.data);
-        setUpdateMate({ mate, mateMembers });
+        setUpdateMate({ mate });
         setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setIsLoading(false);
+      });
+  };
+
+  const getMateData = () => {
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate`)
+      .then((res) => {
+        console.log(res.data);
+        const { mate_member } = res.data;
+        setMateData(mate_member);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -58,6 +109,7 @@ const BoardDetail = () => {
       })
       .then((res) => {
         setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
+        getMateData();
       })
       .catch((err) => {
         console.log(err);
@@ -107,10 +159,10 @@ const BoardDetail = () => {
           </TextContainer>
           {/* 참가 신청 영역 */}
           <ApplyParticipate
-            mateMembers={mateMembers}
             postApplyData={postApplyData}
-            getDetailData={getDetailData}
             updateMate={updateMate.mate}
+            showParticipant={showParticipant}
+            mateData={mateData}
           />
         </ContentsWrapper>
         {/* 작성자 프로필 영역 */}
