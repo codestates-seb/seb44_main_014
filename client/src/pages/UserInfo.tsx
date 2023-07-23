@@ -144,7 +144,7 @@ const UserInfo = () => {
           `${import.meta.env.VITE_APP_API_URL}/users/mypage/${memberId}/location`,
           location
         );
-        dispatch(locationPost({ locationId: response.data.locationId }));
+        dispatch(locationPost({ locationId: response.headers.location }));
 
         alert('제출이 완료되었습니다.');
         // login 상태 들고 가야해
