@@ -46,17 +46,15 @@ public interface MemberMapper {
 
     @Mapping(source = "foodTag.foodTagId", target = "foodTagId")
     MemberTagDto.FoodTagResponse memberTagToMemberFoodTagResponseDto (MemberTag memberTag);
-
     default MemberDto.PatchInfoResponse memberToMemberPatchInfoResponse(Member member){
         MemberDto.PatchInfoResponse patchInfoResponse = new MemberDto.PatchInfoResponse();
-
+        
         patchInfoResponse.setImage(member.getImage());
         patchInfoResponse.setEmail(member.getEmail());
         patchInfoResponse.setMemberId(member.getMemberId());
         patchInfoResponse.setGender(member.getGender());
         patchInfoResponse.setMemberTag(memberTagToMemberTagResponseDto(member.getMemberTag()));
         patchInfoResponse.setName(member.getName());
-
         return patchInfoResponse;
     }
 
