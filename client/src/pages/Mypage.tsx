@@ -5,7 +5,8 @@ import { styled } from 'styled-components';
 // import Tag from '../components/UI/Tag.tsx';
 // import Toggle from '../components/UI/Toggle.tsx';
 import { IUserState } from '../store/userSlice.ts';
-import authApi from '../util/api/authApi.tsx';
+import axios from 'axios';
+import { getCookie } from '../util/cookie/index.ts';
 
 const Mypage = () => {
   const [userData, setUserData] = useState({
@@ -62,16 +63,18 @@ const Mypage = () => {
   const userId = useSelector((state: IUserState) => state.user.memberId);
 
   useEffect(() => {
-    authApi
-      .get(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}`)
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}`, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
         setUserData(res.data);
-        console.log(userData);
       })
       .catch((err) => {
         console.log(err);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const userPosts = ({ user: any }) => {
