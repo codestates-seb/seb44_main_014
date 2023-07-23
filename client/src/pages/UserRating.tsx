@@ -44,7 +44,7 @@ const UserRating = () => {
           <UserRateList key={idx} list={list} />
         ))}
       </ul>
-      {/* <UserRateList /> */}
+      <ButtonComplete onClick={() => navigate(`/board/posts/${postId}`)}>완료</ButtonComplete>
     </UserRateContainer>
   );
 };
@@ -74,6 +74,17 @@ const Description = styled.p`
   font-family: 'NanumSquare', sans-serif;
   font-size: 1.25rem;
   line-height: 1.5;
+`;
+
+const ButtonComplete = styled.button`
+  display: block;
+  width: 286px;
+  height: 2.5rem;
+  margin: 2rem auto 0;
+  background-color: var(--color-orange);
+  color: #ffffff;
+  font-size: 1rem;
+  border-radius: 5px;
 `;
 
 export default UserRating;

@@ -20,6 +20,7 @@ interface IMateInfo {
 const UserRateList = ({ list }: IMateInfo) => {
   const params = useParams();
   const postId = Number(params.postId);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [userRateInfo, setUserRateInfo] = useState<IStarRate>({
     rateMemberId: list.memberId,
     starRate: 0,
@@ -29,79 +30,95 @@ const UserRateList = ({ list }: IMateInfo) => {
       .post(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate/userRate`, userRateInfo)
       .then((res) => {
         console.log(res);
+        setIsSubmitted(true);
+        handleDisableBtn();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log(list);
+  console.log(isSubmitted);
 
   const handleRateValue = (e: React.MouseEvent<HTMLInputElement>) => {
     setUserRateInfo({ ...userRateInfo, starRate: Number(checkedValue(e)) });
   };
+
+  const handleDisableBtn = () => {
+    (document.getElementById(`btnSubmit${list.memberId}`) as HTMLButtonElement).disabled = true;
+  };
+
   return (
     <StarRateList>
       <RatingContainer>
         <Username>{list.name}</Username>
-        <div className="rating-group">
-          <label aria-label="1 star" htmlFor="starRate10">
-            <FontAwesomeIcon icon={faStar} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate10"
-            value="1"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
-          <label aria-label="2 stars" htmlFor="starRate20">
-            <FontAwesomeIcon icon={faStar} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate20"
-            value="2"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
-          <label aria-label="3 stars" htmlFor="starRate30">
-            <FontAwesomeIcon icon={faStar} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate30"
-            value="3"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
-          <label aria-label="4 stars" htmlFor="starRate40">
-            <FontAwesomeIcon icon={faStar} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate40"
-            value="4"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
-          <label aria-label="5 stars" htmlFor="starRate50">
-            <FontAwesomeIcon icon={faStar} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate50"
-            value="5"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
-        </div>
-        <ButtonSave type="button" onClick={() => postStarRate()}>
-          저장
+        {isSubmitted && <TextComplete>제출이 완료되었습니다.</TextComplete>}
+        {!isSubmitted && (
+          <div className="rating-group">
+            <label aria-label="1 star" htmlFor="starRate10">
+              <FontAwesomeIcon icon={faStar} />
+            </label>
+            <input
+              type="radio"
+              className="rating__input"
+              name={`starRate${list.memberId}`}
+              id="starRate10"
+              value="1"
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
+            />
+            <label aria-label="2 stars" htmlFor="starRate20">
+              <FontAwesomeIcon icon={faStar} />
+            </label>
+            <input
+              type="radio"
+              className="rating__input"
+              name={`starRate${list.memberId}`}
+              id="starRate20"
+              value="2"
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
+            />
+            <label aria-label="3 stars" htmlFor="starRate30">
+              <FontAwesomeIcon icon={faStar} />
+            </label>
+            <input
+              type="radio"
+              className="rating__input"
+              name={`starRate${list.memberId}`}
+              id="starRate30"
+              value="3"
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
+            />
+            <label aria-label="4 stars" htmlFor="starRate40">
+              <FontAwesomeIcon icon={faStar} />
+            </label>
+            <input
+              type="radio"
+              className="rating__input"
+              name={`starRate${list.memberId}`}
+              id="starRate40"
+              value="4"
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
+            />
+            <label aria-label="5 stars" htmlFor="starRate50">
+              <FontAwesomeIcon icon={faStar} />
+            </label>
+            <input
+              type="radio"
+              className="rating__input"
+              name={`starRate${list.memberId}`}
+              id="starRate50"
+              value="5"
+              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
+            />
+          </div>
+        )}
+        <ButtonSave
+          type="button"
+          id={`btnSubmit${list.memberId}`}
+          onClick={() => {
+            postStarRate();
+          }}
+        >
+          제출
         </ButtonSave>
       </RatingContainer>
     </StarRateList>
@@ -146,16 +163,19 @@ const StarRateList = styled.li`
   }
 
   /* make all stars orange on rating group hover */
-  .rating-group:hover label svg,
-  .rating-group:hover .rating__label--half svg {
+  .rating-group:hover label svg {
     color: #ffd233;
   }
 
   /* make hovered input's following siblings grey on hover */
-  .rating__input:hover ~ label svg,
-  .rating__input:hover ~ .rating__label--half svg {
+  .rating__input:hover ~ label svg {
     color: #ddd;
   }
+`;
+
+const TextComplete = styled.div`
+  padding: 1.2rem 0;
+  text-align: center;
 `;
 
 const RatingContainer = styled.div`
@@ -173,11 +193,14 @@ const Username = styled.span`
 const ButtonSave = styled.button`
   width: 100%;
   height: 2.5rem;
-  margin-top: 1.125rem;
+  margin-top: 2rem;
   background-color: var(--color-orange);
   color: #ffffff;
   font-size: 1rem;
   border-radius: 5px;
+  &:disabled {
+    background-color: #aaa;
+  }
 `;
 
 export default UserRateList;
