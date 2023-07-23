@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import axios from 'axios';
 
@@ -10,27 +10,32 @@ import NoBoardList from './Board/NoBoardList.tsx';
 import { IBoardList } from '../interface/board.ts';
 import { category } from '../store/listCategorySlice.ts';
 import { getCookie } from '../util/cookie/index.ts';
+import { IUserState } from '../store/userSlice.ts';
 
 const AfterLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [lists, setLists] = useState<IBoardList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/home`, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setLists(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    if (isLoggedIn) {
+      axios
+        .get(`${import.meta.env.VITE_APP_API_URL}/home`, {
+          headers: { Authorization: getCookie('accessToken') },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setLists(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
