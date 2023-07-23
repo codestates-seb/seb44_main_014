@@ -4,6 +4,6 @@ const initAuthApi = async () => {
   return await api();
 };
 
-const authApi = await initAuthApi();
+const authApi = initAuthApi();
 
 export default authApi;
