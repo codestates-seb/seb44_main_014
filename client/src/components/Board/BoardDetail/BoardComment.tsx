@@ -8,6 +8,7 @@ import Comment from './Comment.tsx';
 // import authApi from '../../../util/api/authApi.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
+import { getCookie } from '../../../util/cookie/index.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments[];
@@ -33,7 +34,9 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
 
   const postComment = () => {
     axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments`, commentContent)
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments`, commentContent, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
       })

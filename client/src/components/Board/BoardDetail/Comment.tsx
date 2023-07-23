@@ -32,7 +32,9 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 
   const patchComment = () => {
     axios
-      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`, commentContent)
+      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments/${commentId}`, commentContent, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
         setCommentContent({ ...commentContent, content: res.data.content });

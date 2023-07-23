@@ -52,7 +52,9 @@ const BoardDetail = () => {
 
   const postApplyData = () => {
     axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/mate`, applyData)
+      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/mate`, applyData, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
       })
