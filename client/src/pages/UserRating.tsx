@@ -19,7 +19,6 @@ const UserRating = () => {
       .get(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate`)
       .then((res) => {
         console.log(res);
-        // const { mateMember: mate_member } = res.data;
         setUserLists(res.data.mate_member);
         setIsLoading(false);
       })
@@ -27,6 +26,7 @@ const UserRating = () => {
         console.log(err);
         setIsLoading(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

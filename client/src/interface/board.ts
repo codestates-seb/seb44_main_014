@@ -29,8 +29,8 @@ export interface IFilterInfo {
 export interface IPageInfo {
   page: number;
   size: number;
-  totalElements: Nullable<number>;
-  totalPages: Nullable<number>;
+  totalElements: number;
+  totalPages: number;
 }
 
 // Page BoardDetail - mate info
