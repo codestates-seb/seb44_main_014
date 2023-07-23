@@ -53,6 +53,7 @@ public class LocationDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response {
+        private Long locationId;
         private Long memberId;
         private double latitude;
         private double longitude;

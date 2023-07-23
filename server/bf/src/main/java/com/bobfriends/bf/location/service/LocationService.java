@@ -87,6 +87,7 @@ public class LocationService {
         else
             return postsByMemberId;
     }
+
     /** 위치 등록한 회원인지 검증 **/
 
     public Location locationRegisteredMember(Long memberId) {
