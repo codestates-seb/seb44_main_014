@@ -64,7 +64,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
         <div>
           <WriterId>{name}</WriterId>
           <WriterScore>
-            <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate}
+            <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate.toFixed(1)}
           </WriterScore>
         </div>
         <CommentTime>{newTime}</CommentTime>
