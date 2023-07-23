@@ -1,34 +1,40 @@
 import { styled } from 'styled-components';
+import NoBoardList from '../components/Board/NoBoardList.tsx';
+import { IMypagePosts } from '../interface/mypage.ts';
+import { useState, useEffect } from 'react';
+import { IUserState } from '../store/userSlice.ts';
+import { useSelector } from 'react-redux';
+import authApi from '../util/api/authApi.tsx';
 
 const MoreInfoWritings = () => {
+  const [lists, setLists] = useState<IMypagePosts>([]);
+  const memberId = useSelector((state: IUserState) => state.user.memberId);
+
+  useEffect(() => {
+    getList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getList = async () => {
+    const response = await (await authApi).get(`/users/mypage/${memberId}/posts`);
+    setLists(response.data);
+  };
   return (
     <WritingsContainer>
       <WritingsTitle>작성한 게시글</WritingsTitle>
-      <WritingContentsContainer>
+      {/* <WritingContentsContainer>
         <ContentsTitle>연남동 OO라멘 2인 선착순!</ContentsTitle>
         <ContentsParagraph>연남동 OO라멘 오후 2시에 2분만 선착···</ContentsParagraph>
         <ContentsMetting>모집 완료 </ContentsMetting>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>연남동 OO라멘 2인 선착순!</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 오후 2시에 2분만 선착···</ContentsParagraph>
-        <ContentsMetting>모집 완료 </ContentsMetting>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>연남동 OO라멘 2인 선착순!</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 오후 2시에 2분만 선착···</ContentsParagraph>
-        <ContentsMetting>모집 완료 </ContentsMetting>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>연남동 OO라멘 2인 선착순!</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 오후 2시에 2분만 선착···</ContentsParagraph>
-        <ContentsMetting>모집 완료 </ContentsMetting>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>연남동 OO라멘 2인 선착순!</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 오후 2시에 2분만 선착···</ContentsParagraph>
-        <ContentsMetting>모집 완료 </ContentsMetting>
-      </WritingContentsContainer>
+      </WritingContentsContainer> */}
+      {lists.length === 0 && <NoBoardList />}
+      {lists.map((list, idx) => (
+        <WritingContentsContainer key={idx}>
+          <ContentsTitle>{list.title}</ContentsTitle>
+          <ContentsParagraph>{list.content}</ContentsParagraph>
+          <ContentsMetting>{list.status} </ContentsMetting>
+        </WritingContentsContainer>
+      ))}
     </WritingsContainer>
   );
 };
