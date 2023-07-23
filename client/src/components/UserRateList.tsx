@@ -33,17 +33,6 @@ const UserRateList = ({ list }) => {
       <RatingContainer>
         <Username>{list.name}</Username>
         <div className="rating-group">
-          <label aria-label="0.5 stars" className="rating__label--half" htmlFor="starRate05">
-            <FontAwesomeIcon icon={faStarHalf} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate05"
-            value="0.5"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
           <label aria-label="1 star" htmlFor="starRate10">
             <FontAwesomeIcon icon={faStar} />
           </label>
@@ -53,17 +42,6 @@ const UserRateList = ({ list }) => {
             name="starRate"
             id="starRate10"
             value="1"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
-          <label aria-label="1.5 stars" className="rating__label--half" htmlFor="starRate15">
-            <FontAwesomeIcon icon={faStarHalf} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate15"
-            value="1.5"
             onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
           />
           <label aria-label="2 stars" htmlFor="starRate20">
@@ -77,17 +55,6 @@ const UserRateList = ({ list }) => {
             value="2"
             onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
           />
-          <label aria-label="2.5 stars" className="rating__label--half" htmlFor="starRate25">
-            <FontAwesomeIcon icon={faStarHalf} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate25"
-            value="2.5"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
           <label aria-label="3 stars" htmlFor="starRate30">
             <FontAwesomeIcon icon={faStar} />
           </label>
@@ -99,17 +66,6 @@ const UserRateList = ({ list }) => {
             value="3"
             onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
           />
-          <label aria-label="3.5 stars" className="rating__label--half" htmlFor="starRate35">
-            <FontAwesomeIcon icon={faStarHalf} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate35"
-            value="3.5"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
           <label aria-label="4 stars" htmlFor="starRate40">
             <FontAwesomeIcon icon={faStar} />
           </label>
@@ -119,17 +75,6 @@ const UserRateList = ({ list }) => {
             name="starRate"
             id="starRate40"
             value="4"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-          />
-          <label aria-label="4.5 stars" className="rating__label--half" htmlFor="starRate45">
-            <FontAwesomeIcon icon={faStarHalf} />
-          </label>
-          <input
-            type="radio"
-            className="rating__input"
-            name="starRate"
-            id="starRate45"
-            value="4.5"
             onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
           />
           <label aria-label="5 stars" htmlFor="starRate50">
@@ -173,11 +118,11 @@ const StarRateList = styled.li`
   }
 
   /* add padding and positioning to half star labels */
-  .rating__label--half {
+  /* .rating__label--half {
     padding-right: 0;
     margin-right: -1.3em;
     z-index: 2;
-  }
+  } */
 
   /* set default star color */
   svg {

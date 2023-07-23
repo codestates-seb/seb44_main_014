@@ -41,7 +41,7 @@ const WriterProfile = ({ profileInfo }: ProfileInfoProps) => {
         <InfoRow>
           <InfoId>{name}</InfoId>
           <InfoScore>
-            <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate}
+            <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate.toFixed(1)}
           </InfoScore>
         </InfoRow>
         <InfoRow>
