@@ -68,8 +68,24 @@ public class PostController {
         return new ResponseEntity<>(postMapper.PostToPostDetailResponseDto(post), HttpStatus.OK);
     }
 
+    /** 로그인 전-> 질문 검색 (검색어, 태그) **/
+    @GetMapping("/search/notlogin")
+    public ResponseEntity searchPostbynotlogin(PageRequest pageRequest,
+                                     @RequestParam(required = false) String keyword,
+                                     @RequestParam(required = false) String category,
+                                     @RequestParam(required = false) Long genderTag,
+                                     @RequestParam(required = false) Long foodTag){
 
-        /** 질문 검색 (검색어, 태그) **/
+        // custom pageRequest
+        Pageable pageable = pageRequest.of();
+        Page<Post> pagePosts = postService.searchPostsNotLogin(pageable, keyword, category, genderTag, foodTag);
+
+        List<Post> posts = pagePosts.getContent();
+
+        return new ResponseEntity<>(new MultiResponseDto<>(postMapper.PostsToPostResponseDtos(posts), pagePosts), HttpStatus.OK);
+    }
+
+        /** 로그인 후(위치 적용) -> 질문 검색 (검색어, 태그) **/
     @GetMapping("/search")
     public ResponseEntity searchPost(PageRequest pageRequest,
                                      @RequestParam(required = false) String keyword,
