@@ -86,11 +86,9 @@ const Login = () => {
         // 가입안되어있으면 null오고
         // 비밀번호틀리면 401에러
         if (error.response.status === 401) {
-          alert(error.response.message);
           alert('비밀번호가 일치하지 않습니다');
           setPwdErrMsg('비밀번호가 일치하지 않습니다');
         } else {
-          alert(error.response.message);
           alert('존재하지 않는 계정입니다.');
         }
       }

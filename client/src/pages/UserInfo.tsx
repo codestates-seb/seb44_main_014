@@ -110,7 +110,7 @@ const UserInfo = () => {
     });
   };
 
-  const userInfoValidate = async (e: React.MouseEvent<HTMLInputElement>) => {
+  const userInfoValidate = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.persist();
 
@@ -127,7 +127,7 @@ const UserInfo = () => {
     } else {
       setGenderErrMsg('');
     }
-    if (location) {
+    if (!location) {
       setLocationErrMsg('지역은 필수로 입력해야합니다.');
       userInfoErr = true;
     } else {
