@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -133,6 +134,8 @@ public class PostService {
         List<Post> commonPosts = postsByMemberId.stream()
                 .filter(filteredPosts::contains)
                 .collect(Collectors.toList());
+
+        Collections.sort(commonPosts, (post1, post2) -> post2.getCreatedAt().compareTo(post1.getCreatedAt()));
 
 
         if (memberIdList.size() < 3)
