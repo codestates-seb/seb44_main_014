@@ -54,7 +54,6 @@ public class MemberService {
             List<String> roles = authorityUtils.createRoles(member.getEmail());
             member.setRoles(roles);
 
-            member.setImage("https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png");
         }
 
         return memberRepository.save(member);
@@ -83,7 +82,12 @@ public class MemberService {
         Member findMember = findVerifiedMember(requestBody.getMemberId());
 
         findMember.setName(requestBody.getName());
-        findMember.setImage(requestBody.getImage());
+
+        if(requestBody.getImage() == null) {
+            findMember.setImage("https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png");
+        } else {
+            findMember.setImage(requestBody.getImage());
+        }
         findMember.setGender(requestBody.getGender());
 
         if (requestBody.getFoodTag() != null) {
