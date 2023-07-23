@@ -15,6 +15,11 @@ import { IBoardDetailData } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { getCookie } from '../util/cookie/index.ts';
 
+interface IMember {
+  memberId: number;
+  name: string;
+}
+
 const BoardDetail = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -26,9 +31,13 @@ const BoardDetail = () => {
 
   const { content, mateMembers, member, comments } = detailData;
   const [updateMate, setUpdateMate] = useState({});
+  const [mateData, setMateData] = useState<IMember[] | []>([]);
+
+  const showParticipant = mateData.filter((mate) => mate.memberId === userId).length;
 
   useEffect(() => {
     getDetailData();
+    getMateData();
   }, []);
 
   const getDetailData = () => {
@@ -47,6 +56,19 @@ const BoardDetail = () => {
       });
   };
 
+  const getMateData = () => {
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate`)
+      .then((res) => {
+        console.log(res.data);
+        const { mate_member } = res.data;
+        setMateData(mate_member);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const applyData = {
     memberId: userId, //사용자 멤버 아이디
   };
@@ -58,6 +80,7 @@ const BoardDetail = () => {
       })
       .then((res) => {
         setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
+        getMateData();
       })
       .catch((err) => {
         console.log(err);
@@ -107,10 +130,10 @@ const BoardDetail = () => {
           </TextContainer>
           {/* 참가 신청 영역 */}
           <ApplyParticipate
-            mateMembers={mateMembers}
             postApplyData={postApplyData}
-            getDetailData={getDetailData}
             updateMate={updateMate.mate}
+            showParticipant={showParticipant}
+            mateData={mateData}
           />
         </ContentsWrapper>
         {/* 작성자 프로필 영역 */}

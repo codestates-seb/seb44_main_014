@@ -1,23 +1,22 @@
 import { styled } from 'styled-components';
-import { useSelector } from 'react-redux';
-import { IMateMember } from '../../../interface/board.ts';
-import { IUserState } from '../../../store/userSlice.ts';
+
+interface IMember {
+  memberId: number;
+  name: string;
+}
 
 interface IMate {
   findNum: number;
   mateNum: number;
 }
 interface IApplyParticipateProps {
-  mateMembers: IMateMember[];
   postApplyData: () => void;
   getDetailData: () => void;
   updateMate: IMate;
+  showParticipant: number;
+  mateData: IMember[];
 }
-const ApplyParticipate = ({ mateMembers, postApplyData, getDetailData, updateMate }: IApplyParticipateProps) => {
-  const userId = useSelector((state: IUserState) => state.user.memberId);
-
-  const showParticipant = mateMembers.filter((member) => member.mateMemberId === userId).length;
-
+const ApplyParticipate = ({ postApplyData, updateMate, showParticipant, mateData }: IApplyParticipateProps) => {
   return (
     <ParticipantContainer>
       <ApplyParticipant>
@@ -29,7 +28,6 @@ const ApplyParticipate = ({ mateMembers, postApplyData, getDetailData, updateMat
           type="button"
           onClick={() => {
             postApplyData();
-            getDetailData();
           }}
         >
           신청
@@ -38,8 +36,8 @@ const ApplyParticipate = ({ mateMembers, postApplyData, getDetailData, updateMat
       {showParticipant !== 0 && (
         <ParticipantId>
           <span>참가자: &nbsp;</span>
-          {mateMembers.map((member, idx) => (
-            <span key={idx}>&nbsp; {member.name}</span>
+          {mateData.map((mate, idx) => (
+            <span key={idx}>&nbsp; {mate.name}</span>
           ))}
         </ParticipantId>
       )}

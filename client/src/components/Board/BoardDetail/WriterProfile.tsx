@@ -27,7 +27,7 @@ const WriterProfile = ({ profileInfo }: ProfileInfoProps) => {
     userGender = '남성';
   }
 
-  let profileImage: string;
+  let profileImage: string | undefined;
   if (image === '') {
     profileImage = 'https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png';
   } else {

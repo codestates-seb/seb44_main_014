@@ -18,7 +18,18 @@ const EditForm = () => {
   const navigate = useNavigate();
   const params = useParams();
   const postId = Number(params.postId);
-  const [info, setInfo] = useState<IEditInfo>({});
+  const [info, setInfo] = useState<IEditInfo>({
+    memberId: null,
+    category: '',
+    title: '',
+    content: '',
+    genderTag: null,
+    foodTag: null,
+    mate: {
+      mateNum: null,
+    },
+    status: '',
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   console.log(info);
 

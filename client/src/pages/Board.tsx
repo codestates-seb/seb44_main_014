@@ -26,7 +26,12 @@ const Board = () => {
   const [newer, setNewer] = useState<boolean>(true);
   const [mostViewed, setMostViewed] = useState<boolean>(!newer);
   // 리스트 정렬
-  const [pageInfo, setPageInfo] = useState<IPageInfo | object>({});
+  const [pageInfo, setPageInfo] = useState<IPageInfo>({
+    page: 1,
+    size: 10,
+    totalElements: null,
+    totalPages: null,
+  });
   const [lists, setLists] = useState<IBoardList[]>([]);
   // endPoint 파라미터
   const [filterInfo, setFilterInfo] = useState<IFilterInfo>({
@@ -80,7 +85,7 @@ const Board = () => {
           setIsLoading(false);
         });
     }
-  }, [filterInfo, currentApi]);
+  }, [isLoggedIn, filterInfo, currentApi]);
 
   const handleNavigate = () => {
     if (!isLoggedIn) {
