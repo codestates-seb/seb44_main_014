@@ -54,7 +54,7 @@ public class MemberService {
             List<String> roles = authorityUtils.createRoles(member.getEmail());
             member.setRoles(roles);
 
-            member.setImage("/users/image/defaultProfile.png");
+            member.setImage("https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png");
         }
 
         return memberRepository.save(member);
