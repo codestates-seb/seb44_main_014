@@ -11,7 +11,6 @@ interface IMate {
 }
 interface IApplyParticipateProps {
   postApplyData: () => void;
-  getDetailData: () => void;
   updateMate: IMate;
   showParticipant: number;
   mateData: IMember[];

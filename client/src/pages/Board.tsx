@@ -29,9 +29,10 @@ const Board = () => {
   const [pageInfo, setPageInfo] = useState<IPageInfo>({
     page: 1,
     size: 10,
-    totalElements: null,
-    totalPages: null,
+    totalElements: 0,
+    totalPages: 0,
   });
+
   const [lists, setLists] = useState<IBoardList[]>([]);
   // endPoint 파라미터
   const [filterInfo, setFilterInfo] = useState<IFilterInfo>({
@@ -48,13 +49,14 @@ const Board = () => {
   useEffect(() => {
     setFilterInfo({ ...filterInfo, category: isShopping });
     dispatch(category('EATING'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     let URL: string;
     if (isLoggedIn) {
       URL = `${import.meta.env.VITE_APP_API_URL}/board/search?page=`;
-      console.log(URL);
+      console.log(`${URL}${filterInfo.page}${currentApi}`);
       axios
         .get(`${URL}${filterInfo.page}${currentApi}`, {
           headers: { Authorization: getCookie('accessToken') },
@@ -71,7 +73,7 @@ const Board = () => {
         });
     } else {
       URL = `${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=`;
-      console.log(URL);
+      console.log(`${URL}${filterInfo.page}${currentApi}`);
       axios
         .get(`${URL}${filterInfo.page}${currentApi}`)
         .then((res) => {

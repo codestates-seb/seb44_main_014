@@ -26,11 +26,39 @@ const BoardDetail = () => {
   const postId = Number(params.postId);
   const userId = useSelector((state: IUserState) => state.user.memberId);
 
-  const [detailData, setDetailData] = useState<IBoardDetailData>({});
+  const [detailData, setDetailData] = useState<IBoardDetailData>({
+    title: '',
+    content: '',
+    image: '',
+    createdAt: '',
+    viewCount: 0,
+    commentCount: 0,
+    status: '',
+    category: '',
+    member: {
+      memberId: 0,
+      image: '',
+      name: '',
+      gender: '',
+      avgStarRate: 0,
+      eatStatus: false,
+    },
+    postTag: {
+      postTagId: 0,
+      foodTagId: 0,
+      genderTagId: 0,
+    },
+    mate: {
+      findNum: 0,
+      mateNum: 0,
+    },
+    mateMembers: [],
+    comments: [],
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { content, mateMembers, member, comments } = detailData;
-  const [updateMate, setUpdateMate] = useState({});
+  const { content, member, comments } = detailData;
+  const [updateMate, setUpdateMate] = useState({ mate: { findNum: 0, mateNum: 0 } });
   const [mateData, setMateData] = useState<IMember[] | []>([]);
 
   const showParticipant = mateData.filter((mate) => mate.memberId === userId).length;
@@ -38,6 +66,7 @@ const BoardDetail = () => {
   useEffect(() => {
     getDetailData();
     getMateData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getDetailData = () => {
@@ -45,9 +74,9 @@ const BoardDetail = () => {
       .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
       .then((res) => {
         console.log(res.data);
-        const { mate, mateMembers } = res.data;
+        const { mate } = res.data;
         setDetailData(res.data);
-        setUpdateMate({ mate, mateMembers });
+        setUpdateMate({ mate });
         setIsLoading(false);
       })
       .catch((err) => {
