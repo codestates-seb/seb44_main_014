@@ -14,6 +14,7 @@ import NoBoardList from '../components/Board/NoBoardList.tsx';
 
 import { category, ICategoryState } from '../store/listCategorySlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
+import { getCookie } from '../util/cookie/index.ts';
 
 const Board = () => {
   const navigate = useNavigate();
@@ -44,7 +45,9 @@ const Board = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/board/search?page=${filterInfo.page}${currentApi}`)
+      .get(`${import.meta.env.VITE_APP_API_URL}/board/search?page=${filterInfo.page}${currentApi}`, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
         setPageInfo(res.data.pageInfo);

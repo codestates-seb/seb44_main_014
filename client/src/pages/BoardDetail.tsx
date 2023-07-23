@@ -35,6 +35,7 @@ const BoardDetail = () => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
       .then((res) => {
+        console.log(res.data);
         const { mate, mateMembers } = res.data;
         setDetailData(res.data);
         setUpdateMate({ mate, mateMembers });
@@ -158,6 +159,9 @@ const TextArea = styled.div`
   border-radius: 0.625rem;
   font-size: 0.875rem;
   line-height: 1.5;
+  img {
+    width: 100%;
+  }
 `;
 
 const ModifyButtons = styled.div`
