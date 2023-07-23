@@ -13,6 +13,7 @@ import Loading from '../components/Loading.tsx';
 // import authApi from '../util/api/authApi.tsx';
 import { IBoardDetailData } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
+import { getCookie } from '../util/cookie/index.ts';
 
 const BoardDetail = () => {
   const navigate = useNavigate();
@@ -67,7 +68,9 @@ const BoardDetail = () => {
 
   const deletePost = () => {
     axios
-      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
+      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
         navigate('/board');

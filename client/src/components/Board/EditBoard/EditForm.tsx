@@ -12,6 +12,7 @@ import Loading from '../../Loading.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IEditInfo } from '../../../interface/board.ts';
 import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
+import { getCookie } from '../../../util/cookie/index.ts';
 
 const EditForm = () => {
   const navigate = useNavigate();
@@ -75,7 +76,9 @@ const EditForm = () => {
 
   const patchSubmitInfo = () => {
     axios
-      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/edit`, info)
+      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/edit`, info, {
+        headers: { Authorization: getCookie('accessToken') },
+      })
       .then((res) => {
         console.log(res);
         if (info.status === 'END') {

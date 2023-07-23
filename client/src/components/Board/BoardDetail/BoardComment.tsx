@@ -36,7 +36,6 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
       .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/comments`, commentContent)
       .then((res) => {
         console.log(res);
-        // setCommentContent({ ...commentContent, content: res.content });
       })
       .catch((err) => {
         console.log(err);
@@ -54,7 +53,6 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
           value={commentContent.content}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
-            console.log(commentContent);
           }}
           placeholder="댓글을 작성해주세요."
           max-length={100}
