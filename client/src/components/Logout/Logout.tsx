@@ -12,7 +12,7 @@ const Logout = () => {
 
   const doLogout = async () => {
     await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
-      headers: { Refresh: getCookie('refreshToken') },
+      headers: { Refresh: getCookie('refreshToken'), Authorization: getCookie('accessToken') },
     });
     removeCookie('accessToken');
     removeCookie('refreshToken');
