@@ -25,42 +25,41 @@ const ToggleMenu = ({ setShowToggleMenu }: ISHowToggle) => {
     <HeaderNavContainer>
       <HeaderNavContents>
         <HeaderNavItems>
-          <HeaderNavIcons icon={faHouse} />
           <Link to="/" onClick={() => setShowToggleMenu(false)}>
-            홈
+            <FontAwesomeIcon icon={faHouse} />홈
           </Link>
         </HeaderNavItems>
         <HeaderNavItems>
-          <HeaderNavIcons icon={faTableList} />
           <Link to="/board" onClick={() => setShowToggleMenu(false)}>
+            <FontAwesomeIcon icon={faTableList} />
             보드
           </Link>
         </HeaderNavItems>
         {!isLoggedIn ? (
           <HeaderNavItems>
-            <HeaderNavIcons icon={faUser} />
             <Link to="/users/signup" onClick={() => setShowToggleMenu(false)}>
+              <FontAwesomeIcon icon={faUser} />
               회원가입
             </Link>
           </HeaderNavItems>
         ) : (
           <HeaderNavItems>
-            <HeaderNavIcons icon={faUser} />
             <Link to={`/users/mypage/${memberId}`} onClick={() => setShowToggleMenu(false)}>
+              <FontAwesomeIcon icon={faUser} />
               마이페이지
             </Link>
           </HeaderNavItems>
         )}
         {!isLoggedIn ? (
           <HeaderNavItems>
-            <HeaderNavIcons icon={faArrowRightToBracket} />
             <Link to="/login" onClick={() => setShowToggleMenu(false)}>
+              <FontAwesomeIcon icon={faArrowRightToBracket} />
               로그인
             </Link>
           </HeaderNavItems>
         ) : (
           <HeaderNavItems>
-            <HeaderNavIcons icon={faArrowRightFromBracket} />
+            <FontAwesomeIcon icon={faArrowRightFromBracket} />
             <Logout setShowToggleMenu={setShowToggleMenu} />
           </HeaderNavItems>
         )}
@@ -104,13 +103,19 @@ const HeaderNavItems = styled.div`
   &:hover svg {
     color: var(--color-orange);
   }
+  svg {
+    margin-right: 0.625rem;
+    width: 18px;
+    height: 18px;
+    color: #000;
+  }
 `;
 
-const HeaderNavIcons = styled(FontAwesomeIcon)`
-  margin-right: 0.625rem;
-  width: 18px;
-  height: 18px;
-  color: #000;
-`;
+// const HeaderNavIcons = styled(FontAwesomeIcon)`
+//   margin-right: 0.625rem;
+//   width: 18px;
+//   height: 18px;
+//   color: #000;
+// `;
 
 export default ToggleMenu;
