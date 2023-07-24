@@ -16,6 +16,7 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
   const params = useParams();
   const postId = Number(params.postId);
   const memberId = useSelector((state: IUserState) => state.user.memberId);
+  const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
   const [commentContent, setCommentContent] = useState({
     memberId: memberId, // 사용자 멤버 아이디
     content: '',
@@ -31,14 +32,18 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
   });
 
   const postComment = async () => {
-    (await authApi)
-      .post(`/board/posts/${postId}/comments`, commentContent)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (isLoggedIn) {
+      (await authApi)
+        .post(`/board/posts/${postId}/comments`, commentContent)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert('로그인 후 이용해주세요.');
+    }
   };
 
   return (

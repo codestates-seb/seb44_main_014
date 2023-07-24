@@ -211,6 +211,7 @@ const EditForm = () => {
           <InputNumber
             type="number"
             value={Number(info.mate.mateNum)}
+            min={1}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setInfo({ ...info, mate: { mateNum: Number((e.target as HTMLInputElement).value) } })
             }
