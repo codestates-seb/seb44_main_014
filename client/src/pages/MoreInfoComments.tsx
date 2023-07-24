@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { IUserState } from '../store/userSlice.ts';
 import { useSelector } from 'react-redux';
 import authApi from '../util/api/authApi.tsx';
+import { Link } from 'react-router-dom';
 
 const MoreInfoComments = () => {
   const [lists, setLists] = useState<IMypageComments[]>([]);
@@ -25,8 +26,10 @@ const MoreInfoComments = () => {
       {lists.length === 0 && <NoBoardList />}
       {lists.map((list) => (
         <WritingContentsContainer key={list.postId}>
-          <ContentsTitle>{list.title}</ContentsTitle>
-          <ContentsParagraph>{list.content}</ContentsParagraph>
+          <ContentsTitle>
+            <Link to={`/board/posts/${list.postId}`}>{list.title}</Link>
+          </ContentsTitle>
+          <ContentsParagraph dangerouslySetInnerHTML={{ __html: list.content }} />
         </WritingContentsContainer>
       ))}
     </WritingsContainer>
