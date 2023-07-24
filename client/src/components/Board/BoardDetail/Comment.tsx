@@ -32,7 +32,6 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
     (await authApi)
       .patch(`/board/posts/${postId}/comments/${commentId}`, commentContent)
       .then((res) => {
-        console.log(res);
         setCommentContent({ ...commentContent, content: res.data.content });
       })
       .catch((err) => {
@@ -43,8 +42,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   const deleteComment = async () => {
     (await authApi)
       .delete(`/board/posts/${postId}/comments/${commentId}`)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         location.reload();
       })
       .catch((err) => {
@@ -84,7 +82,6 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
             <textarea
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
-                console.log(commentContent);
               }}
               value={commentContent.content}
               placeholder="댓글을 작성해주세요."

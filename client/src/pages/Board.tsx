@@ -57,7 +57,6 @@ const Board = () => {
       (await authApi)
         .get(`/board/search?page=${filterInfo.page}${currentApi}`)
         .then((res) => {
-          console.log(res);
           setPageInfo(res.data.pageInfo);
           setLists(res.data.data);
           setIsLoading(false);
@@ -73,7 +72,6 @@ const Board = () => {
       axios
         .get(`${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=${filterInfo.page}${currentApi}`)
         .then((res) => {
-          console.log(res);
           setPageInfo(res.data.pageInfo);
           setLists(res.data.data);
           setIsLoading(false);

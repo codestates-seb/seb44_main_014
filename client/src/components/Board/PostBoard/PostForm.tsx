@@ -130,6 +130,7 @@ const PostForm = () => {
         <div>
           <InputNumber
             type="number"
+            min={1}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setInfo({ ...info, mate: { mateNum: Number((e.target as HTMLInputElement).value) } })
             }
