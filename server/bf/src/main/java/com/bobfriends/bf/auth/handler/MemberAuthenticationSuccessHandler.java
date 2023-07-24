@@ -5,7 +5,9 @@ import com.bobfriends.bf.exception.ExceptionCode;
 import com.bobfriends.bf.location.entity.Location;
 import com.bobfriends.bf.location.repository.LocationRepository;
 import com.bobfriends.bf.member.entity.Member;
+import com.bobfriends.bf.member.entity.MemberTag;
 import com.bobfriends.bf.member.repository.MemberRepository;
+import com.bobfriends.bf.member.repository.MemberTagRepository;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ import java.util.Optional;
 public class MemberAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
    private final MemberRepository memberRepository;
    private final LocationRepository locationRepository;
+   private final MemberTagRepository memberTagRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -42,11 +45,18 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         Optional<Location> optionalLocation = locationRepository.findByMemberId(memberId);
 
         String location = null;
+        Long locationId = null;
         if(optionalLocation.isPresent()) {
             location = member.getLocation().getAddress();
+            locationId = member.getLocation().getLocationId();
         }
 
+        Optional<MemberTag> optionalMemberTag = memberTagRepository.findByMemberId(memberId);
 
+        Long foodTagId = null;
+        if(optionalMemberTag.isPresent()) {
+            foodTagId = member.getMemberTag().getFoodTag().getFoodTagId();
+        }
 
         Member.genderStatus gender = member.getGender();
 
@@ -59,6 +69,8 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
             JsonObject json = new JsonObject();
             json.addProperty("memberId", memberId);
             json.addProperty("location", location);
+            json.addProperty("locationId", locationId);
+            json.addProperty("foodTagId", foodTagId);
             json.addProperty("gender", String.valueOf(gender));
             writer.write(json.toString());
         }
