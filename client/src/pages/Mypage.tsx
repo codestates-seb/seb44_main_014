@@ -19,6 +19,20 @@ interface Comment {
   content: string;
 }
 
+interface Meetings {
+  mateId: number;
+  postId: number;
+  title: string;
+  mateMembers: [
+    {
+      memberId: number;
+      name: string;
+    }
+  ];
+  postMemberId: number;
+  postMemberName: string;
+}
+
 const Mypage = () => {
   const [userData, setUserData] = useState({
     image: '',
@@ -76,6 +90,7 @@ const Mypage = () => {
   const [meetingMates, setMeetingMates] = useState('참여자가 없습니다.');
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [meetings, setMeetings] = useState<Meetings[]>([]);
   const [userImage, setUserImage] = useState('');
 
   const userFoodTag = (data: any) => {
@@ -93,7 +108,7 @@ const Mypage = () => {
   };
 
   const userMeeting = (data: any) => {
-    if (data.mates[0].postId === 1) {
+    if (data.mates[0].postId != 0) {
       setMeetingTitle(data.mates[0].title);
       setMeetingMates(`참여자: ${data.mates[0].mateMembers[0].name}`);
     }
@@ -143,6 +158,7 @@ const Mypage = () => {
         userComments(res.data);
         setUserImage(res.data.image);
         setIsOn(res.data.eatStatus);
+        setMeetings(res.data.mates);
 
         const toggleCheckboxes = document.getElementsByName('toggle');
         if (res.data.eatStatus === true) {
@@ -213,14 +229,20 @@ const Mypage = () => {
       <UserContainer className={'MeetingContainer'}>
         <UserContentsTitle>참여 중인 모임</UserContentsTitle>
         <UserContentBox className={'MeetingBox'}>
-          <UserContents>
-            <UserContentsBoxTitle>
-              <div>{meetingTitle}</div>
-            </UserContentsBoxTitle>
-            <UserContentsBoxParagraph>
-              <div>{meetingMates}</div>
-            </UserContentsBoxParagraph>
-          </UserContents>
+          {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
+          {meetings.map((meeting) => (
+            <UserContentsContainer key={meeting.postId}>
+              <UserContentsBoxTitle>
+                <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
+              </UserContentsBoxTitle>
+              <UserContents>{meeting.mateMembers[0].name}</UserContents>
+              {/* {meeting.mateMembers.map((member) => {
+                <div key={member.memberId}>
+                  <div>{member.name}</div>
+                </div>;
+              })} */}
+            </UserContentsContainer>
+          ))}
         </UserContentBox>
       </UserContainer>
       <UserContainer className={'PostsContainer'}>
@@ -234,7 +256,7 @@ const Mypage = () => {
       <UserContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            {posts.length === 0 && <NoBoardList />}
+            {posts.length === 0 && <p>작성한 게시글이 없습니다.</p>}
             {posts.map((post) => (
               <UserContentsContainer key={post.postId}>
                 <UserContentsBoxTitle>
@@ -254,7 +276,7 @@ const Mypage = () => {
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            {comments.length === 0 && <NoBoardList />}
+            {comments.length === 0 && <p>작성한 댓글이 없습니다.</p>}
             {comments.map((comment) => (
               <UserContentsContainer key={comment.postId}>
                 <UserContentsBoxTitle>
@@ -379,10 +401,10 @@ const UserContentBox = styled.div`
   border-radius: 10px;
 
   &.MeetingBox {
-    height: 90px;
+    min-height: 100px;
   }
   &.PostsBox {
-    height: 130px;
+    min-height: 100px;
   }
 `;
 
