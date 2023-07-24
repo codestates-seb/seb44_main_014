@@ -103,7 +103,7 @@ const CustomReactQuill = styled.div`
   .ql-editor {
     height: 100px;
     @media screen and (min-width: 768px) {
-      height: 200px;
+      height: 300px;
     }
   }
 `;

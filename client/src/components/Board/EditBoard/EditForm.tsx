@@ -209,7 +209,7 @@ const EditForm = () => {
         </div>
       </InfoDiv>
       <InfoDiv>
-        <InfoTitle>카테고리 *</InfoTitle>
+        <InfoTitle>모집 상태 *</InfoTitle>
         <RadioFlex>
           <InputRadio type="status" value="RECRUITING" handleGetValue={handleStatusType}>
             모집 중
