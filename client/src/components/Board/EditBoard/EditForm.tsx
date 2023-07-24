@@ -29,9 +29,10 @@ const EditForm = () => {
     },
     status: '',
   });
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   console.log(info);
-
+  console.log(isDisabled);
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
@@ -47,7 +48,9 @@ const EditForm = () => {
           foodTag: { foodTagId: postTag.foodTagId },
           memberId: member.memberId,
         };
-        console.log(res);
+        if (data.status === 'END') {
+          setIsDisabled(true);
+        }
         setInfo(data);
         setIsLoading(false);
       })
@@ -82,6 +85,12 @@ const EditForm = () => {
       if (info.status === (statusRadios[i] as HTMLInputElement).value) {
         (statusRadios[i] as HTMLInputElement).checked = true;
       }
+      // if (info.status === 'END') {
+      //   for (let j = 0; j < statusRadios.length; j++) {
+      //     (statusRadios[j] as HTMLInputElement).disabled = true;
+      //   }
+      //   setIsDisabled(true);
+      // }
     }
   }, [info]);
 
@@ -90,7 +99,7 @@ const EditForm = () => {
       .patch(`/board/posts/${postId}/edit`, info)
       .then((res) => {
         console.log(res);
-        if (info.status === 'END') {
+        if (info.status === 'END' && !isDisabled) {
           navigate(`/board/post/${postId}/mate`);
         } else {
           navigate(`/board/posts/${postId}`);
@@ -208,21 +217,22 @@ const EditForm = () => {
           />
         </div>
       </InfoDiv>
-      <InfoDiv>
-        <InfoTitle>모집 상태 *</InfoTitle>
-        <RadioFlex>
-          <InputRadio type="status" value="RECRUITING" handleGetValue={handleStatusType}>
-            모집 중
-          </InputRadio>
-          <InputRadio type="status" value="COMPLETE" handleGetValue={handleStatusType}>
-            모집 완료
-          </InputRadio>
-          <InputRadio type="status" value="END" handleGetValue={handleStatusType}>
-            모집 종료
-          </InputRadio>
-        </RadioFlex>
-      </InfoDiv>
-
+      {!isDisabled && (
+        <InfoDiv>
+          <InfoTitle>모집 상태 *</InfoTitle>
+          <RadioFlex>
+            <InputRadio type="status" value="RECRUITING" handleGetValue={handleStatusType}>
+              모집 중
+            </InputRadio>
+            <InputRadio type="status" value="COMPLETE" handleGetValue={handleStatusType}>
+              모집 완료
+            </InputRadio>
+            <InputRadio type="status" value="END" handleGetValue={handleStatusType}>
+              모집 종료
+            </InputRadio>
+          </RadioFlex>
+        </InfoDiv>
+      )}
       <SubmitButton type="button" onClick={() => handleSubmitInfo()}>
         수정
       </SubmitButton>
