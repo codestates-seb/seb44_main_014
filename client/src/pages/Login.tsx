@@ -8,17 +8,11 @@ import { login } from '../store/userSlice.ts';
 import moment from 'moment';
 // import GoogleLoginButton from '../components/Login/GoogleLoginButton.tsx';
 
-// interface UserInfo {
-//   gender: string;
-//   memberId: string;
-// }
-
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailErrMsg, setEmailErrMsg] = useState<string>('');
   const [pwdErrMsg, setPwdErrMsg] = useState<string>('');
-  // const [userInfo, setUserInfo] = useState<UserInfo>({ gender: '', memberId: '' });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -66,7 +60,6 @@ const Login = () => {
 
         const responseData = response.data;
         alert('로그인에 성공했습니다.');
-        // setUserInfo(responseData);
 
         dispatch(
           login({
@@ -82,9 +75,6 @@ const Login = () => {
           navigate(`/users/userInfo/${responseData.memberId}`);
         }
       } catch (error: any) {
-        //가입안한거랑 비밀번호 틀린거랑 어떻게 구분하지? 에러코드가 다른가?
-        // 가입안되어있으면 null오고
-        // 비밀번호틀리면 401에러
         if (error.response.status === 401) {
           alert('비밀번호가 일치하지 않습니다');
           setPwdErrMsg('비밀번호가 일치하지 않습니다');

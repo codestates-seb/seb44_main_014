@@ -6,13 +6,17 @@ import { logout } from '../../store/userSlice.ts';
 import { locationLogout } from '../../store/locationSlice.ts';
 import axios from 'axios';
 
-const Logout = () => {
+interface ISHowToggle {
+  setShowToggleMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Logout = ({ setShowToggleMenu }: ISHowToggle) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const doLogout = async () => {
     await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
-      headers: { Refresh: getCookie('refreshToken'), Authorization: getCookie('accessToken') },
+      headers: { Refresh: getCookie('refreshToken') },
     });
     removeCookie('accessToken');
     removeCookie('refreshToken');
@@ -30,16 +34,19 @@ const Logout = () => {
     navigate('/'); //로그인 유저가 바뀔 때 발생하는 버그를 막기위해 reload설정
   };
   return (
-    <LogoutButton onClick={doLogout}>
-      <div>로그아웃</div>
+    <LogoutButton
+      onClick={() => {
+        doLogout();
+        setShowToggleMenu(false);
+      }}
+    >
+      로그아웃
     </LogoutButton>
   );
 };
 
 export default Logout;
 
-const LogoutButton = styled.div`
-  margin-left: 1.875rem;
-  color: #fff;
-  font-size: 1rem;
+const LogoutButton = styled.button`
+  cursor: pointer;
 `;

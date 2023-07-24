@@ -2,11 +2,35 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import Tag from '../components/UI/Tag.tsx';
-// import Toggle from '../components/UI/Toggle.tsx';
 import { IUserState } from '../store/userSlice.ts';
-import axios from 'axios';
+import authApi from '../util/api/authApi.tsx';
 import { getCookie } from '../util/cookie/index.ts';
+
+interface Post {
+  postId: number;
+  title: string;
+  status: string;
+}
+
+interface Comment {
+  postId: number;
+  commentId: number;
+  content: string;
+}
+
+interface Meetings {
+  mateId: number;
+  postId: number;
+  title: string;
+  mateMembers: [
+    {
+      memberId: number;
+      name: string;
+    }
+  ];
+  postMemberId: number;
+  postMemberName: string;
+}
 
 const Mypage = () => {
   const [userData, setUserData] = useState({
@@ -17,7 +41,7 @@ const Mypage = () => {
     foodTag: {
       foodTagId: 1,
     },
-    eatStatus: '',
+    eatStatus: false,
     posts: [
       {
         postId: 1,
@@ -28,8 +52,8 @@ const Mypage = () => {
     comments: [
       {
         postId: 1,
-        title: '',
-        status: '',
+        commentId: 1,
+        content: '',
       },
     ],
     postMates: [
@@ -59,52 +83,105 @@ const Mypage = () => {
       },
     ],
   });
-
   const userId = useSelector((state: IUserState) => state.user.memberId);
+  const [foodTagName, setFoodTagName] = useState('# 한식');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [meetings, setMeetings] = useState<Meetings[]>([]);
+  const [userImage, setUserImage] = useState('');
+
+  const userFoodTag = (data: any) => {
+    if (data.foodTag.foodTagId === 1) {
+      setFoodTagName('# 한식');
+    } else if (data.foodTag.foodTagId === 2) {
+      setFoodTagName('# 중식');
+    } else if (data.foodTag.foodTagId === 3) {
+      setFoodTagName('# 일식');
+    } else if (data.foodTag.foodTagId === 4) {
+      setFoodTagName('# 양식');
+    } else {
+      setFoodTagName('기타');
+    }
+  };
+
+  const userPosts = (data: any) => {
+    if (data.posts[0].postId != 0) {
+      setPosts(data.posts);
+    }
+  };
+
+  const userComments = (data: any) => {
+    if (data.comments[0].commentId != 0) {
+      setComments(data.comments);
+    }
+  };
+  const [isOn, setIsOn] = useState(false);
+  const ToggleHandler = async () => {
+    setIsOn(!isOn);
+    try {
+      const axiosInstance = await authApi; // Resolve the promise to get the Axios instance
+      const response = await axiosInstance.patch(
+        `/users/mypage/${userId}?eatStatus=${!isOn}`,
+        {},
+        {
+          headers: { Authorization: getCookie('accessToken') },
+        }
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}`, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
-      .then((res) => {
+    const fetchData = async () => {
+      try {
+        const axiosInstance = await authApi; // Resolve the promise to get the Axios instance
+        const res = await axiosInstance.get(`/users/mypage/${userId}`, {
+          headers: { Authorization: getCookie('accessToken') },
+        });
         console.log(res);
         setUserData(res.data);
-      })
-      .catch((err) => {
+        userFoodTag(res.data);
+        userMeeting(res.data);
+        userPosts(res.data);
+        userComments(res.data);
+        setUserImage(res.data.image);
+        setIsOn(res.data.eatStatus);
+        setMeetings(res.data.mates);
+
+        const toggleCheckboxes = document.getElementsByName('toggle');
+        if (res.data.eatStatus === true) {
+          for (let i = 0; i < toggleCheckboxes.length; i++) {
+            const checkbox = toggleCheckboxes[i] as HTMLInputElement;
+            checkbox.checked = true;
+          }
+        } else {
+          for (let i = 0; i < toggleCheckboxes.length; i++) {
+            const checkbox = toggleCheckboxes[i] as HTMLInputElement;
+            checkbox.checked = false;
+          }
+        }
+      } catch (err) {
         console.log(err);
-      });
+      }
+    };
+
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const userPosts = ({ user: any }) => {
-  //   return (
-  //     <div key={user.posts.postId}>
-  //       <UserContentsBoxTitle>
-  //         <Link to="/board">{user.posts.title}</Link>
-  //       </UserContentsBoxTitle>
-  //       <UserContentsBoxParagraph>{user.posts.status}</UserContentsBoxParagraph>
-  //     </div>
-  //   );
-  // };
-
-  // const userComments = ({ user: any }) => {
-  //   return (
-  //     <div key={user.posts.commentId}>
-  //       <UserContentsContainer>
-  //         <UserContentsBoxTitle>
-  //           <Link to="/board">{user.comments.content}</Link>
-  //         </UserContentsBoxTitle>
-  //       </UserContentsContainer>
-  //     </div>
-  //   );
-  // };
+  // 토글
 
   return (
     <BodyContainer>
       <UserProfileContainer>
         <UserImageContainer>
-          <UserImage></UserImage>
+          {userImage != '' ? (
+            <UserImage src={userImage} />
+          ) : (
+            <UserImage src="https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png" />
+          )}
         </UserImageContainer>
         <UserInfoContainer>
           <UserContents className={'InfoContents'}>
@@ -122,15 +199,18 @@ const Mypage = () => {
             </UserContentsContainer>
             <UserContentsContainer className={'Tag'}>
               <UserInfoTitle className={'Tag'}>태그</UserInfoTitle>
-              {/* <Tag className={'Tag'}>4.6</Tag> */}
+              <div>{foodTagName}</div>
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
-              {/* <Toggle>4.6</Toggle> */}
+              <ToggleContainer className={'switch'}>
+                <input type="checkbox" name="toggle" onClick={ToggleHandler} />
+                <span className={'slider round'}></span>
+              </ToggleContainer>
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Edit'}>
-                <Link to="/users/mypage/:memberId/edit">프로필 수정</Link>
+                <Link to={`/users/mypage/${userId}/edit`}>프로필 수정</Link>
               </UserInfoTitle>
             </UserContentsContainer>
           </UserContents>
@@ -139,36 +219,64 @@ const Mypage = () => {
       <UserContainer className={'MeetingContainer'}>
         <UserContentsTitle>참여 중인 모임</UserContentsTitle>
         <UserContentBox className={'MeetingBox'}>
-          <UserContents>
-            <UserContentsBoxTitle>
-              <Link to="/board"></Link>
-            </UserContentsBoxTitle>
-            <UserContentsBoxParagraph></UserContentsBoxParagraph>
-          </UserContents>
+          {/* {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
+          {meetings.map((meeting) => (
+            <UserContentsContainer key={meeting.postId}>
+              <UserContents className={'InfoContents'}>
+                <UserContentsBoxTitle>
+                  <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
+                </UserContentsBoxTitle>
+                참여자:
+                {meeting.mateMembers.map((member) => {
+                  <div key={member.memberId}>
+                    <div>{member.name}</div>
+                  </div>;
+                })}
+              </UserContents>
+            </UserContentsContainer>
+          ))} */}
         </UserContentBox>
       </UserContainer>
       <UserContainer className={'PostsContainer'}>
         <UserContentsContainer>
           <UserContentsTitle>작성한 게시글</UserContentsTitle>
-          <Link to="/users/mypage/:memberId/questions">
+          <Link to={`/users/mypage/${userId}/questions`}>
             <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
           </Link>
         </UserContentsContainer>
+      </UserContainer>
+      <UserContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            <UserContentsContainer>{/*{userData.map(userPosts)}*/}</UserContentsContainer>
+            {posts.length === 0 && <p>작성한 게시글이 없습니다.</p>}
+            {posts.map((post) => (
+              <UserContentsContainer key={post.postId}>
+                <UserContentsBoxTitle>
+                  <Link to={`/board/posts/${post.postId}`}>{post.title}</Link>
+                </UserContentsBoxTitle>
+              </UserContentsContainer>
+            ))}
           </UserContents>
         </UserContentBox>
       </UserContainer>
       <UserContainer className={'PostsContainer'}>
         <UserContentsContainer>
           <UserContentsTitle>작성한 댓글</UserContentsTitle>
-          <Link to="/users/mypage/:memberId/comments">
+          <Link to={`/users/mypage/${userId}/comments`}>
             <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
           </Link>
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
-          {/* <UserContents>{userData.map(userComments)}</UserContents> */}
+          <UserContents>
+            {comments.length === 0 && <p>작성한 댓글이 없습니다.</p>}
+            {comments.map((comment) => (
+              <UserContentsContainer key={comment.postId}>
+                <UserContentsBoxTitle>
+                  <Link to={`/board/posts/${comment.postId}`}>{comment.content}</Link>
+                </UserContentsBoxTitle>
+              </UserContentsContainer>
+            ))}
+          </UserContents>
         </UserContentBox>
       </UserContainer>
     </BodyContainer>
@@ -202,11 +310,10 @@ const UserImageContainer = styled.div`
   height: 20.625rem;
 `;
 
-const UserImage = styled.div`
+const UserImage = styled.img`
   width: 250px;
   height: 250px;
   padding: 50px;
-  background: black;
   border-radius: 50%;
 `;
 
@@ -264,7 +371,8 @@ const UserContainer = styled.div`
     }
   }
   &.PostsContainer {
-    height: 160px;
+    height: 20px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -285,10 +393,10 @@ const UserContentBox = styled.div`
   border-radius: 10px;
 
   &.MeetingBox {
-    height: 90px;
+    min-height: 100px;
   }
   &.PostsBox {
-    height: 130px;
+    min-height: 100px;
   }
 `;
 
@@ -296,11 +404,11 @@ const UserContents = styled.div`
   padding: 20px;
 
   &.InfoContents {
-    padding: 30px;
+    padding: 20px 20px 10px;
   }
 `;
 
-const UserContentsBoxTitle = styled.h1`
+const UserContentsBoxTitle = styled.div`
   margin-bottom: 15px;
   font-size: 16px;
 
@@ -309,7 +417,7 @@ const UserContentsBoxTitle = styled.h1`
   }
 `;
 
-const UserContentsBoxParagraph = styled.p`
+const UserContentsBoxParagraph = styled.div`
   color: var(--color-black);
   font-size: 14px;
   word-spacing: 10px;
@@ -335,6 +443,66 @@ const UserContentsContainer = styled.div`
   &.Tag {
     flex-wrap: wrap;
     margin-bottom: 30px;
+  }
+`;
+
+// 토글
+
+const ToggleContainer = styled.label`
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+
+    width: 60px;
+    height: 34px;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: '';
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  input:checked + .slider {
+    background-color: var(--color-orange);
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-orange);
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
   }
 `;
 

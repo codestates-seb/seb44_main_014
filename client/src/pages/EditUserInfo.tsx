@@ -1,50 +1,129 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
-// import InputRadio from '../components/UI/InputRadio.tsx';
-import Input from '../components/UI/Input.tsx';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 import Button from '../components/UI/Button.tsx';
 import { checkedValue, selectOneCheckbox } from '../util/common.ts';
+import { IUserState } from '../store/userSlice.ts';
+import axios from 'axios';
+import { getCookie } from '../util/cookie/index.ts';
+import { ILocationState } from '../store/locationSlice.ts';
+import authApi from '../util/api/authApi.tsx';
 
 const EditUserInfo = () => {
+  const [userData, setUserData] = useState({
+    image: '',
+    name: '',
+    email: '',
+    gender: '',
+    location: '',
+    foodTag: {
+      foodTagId: 1,
+    },
+  });
+  const userId = useSelector((state: IUserState) => state.user.memberId);
+  const address = useSelector((state: ILocationState) => state.location.address);
+  const [userImg, setUserImg] = useState('');
+  const [userGender, setUserGender] = useState('');
+  const [userFoodTag, setUserFoodTag] = useState(1);
+
+  useEffect(() => {
+    axios
+      .patch(
+        `${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}/edit`,
+        {
+          image: userImg,
+          foodTag: {
+            foodTagId: userFoodTag,
+          },
+        },
+        {
+          headers: { Authorization: getCookie('accessToken') },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data);
+        UserGender(res.data);
+        setUserImg(res.data.image);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
     selectOneCheckbox(e);
     const foodTag = checkedValue(e);
-    console.log(foodTag);
+    setUserFoodTag(parseInt(foodTag, 10));
+    console.log(userFoodTag);
   };
 
-  const Check = () => {
-    console.log(1);
+  const Check = async () => {
+    (await authApi).patch(`/users/mypage/${userId}/edit`, {
+      image: userImg,
+      foodTag: {
+        foodTagId: userFoodTag,
+      },
+    });
+  };
+
+  const UserGender = (data: any) => {
+    if (data.gender === 'MALE') {
+      setUserGender('남성');
+    }
+    if (data.gender === 'FEMALE') {
+      setUserGender('여성');
+    }
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files?.[0];
+    if (!selectedImage) return;
+
+    const formData = new FormData();
+    formData.append('multipartFile', selectedImage);
+
+    const imageResponseUrl = await axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/users/images/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      })
+      .then((res) => res.data[0]);
+    setUserImg(imageResponseUrl);
   };
   return (
     <MainContainer>
       <UserImgContainer>
         <UserImg></UserImg>
       </UserImgContainer>
-      <ImgEditor>프로필 사진 변경</ImgEditor>
+      <ImgEditor htmlFor="profileImg_uploads">
+        프로필 사진 변경
+        <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange}></input>
+      </ImgEditor>
       <UneditableContainer>
         <UneditableComponent>
           <EditorTitle>이메일</EditorTitle>
-          <UndeitableTextBox>bobfriends@gmail.com</UndeitableTextBox>
+          <UndeitableTextBox>{userData.email}</UndeitableTextBox>
         </UneditableComponent>
         <UneditableComponent>
           <EditorTitle>활동명</EditorTitle>
-          <UndeitableTextBox>홍길동</UndeitableTextBox>
+          <UndeitableTextBox>{userData.name}</UndeitableTextBox>
         </UneditableComponent>
       </UneditableContainer>
       <UserGenderEditContainer>
         <EditorTitle className={'GenderTitle'}>성별</EditorTitle>
         <UserGenderEditPositioner>
-          {/* <InputRadio type={'gender'} value={'MALE'}>
-            남성
-          </InputRadio>
-          <InputRadio type={'gender'} value={'FEMALE'}>
-            여성
-          </InputRadio> */}
+          <div>{userGender}</div>
         </UserGenderEditPositioner>
       </UserGenderEditContainer>
       <UserLocationEditContainer>
-        <EditorTitle className={'GenderTitle'}>지역 선택</EditorTitle>
-        <StyledInput></StyledInput>
+        <EditorTitle className={'GenderTitle'}>지역</EditorTitle>
+        <div>{address}</div>
       </UserLocationEditContainer>
       <UserTagEditContainer>
         <EditorTitle className={'GenderTitle'}>음식 태그</EditorTitle>
@@ -67,7 +146,9 @@ const EditUserInfo = () => {
         </UserTagBox>
       </UserTagEditContainer>
       <ButtonContainer>
-        <Button onClick={Check}>저장</Button>
+        <Button onClick={Check}>
+          <Link to="/board">저장</Link>
+        </Button>
       </ButtonContainer>
     </MainContainer>
   );
@@ -96,10 +177,14 @@ const UserImg = styled.div`
   border-radius: 50%;
 `;
 
-const ImgEditor = styled.h1`
+const ImgEditor = styled.label`
   font-size: 1rem;
   text-align: center;
   cursor: pointer;
+
+  input {
+    display: none;
+  }
 
   &:hover {
     text-decoration: underline;
@@ -148,12 +233,8 @@ const UserGenderEditPositioner = styled.div`
   display: flex;
 `;
 
-const StyledInput = styled(Input)`
-  width: 300px;
-`;
-
 const UserLocationEditContainer = styled.div`
-  width: 9.375rem;
+  width: 18.75rem;
   height: 3.75rem;
   margin-top: 30px;
   margin-left: 0.9375rem;

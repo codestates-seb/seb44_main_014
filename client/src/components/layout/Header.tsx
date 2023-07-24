@@ -3,52 +3,43 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faBars, faX } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { IUserState } from '../../store/userSlice.ts';
-import HeaderNavLogin from './HeaderNavLogin.tsx';
-import HeaderNavLogout from './HeaderNavLogout.tsx';
+import ToggleMenu from './ToggleMenu.tsx';
 import Logout from '../Logout/Logout.tsx';
 
 const Header = () => {
-  const Loginstate = useSelector((state: IUserState) => state.user.isLogin);
-
-  const [isClicked, setIsClicked] = useState(true);
-
-  const ClickHandler = () => {
-    setIsClicked(!isClicked);
-  };
+  const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
+  const memberId = useSelector((state: IUserState) => state.user.memberId);
+  const [showToggleMenu, setShowToggleMenu] = useState<boolean>(false);
 
   return (
     <>
       <HeaderContainer>
-        <HeaderPositioner>
-          <HeaderLeftContents>
-            <Link to="/location">
-              <LocationIcon icon={faLocationDot} />
-            </Link>
-          </HeaderLeftContents>
-          <HeaderTitleContainer>
-            <Link to="/">
-              <HeaderTitle># 밥친구</HeaderTitle>
-            </Link>
-          </HeaderTitleContainer>
-          <HeaderRightContents>
-            <Link to="/board">
-              <HeaderRightItems>보드</HeaderRightItems>
-            </Link>
-            <Link to="/users/mypage/:memberId">
-              <HeaderRightItems>마이페이지</HeaderRightItems>
-            </Link>
-            <HeaderRightItems>{Loginstate ? <Logout /> : <StyledLink to="/Login">로그인</StyledLink>}</HeaderRightItems>
-            {isClicked ? (
-              <HeaderHamburgerIcon icon={faBars} onClick={ClickHandler} />
+        <HeaderWrapper>
+          <Link to="/location" onClick={() => setShowToggleMenu(false)}>
+            <LocationBtn>
+              <FontAwesomeIcon icon={faLocationDot} />
+            </LocationBtn>
+          </Link>
+          <Link to="/" onClick={() => setShowToggleMenu(false)}>
+            <Logo>#밥친구</Logo>
+          </Link>
+          <MenuBtn onClick={() => setShowToggleMenu(!showToggleMenu)}>
+            {showToggleMenu ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faBars} />}
+          </MenuBtn>
+          <PCNav>
+            <Link to="/board">보드</Link>
+            {!isLoggedIn ? (
+              <Link to="/users/signup">회원가입</Link>
             ) : (
-              <HeaderXIcon icon={faX} onClick={ClickHandler} />
+              <Link to={`/users/mypage/${memberId}`}>마이페이지</Link>
             )}
-          </HeaderRightContents>
-        </HeaderPositioner>
+            {!isLoggedIn ? <Link to="/login">로그인</Link> : <Logout setShowToggleMenu={setShowToggleMenu} />}
+          </PCNav>
+        </HeaderWrapper>
       </HeaderContainer>
-      {!isClicked && Loginstate ? <HeaderNavLogout /> : <HeaderNavLogin />}
+      {showToggleMenu && <ToggleMenu setShowToggleMenu={setShowToggleMenu} />}
     </>
   );
 };
@@ -58,106 +49,89 @@ const HeaderContainer = styled.header`
   left: 0;
   top: 0;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
-  height: 4.375rem;
+  height: 3.125rem;
   background-color: var(--color-green);
 
-  @media screen and (max-width: 1024px) {
-    height: 3.125rem;
+  @media screen and (min-width: 1024px) {
+    height: 4.375rem;
   }
 `;
 
-const HeaderPositioner = styled.div`
+const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100%;
-  margin-left: 3.125rem;
-  margin-right: 3.125rem;
-
-  @media screen and (max-width: 375px) {
-    margin-left: 1.875rem;
-    margin-right: 1.875rem;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.875rem;
+  @media screen and (min-width: 768px) {
+    padding: 0 5rem;
+  }
+  @media screen and (min-width: 1024px) {
+    padding: 0 3.125rem;
   }
 `;
 
-const LocationIcon = styled(FontAwesomeIcon)`
-  width: 1.5625rem;
-  height: 1.5625rem;
-  color: #fff;
-`;
-
-const HeaderLeftContents = styled.div`
-  display: flex;
-  width: 16.25rem;
-
-  @media screen and (max-width: 1024px) {
-    width: 1.875rem;
-  }
-`;
-
-const HeaderTitleContainer = styled.h1`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const HeaderTitle = styled.h1`
-  padding-top: 0.3125rem;
+const Logo = styled.h1`
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   color: #fff;
   font-family: Tenada;
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
 
-  @media screen and (max-width: 1024px) {
-    font-size: 1.5rem;
+  @media screen and (min-width: 1024px) {
+    top: 1.3rem;
+    font-size: 2rem;
   }
 `;
 
-const HeaderRightContents = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  width: 16.25rem;
-
-  @media screen and (max-width: 1024px) {
-    width: 1.875rem;
+const LocationBtn = styled.span`
+  svg {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    @media screen and (min-width: 1024px) {
+      width: 25px;
+      height: 25px;
+    }
   }
 `;
 
-const HeaderRightItems = styled.div`
-  margin-left: 1.875rem;
-  color: #fff;
-  font-size: 1rem;
-
-  @media screen and (max-width: 1024px) {
+const MenuBtn = styled.button`
+  svg {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+  }
+  @media screen and (min-width: 1024px) {
     display: none;
   }
 `;
 
-const HeaderHamburgerIcon = styled(FontAwesomeIcon)`
+const PCNav = styled.nav`
   display: none;
-  width: 1.5625rem;
-  height: 1.5625rem;
-  color: #fff;
+  @media screen and (min-width: 1024px) {
+    display: flex;
+    justify-content: flex-end;
+    a,
+    button {
+      margin-left: 0.625rem;
+      padding: 0 0.5rem;
+      color: #fff;
+      font-family: 'NanumSquare', sans-serif;
 
-  @media screen and (max-width: 1024px) {
-    display: block;
+      font-size: 1rem;
+    }
   }
-`;
-
-const HeaderXIcon = styled(FontAwesomeIcon)`
-  display: none;
-  width: 1.5625rem;
-  height: 1.5625rem;
-  color: #fff;
-
-  @media screen and (max-width: 1024px) {
-    display: block;
-  }
-`;
-
-const StyledLink = styled(Link)`
-  color: #fff;
 `;
 
 export default Header;

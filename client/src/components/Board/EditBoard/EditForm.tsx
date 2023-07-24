@@ -8,11 +8,10 @@ import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 import Loading from '../../Loading.tsx';
 
-// import authApi from '../../../util/api/authApi.tsx';
+import authApi from '../../../util/api/authApi.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IEditInfo } from '../../../interface/board.ts';
 import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
-import { getCookie } from '../../../util/cookie/index.ts';
 
 const EditForm = () => {
   const navigate = useNavigate();
@@ -86,11 +85,9 @@ const EditForm = () => {
     }
   }, [info]);
 
-  const patchSubmitInfo = () => {
-    axios
-      .patch(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/edit`, info, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
+  const patchSubmitInfo = async () => {
+    (await authApi)
+      .patch(`/board/posts/${postId}/edit`, info)
       .then((res) => {
         console.log(res);
         if (info.status === 'END') {
@@ -212,7 +209,7 @@ const EditForm = () => {
         </div>
       </InfoDiv>
       <InfoDiv>
-        <InfoTitle>카테고리 *</InfoTitle>
+        <InfoTitle>모집 상태 *</InfoTitle>
         <RadioFlex>
           <InputRadio type="status" value="RECRUITING" handleGetValue={handleStatusType}>
             모집 중

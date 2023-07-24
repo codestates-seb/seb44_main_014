@@ -2,8 +2,10 @@ import { styled } from 'styled-components';
 import { useState, useEffect } from 'react';
 import Button from '../components/UI/Button.tsx';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { ILocationState } from '../store/locationSlice.ts';
+import { useSelector, useDispatch } from 'react-redux';
+import { ILocationState, locationPost } from '../store/locationSlice.ts';
+import { useNavigate } from 'react-router-dom';
+import { IUserState } from '../store/userSlice.ts';
 
 declare global {
   interface Window {
@@ -24,17 +26,16 @@ interface IKakaoMouseEvent {
     getLng: () => number;
   };
 }
-// declare enum KakaoGeocoderStatus {
-//   OK = 'OK',
-//   ERROR = 'ERROR',
-// }
 
 const Location = () => {
   const [coordinate, setCoordinate] = useState({ latitude: 0, longitude: 0 });
   const [address, setAddress] = useState('');
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const locationId = useSelector((state: ILocationState) => state.location.locationId);
-  console.log(locationId);
+  const isLogin = useSelector((state: IUserState) => state.user.isLogin);
 
   useEffect(() => {
     const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -108,6 +109,7 @@ const Location = () => {
 
   const saveLocation = (latitude: number, longitude: number, address: string) => {
     try {
+      dispatch(locationPost({ locationId: locationId, address: address }));
       const response = axios.patch(`${import.meta.env.VITE_APP_API_URL}${locationId}`, {
         latitude,
         longitude,
@@ -120,29 +122,85 @@ const Location = () => {
   };
 
   const handleLocationChange = () => {
-    saveLocation(coordinate.latitude, coordinate.longitude, address);
+    if (address && isLogin) {
+      saveLocation(coordinate.latitude, coordinate.longitude, address);
+      alert('위치가 저장되었습니다.');
+      navigate('/');
+    } else if (!isLogin) {
+      alert('로그인 후 사용가능합니다.');
+      navigate('/login');
+    } else {
+      alert('위치를 선택해주세요.');
+    }
   };
 
   return (
     <>
-      <div>주소:{address}</div>
-      <div>x좌표:{coordinate.latitude}</div>
-      <div>y좌표:{coordinate.longitude}</div>
-      <Button onClick={handleLocationChange}>위치저장</Button>
-      <MapContainer>
-        <Map id="map"></Map>
-      </MapContainer>
+      <LocationPageContainer>
+        <LocationPageTitle>원하는 장소를 선택해주세요.</LocationPageTitle>
+        {/* <div>x좌표:{coordinate.latitude}</div>
+        <div>y좌표:{coordinate.longitude}</div> */}
+        <MapContainer>
+          <Map id="map"></Map>
+        </MapContainer>
+        <AddressContainer>주소:{address}</AddressContainer>
+        <ButtoneContainer>
+          <Button onClick={handleLocationChange}>위치저장</Button>
+        </ButtoneContainer>
+      </LocationPageContainer>
     </>
   );
 };
 
 export default Location;
 
+const LocationPageContainer = styled.article`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 30px;
+`;
+
+const LocationPageTitle = styled.section`
+  font-size: 20px;
+  margin: 30px 0;
+`;
+
 const MapContainer = styled.section`
   display: flex;
   justify-content: center;
 `;
 const Map = styled.section`
-  width: 500px;
-  height: 500px;
+  width: 315px;
+  height: 315px;
+  @media screen and (min-width: 768px) {
+    width: 500px;
+    height: 500px;
+  }
+`;
+const AddressContainer = styled.section`
+  max-width: 500px;
+  width: 315px;
+  height: 36px;
+  border-radius: 5px;
+  border: 1px solid var(--color-gray);
+  display: flex;
+  align-items: center;
+  margin: 30px 0;
+  padding-left: 10px;
+  @media screen and (min-width: 768px) {
+    width: 500px;
+    margin: 50px auto;
+  }
+`;
+const ButtoneContainer = styled.section`
+  display: flex;
+  justify-content: center;
+  @media screen and (min-width: 768px) {
+    margin: 0 0 50px 0;
+    button {
+      width: 500px;
+    }
+  }
 `;

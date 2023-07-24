@@ -10,10 +10,9 @@ import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
 import Loading from '../components/Loading.tsx';
 
-// import authApi from '../util/api/authApi.tsx';
+import authApi from '../util/api/authApi.tsx';
 import { IBoardDetailData } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
-import { getCookie } from '../util/cookie/index.ts';
 
 interface IMember {
   memberId: number;
@@ -102,11 +101,9 @@ const BoardDetail = () => {
     memberId: userId, //사용자 멤버 아이디
   };
 
-  const postApplyData = () => {
-    axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}/mate`, applyData, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
+  const postApplyData = async () => {
+    (await authApi)
+      .post(`/board/posts/${postId}/mate`, applyData)
       .then((res) => {
         setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
         getMateData();
@@ -117,15 +114,16 @@ const BoardDetail = () => {
           alert('이미 참여 신청한 모임입니다.');
         } else if (err.response.status === 403) {
           alert('신청 불가한 모임입니다.');
+        } else if (err.response.status === 500) {
+          alert('로그인 후 신청해주세요.');
+          navigate('/login');
         }
       });
   };
 
-  const deletePost = () => {
-    axios
-      .delete(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
+  const deletePost = async () => {
+    (await authApi)
+      .delete(`/board/posts/${postId}`)
       .then((res) => {
         console.log(res);
         navigate('/board');
@@ -213,6 +211,7 @@ const TextArea = styled.div`
   line-height: 1.5;
   img {
     width: 100%;
+    max-width: 500px;
   }
 `;
 

@@ -1,29 +1,37 @@
 import { styled } from 'styled-components';
+import NoBoardList from '../components/Board/NoBoardList.tsx';
+import { IMypageComments } from '../interface/mypage.ts';
+import { useState, useEffect } from 'react';
+import { IUserState } from '../store/userSlice.ts';
+import { useSelector } from 'react-redux';
+import authApi from '../util/api/authApi.tsx';
+import { Link } from 'react-router-dom';
 
 const MoreInfoComments = () => {
+  const [lists, setLists] = useState<IMypageComments[]>([]);
+  const memberId = useSelector((state: IUserState) => state.user.memberId);
+
+  useEffect(() => {
+    getList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getList = async () => {
+    const response = await (await authApi).get(`/users/mypage/${memberId}/comments`);
+    setLists(response.data);
+  };
   return (
     <WritingsContainer>
       <WritingsTitle>작성한 댓글</WritingsTitle>
-      <WritingContentsContainer>
-        <ContentsTitle>저요저요</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 2인 선착순!</ContentsParagraph>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>저요저요</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 2인 선착순!</ContentsParagraph>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>저요저요</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 2인 선착순!</ContentsParagraph>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>저요저요</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 2인 선착순!</ContentsParagraph>
-      </WritingContentsContainer>
-      <WritingContentsContainer>
-        <ContentsTitle>저요저요</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 2인 선착순!</ContentsParagraph>
-      </WritingContentsContainer>
+      {lists.length === 0 && <NoBoardList />}
+      {lists.map((list) => (
+        <WritingContentsContainer key={list.postId}>
+          <ContentsTitle>
+            <Link to={`/board/posts/${list.postId}`}>{list.title}</Link>
+          </ContentsTitle>
+          <ContentsParagraph dangerouslySetInnerHTML={{ __html: list.content }} />
+        </WritingContentsContainer>
+      ))}
     </WritingsContainer>
   );
 };

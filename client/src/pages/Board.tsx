@@ -15,7 +15,7 @@ import NoBoardList from '../components/Board/NoBoardList.tsx';
 import { category, ICategoryState } from '../store/listCategorySlice.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
-import { getCookie } from '../util/cookie/index.ts';
+import authApi from '../util/api/authApi.tsx';
 
 const Board = () => {
   const navigate = useNavigate();
@@ -53,14 +53,9 @@ const Board = () => {
   }, []);
 
   useEffect(() => {
-    let URL: string;
-    if (isLoggedIn) {
-      URL = `${import.meta.env.VITE_APP_API_URL}/board/search?page=`;
-      console.log(`${URL}${filterInfo.page}${currentApi}`);
-      axios
-        .get(`${URL}${filterInfo.page}${currentApi}`, {
-          headers: { Authorization: getCookie('accessToken') },
-        })
+    const getBoardList = async () => {
+      (await authApi)
+        .get(`/board/search?page=${filterInfo.page}${currentApi}`)
         .then((res) => {
           console.log(res);
           setPageInfo(res.data.pageInfo);
@@ -71,11 +66,12 @@ const Board = () => {
           console.log(err);
           setIsLoading(false);
         });
+    };
+    if (isLoggedIn) {
+      getBoardList();
     } else {
-      URL = `${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=`;
-      console.log(`${URL}${filterInfo.page}${currentApi}`);
       axios
-        .get(`${URL}${filterInfo.page}${currentApi}`)
+        .get(`${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=${filterInfo.page}${currentApi}`)
         .then((res) => {
           console.log(res);
           setPageInfo(res.data.pageInfo);

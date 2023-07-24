@@ -1,36 +1,39 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch /*, useSelector*/ } from 'react-redux';
 import { styled } from 'styled-components';
-import axios from 'axios';
 
 import BoardList from './Board/BoardList.tsx';
 import Loading from './Loading.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import { IBoardList } from '../interface/board.ts';
 import { category } from '../store/listCategorySlice.ts';
-import { getCookie } from '../util/cookie/index.ts';
+// import { IUserState } from '../store/userSlice.ts';
+import authApi from '../util/api/authApi.tsx';
 
 const AfterLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [lists, setLists] = useState<IBoardList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  // const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/home`, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setLists(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    const getBoarList = async () => {
+      (await authApi)
+        .get(`/home`)
+        .then((res) => {
+          console.log(res.data);
+          setLists(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    };
+    getBoarList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -54,7 +57,7 @@ const AfterLogin = () => {
             <Loading />
           ) : (
             <ul>
-              {lists.length === 0 && <NoBoardList />}
+              {lists.filter((list) => list.category === 'EATING').length === 0 && <NoBoardList />}
               {lists
                 .filter((list) => list.category === 'EATING')
                 .slice(0, 4)
@@ -80,9 +83,35 @@ const AfterLogin = () => {
             <Loading />
           ) : (
             <ul>
-              {lists.length === 0 && <NoBoardList />}
+              {lists.filter((list) => list.category === 'SHOPPING').length === 0 && <NoBoardList />}
               {lists
                 .filter((list) => list.category === 'SHOPPING')
+                .slice(0, 4)
+                .map((list, idx) => (
+                  <BoardList key={idx} list={list} />
+                ))}
+            </ul>
+          )}
+        </ListBlock>
+        <ListBlock>
+          <TitleArea>
+            <TitleH3># 한식 최신 글</TitleH3>
+            <MoreButton
+              onClick={() => {
+                navigate('/board');
+                // dispatch(category('SHOPPING'));
+              }}
+            >
+              더 보기
+            </MoreButton>
+          </TitleArea>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <ul>
+              {lists.filter((list) => list.postTag.foodTagId === 1).length === 0 && <NoBoardList />}
+              {lists
+                .filter((list) => list.postTag.foodTagId === 1)
                 .slice(0, 4)
                 .map((list, idx) => (
                   <BoardList key={idx} list={list} />
