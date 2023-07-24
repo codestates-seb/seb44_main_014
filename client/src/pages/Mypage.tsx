@@ -65,6 +65,8 @@ const Mypage = () => {
   const [meetingMates, setMeetingMates] = useState('참여자가 없습니다.');
   const [posts, setPosts] = useState('작성한 게시글이 없습니다.');
   const [comments, setComments] = useState('작성한 댓글이 없습니다.');
+  const [userImage, setUserImage] = useState('');
+  const [eatStatus, setEatStatus] = useState(false);
 
   const userFoodTag = (data: any) => {
     if (data.foodTag.foodTagId === 1) {
@@ -107,12 +109,11 @@ const Mypage = () => {
       .then((res) => {
         console.log(res);
         setUserData(res.data);
-        userFoodTag(userData);
-        userMeeting(userData);
-        userPosts(userData);
-        userComments(userData);
-        // dataComments(userData);
-        console.log(userData);
+        userFoodTag(res.data);
+        userMeeting(res.data);
+        userPosts(res.data);
+        userComments(res.data);
+        setUserImage(res.data.image);
       })
       .catch((err) => {
         console.log(err);
@@ -143,11 +144,25 @@ const Mypage = () => {
   //   );
   // };
 
+  // 토글
+  const [isOn, setIsOn] = useState(true);
+
+  const ToggleHandler = () => {
+    setIsOn(!isOn);
+    axios.patch(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}?eatStatus=${isOn}`, {
+      headers: { Authorization: getCookie('accessToken') },
+    });
+  };
+
   return (
     <BodyContainer>
       <UserProfileContainer>
         <UserImageContainer>
-          <UserImage></UserImage>
+          {userImage != '' ? (
+            <UserImage style={{ backgroundImage: `url(${userImage})` }}></UserImage>
+          ) : (
+            <UserImage style={{ background: `#000` }}></UserImage>
+          )}
         </UserImageContainer>
         <UserInfoContainer>
           <UserContents className={'InfoContents'}>
@@ -169,7 +184,9 @@ const Mypage = () => {
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
-              {/* <Toggle></Toggle> */}
+              <ToggleContainer onClick={ToggleHandler} isOn={isOn}>
+                <ToggleBtn />
+              </ToggleContainer>
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Edit'}>
@@ -183,8 +200,12 @@ const Mypage = () => {
         <UserContentsTitle>참여 중인 모임</UserContentsTitle>
         <UserContentBox className={'MeetingBox'}>
           <UserContents>
-            <UserContentsBoxTitle>{meetingTitle}</UserContentsBoxTitle>
-            <UserContentsBoxParagraph>{meetingMates}</UserContentsBoxParagraph>
+            <UserContentsBoxTitle>
+              <div>{meetingTitle}</div>
+            </UserContentsBoxTitle>
+            <UserContentsBoxParagraph>
+              <div>{meetingMates}</div>
+            </UserContentsBoxParagraph>
           </UserContents>
         </UserContentBox>
       </UserContainer>
@@ -198,7 +219,9 @@ const Mypage = () => {
         <UserContentBox className={'PostsBox'}>
           <UserContents>
             <UserContentsContainer>
-              <UserContentsBoxTitle>{posts}</UserContentsBoxTitle>
+              <UserContentsBoxTitle>
+                <div>{posts}</div>
+              </UserContentsBoxTitle>
             </UserContentsContainer>
           </UserContents>
         </UserContentBox>
@@ -212,8 +235,6 @@ const Mypage = () => {
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            {/* {userData.comments.map(dataComments)} */}
-            {/* <div>{comments}</div> */}
             <UserContentsContainer>
               <UserContentsBoxTitle>
                 <div>{comments}</div>
@@ -257,7 +278,6 @@ const UserImage = styled.div`
   width: 250px;
   height: 250px;
   padding: 50px;
-  background: black;
   border-radius: 50%;
 `;
 
@@ -351,7 +371,7 @@ const UserContents = styled.div`
   }
 `;
 
-const UserContentsBoxTitle = styled.h1`
+const UserContentsBoxTitle = styled.div`
   margin-bottom: 15px;
   font-size: 16px;
 
@@ -360,7 +380,7 @@ const UserContentsBoxTitle = styled.h1`
   }
 `;
 
-const UserContentsBoxParagraph = styled.p`
+const UserContentsBoxParagraph = styled.div`
   color: var(--color-black);
   font-size: 14px;
   word-spacing: 10px;
@@ -387,6 +407,31 @@ const UserContentsContainer = styled.div`
     flex-wrap: wrap;
     margin-bottom: 30px;
   }
+`;
+
+// 토글
+
+const ToggleContainer = styled.button<{ isOn: boolean }>`
+  display: flex;
+  justify-content: ${(props) => (props.isOn ? 'flex-start' : 'flex-end')};
+  align-items: center;
+  z-index: 0;
+  width: 45px;
+  height: 24px;
+  background: ${(props) => (props.isOn ? 'var(--color-gray)' : 'var(--color-orange)')};
+  border: 1px solid;
+  border-color: ${(props) => (props.isOn ? 'var(--color-gray)' : 'var(--color-orange)')};
+  border-radius: 1.25rem;
+`;
+
+const ToggleBtn = styled.button`
+  width: 20px;
+  height: 20px;
+  margin-left: 0.125rem;
+  margin-right: 0.125rem;
+  background-color: #fff;
+  border: 1px solid #fff;
+  border-radius: 50%;
 `;
 
 export default Mypage;
