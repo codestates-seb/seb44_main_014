@@ -55,29 +55,19 @@ const ZipCodeInput: React.FC<IZipCodeInputProps> = ({ location, setLocation, loc
 
           // 해당 주소에 대한 좌표를 받아서
           const coords = new window.kakao.maps.LatLng(result.y, result.x);
-          const message =
-            '클릭한 위치의 위도는 ' + coords.getLat() + ' 이고, ' + '경도는 ' + coords.getLng() + ' 입니다';
-          console.log(message);
+          // const message ='클릭한 위치의 위도는 ' + coords.getLat() + ' 이고, ' + '경도는 ' + coords.getLng() + ' 입니다';
           setLocation({ address: fullAddress, latitude: coords.getLat(), longitude: coords.getLng() });
         }
       });
       setOpenPostcode(false);
     },
   };
-  // console.log(location);
-  // await axios.post(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${memberId}/location/create`, location);
-
-  // const handleLocationValue = (e) => {
-  //   const location = e.target.value;
-  //   setLocation(??);
-  // };
 
   return (
     <LocationContainer>
       <LocationTitle>지역 선택 *</LocationTitle>
       <LocationInputContainer>
         <LocationInput> {location.address}</LocationInput>
-        {/* onChange={handleLocationValue} */}
         <LocationButton onClick={handle.clickButton}>우편번호</LocationButton>
         <ErrorMessage>{locationErrMsg}</ErrorMessage>
       </LocationInputContainer>

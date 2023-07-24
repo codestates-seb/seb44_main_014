@@ -8,7 +8,7 @@ const postSignUp = async (email: string, password: string, samePassword: string)
       samePassword,
     });
   } catch (error) {
-    throw new Error('이미 가입 되어있는 이메일 입니다.'); // You can customize the error message as per your requirements
+    throw new Error('이미 가입 되어있는 이메일 입니다.');
   }
 };
 export default postSignUp;

@@ -7,7 +7,6 @@ import { setCookie } from '../util/cookie/index.ts';
 import { login } from '../store/userSlice.ts';
 import moment from 'moment';
 import { locationPost } from '../store/locationSlice.ts';
-// import GoogleLoginButton from '../components/Login/GoogleLoginButton.tsx';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -17,16 +16,6 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // const handleGoogleLogin = async () => {};
-  // 이렇게 useEffect쓰는게 나은지 아니면 async await썼으니까 충분한지??
-  // useEffect(() => {
-  //   // if (UserInfo.gender) {
-  //   navigate('/');
-  // } else {
-  //   navigate(`/users/userInfo/${responseData.memberId}`);
-  // }
-  // }, [UserInfo]);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -50,12 +39,9 @@ const Login = () => {
     if (loginFormValid) {
       try {
         const response = await postLogin(email, password);
-        // const { accessToken } = responseData;
-        // axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
         setCookie('accessToken', response.headers.authorization);
         setCookie('refreshToken', response.headers.refresh);
-        // console.log(response.headers.refresh);
 
         localStorage.setItem('expiredAt', moment().add(1, 'hour').format('yyyy-MM-DD HH:mm:ss'));
 
