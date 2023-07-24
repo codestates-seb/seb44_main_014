@@ -7,7 +7,6 @@ import Button from '../components/UI/Button.tsx';
 import { checkedValue, selectOneCheckbox } from '../util/common.ts';
 import { IUserState } from '../store/userSlice.ts';
 import axios from 'axios';
-import { getCookie } from '../util/cookie/index.ts';
 import { ILocationState } from '../store/locationSlice.ts';
 import authApi from '../util/api/authApi.tsx';
 
@@ -29,19 +28,13 @@ const EditUserInfo = () => {
   const [userFoodTag, setUserFoodTag] = useState(1);
 
   useEffect(() => {
-    axios
-      .patch(
-        `${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}/edit`,
-        {
-          image: userImg,
-          foodTag: {
-            foodTagId: userFoodTag,
-          },
-        },
-        {
-          headers: { Authorization: getCookie('accessToken') },
-        }
-      )
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getData = async () => {
+    (await authApi)
+      .get(`/users/mypage/${userId}`)
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
@@ -51,23 +44,26 @@ const EditUserInfo = () => {
       .catch((err) => {
         console.log(err);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
+
+  const patchData = async () => {
+    (await authApi)
+      .patch(`/users/mypage/${userId}/edit`, {
+        image: userImg,
+        foodTag: {
+          foodTagId: userFoodTag,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
     selectOneCheckbox(e);
     const foodTag = checkedValue(e);
     setUserFoodTag(parseInt(foodTag, 10));
     console.log(userFoodTag);
-  };
-
-  const Check = async () => {
-    (await authApi).patch(`/users/mypage/${userId}/edit`, {
-      image: userImg,
-      foodTag: {
-        foodTagId: userFoodTag,
-      },
-    });
   };
 
   const UserGender = (data: any) => {
@@ -146,9 +142,9 @@ const EditUserInfo = () => {
         </UserTagBox>
       </UserTagEditContainer>
       <ButtonContainer>
-        <Button onClick={Check}>
-          <Link to="/board">저장</Link>
-        </Button>
+        <Link to="/board">
+          <Button onClick={patchData}>저장</Button>
+        </Link>
       </ButtonContainer>
     </MainContainer>
   );
