@@ -13,7 +13,7 @@ const api = async () => {
       const response = await axios({
         method: 'post',
         url: `${import.meta.env.VITE_APP_API_URL}/auth/reissue`,
-        timeout: 3000,
+        timeout: 5000,
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const api = async () => {
   // accessToken이 만료되지 않았거나 재발급 받는 경우
   const authCreate = axios.create({
     baseURL: `${import.meta.env.VITE_APP_API_URL}`,
-    timeout: 3000,
+    timeout: 5000,
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',

@@ -15,11 +15,6 @@ const Logout = ({ setShowToggleMenu }: ISHowToggle) => {
   const dispatch = useDispatch();
 
   const doLogout = async () => {
-    await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
-      headers: { Refresh: getCookie('refreshToken') },
-    });
-    removeCookie('accessToken');
-    removeCookie('refreshToken');
     localStorage.clear();
     dispatch(
       logout({
@@ -28,8 +23,12 @@ const Logout = ({ setShowToggleMenu }: ISHowToggle) => {
         email: null,
       })
     );
-
     dispatch(locationLogout({ locationId: null }));
+    await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
+      headers: { Refresh: getCookie('refreshToken') },
+    });
+    removeCookie('accessToken');
+    removeCookie('refreshToken');
 
     navigate('/'); //로그인 유저가 바뀔 때 발생하는 버그를 막기위해 reload설정
   };
