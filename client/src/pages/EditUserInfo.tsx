@@ -8,6 +8,8 @@ import { checkedValue, selectOneCheckbox } from '../util/common.ts';
 import { IUserState } from '../store/userSlice.ts';
 import axios from 'axios';
 import { getCookie } from '../util/cookie/index.ts';
+import { ILocationState } from '../store/locationSlice.ts';
+import authApi from '../util/api/authApi.tsx';
 
 const EditUserInfo = () => {
   const [userData, setUserData] = useState({
@@ -21,6 +23,7 @@ const EditUserInfo = () => {
     },
   });
   const userId = useSelector((state: IUserState) => state.user.memberId);
+  const address = useSelector((state: ILocationState) => state.location.address);
   const [userImg, setUserImg] = useState('');
   const [userGender, setUserGender] = useState('');
   const [userFoodTag, setUserFoodTag] = useState(1);
@@ -58,19 +61,13 @@ const EditUserInfo = () => {
     console.log(userFoodTag);
   };
 
-  const Check = () => {
-    axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}/edit`,
-      {
-        image: userImg,
-        foodTag: {
-          foodTagId: userFoodTag,
-        },
+  const Check = async () => {
+    (await authApi).patch(`/users/mypage/${userId}/edit`, {
+      image: userImg,
+      foodTag: {
+        foodTagId: userFoodTag,
       },
-      {
-        headers: { Authorization: getCookie('accessToken') },
-      }
-    );
+    });
   };
 
   const UserGender = (data: any) => {
@@ -126,7 +123,7 @@ const EditUserInfo = () => {
       </UserGenderEditContainer>
       <UserLocationEditContainer>
         <EditorTitle className={'GenderTitle'}>지역</EditorTitle>
-        <div>{userData.location}</div>
+        <div>{address}</div>
       </UserLocationEditContainer>
       <UserTagEditContainer>
         <EditorTitle className={'GenderTitle'}>음식 태그</EditorTitle>
