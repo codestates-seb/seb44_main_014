@@ -61,7 +61,7 @@ const BoardList = ({ list }: BoardListProps) => {
           <ListStatus $statusColor={statusColor}>{statusText}</ListStatus>
         </ListTitle>
         <div>
-          <ListTag>{foodTag}</ListTag>
+          {list.category !== 'SHOPPING' && <ListTag>{foodTag}</ListTag>}
           <ListTag>{genderTag}</ListTag>
         </div>
         <ListFlex>
