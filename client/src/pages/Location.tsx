@@ -69,19 +69,13 @@ const Location = () => {
     // 마커가 지도 위에 표시되도록 설정합니다
     marker.setMap(map);
 
-    // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
-    // marker.setMap(null);
-
     function getAddr(lat: number, lng: number) {
       const geocoder = new window.kakao.maps.services.Geocoder();
 
       const coord = new window.kakao.maps.LatLng(lat, lng);
       const callback = function (result: IKakaoGeocoderResult[], status: any) {
         if (status === window.kakao.maps.services.Status.OK) {
-          //window.kakao.maps.services.Status
-          //KakaoGeocoderStatus
           const addr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
-          console.log(addr);
           setAddress(addr);
         }
       };
@@ -98,24 +92,21 @@ const Location = () => {
       marker.setPosition(latlng);
 
       // 마우스로 클릭한 위치의 위도와 경도를 표시할 메세지
-      const message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ' + '경도는 ' + latlng.getLng() + ' 입니다';
-
-      console.log(message);
+      // const message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ' + '경도는 ' + latlng.getLng() + ' 입니다';
 
       setCoordinate({ latitude: latlng.getLat(), longitude: latlng.getLng() });
       getAddr(latlng.getLat(), latlng.getLng());
     });
   }, []);
 
-  const saveLocation = (latitude: number, longitude: number, address: string) => {
+  const saveLocation = async (latitude: number, longitude: number, address: string) => {
     try {
       dispatch(locationPost({ locationId: locationId, address: address }));
-      const response = axios.patch(`${import.meta.env.VITE_APP_API_URL}${locationId}`, {
+      await axios.patch(`${import.meta.env.VITE_APP_API_URL}${locationId}`, {
         latitude,
         longitude,
         address,
       });
-      console.log(response);
     } catch (err) {
       console.log(err);
     }
@@ -138,8 +129,6 @@ const Location = () => {
     <>
       <LocationPageContainer>
         <LocationPageTitle>원하는 장소를 선택해주세요.</LocationPageTitle>
-        {/* <div>x좌표:{coordinate.latitude}</div>
-        <div>y좌표:{coordinate.longitude}</div> */}
         <MapContainer>
           <Map id="map"></Map>
         </MapContainer>
