@@ -23,8 +23,9 @@ const UserRateList = ({ list }: IMateInfo) => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [userRateInfo, setUserRateInfo] = useState<IStarRate>({
     rateMemberId: list.memberId,
-    starRate: 0,
+    starRate: 5,
   });
+
   const postStarRate = () => {
     axios
       .post(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate/userRate`, userRateInfo)

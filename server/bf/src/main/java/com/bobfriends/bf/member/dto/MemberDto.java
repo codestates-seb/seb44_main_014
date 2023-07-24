@@ -100,6 +100,7 @@ public class MemberDto {
     public static class Response {
         private String image;
         private String name;
+        private Member.genderStatus gender;
         private String email;
         private float avgStarRate;
         private MemberTagDto.FoodTagResponse foodTag;
