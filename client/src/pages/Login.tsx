@@ -6,6 +6,7 @@ import postLogin from '../util/api/postLogin.tsx';
 import { setCookie } from '../util/cookie/index.ts';
 import { login } from '../store/userSlice.ts';
 import moment from 'moment';
+import { locationPost } from '../store/locationSlice.ts';
 // import GoogleLoginButton from '../components/Login/GoogleLoginButton.tsx';
 
 const Login = () => {
@@ -68,6 +69,11 @@ const Login = () => {
             email: email,
           })
         );
+
+        if (responseData.locationId && responseData.location) {
+          const locationURI = `/users/mypage/${responseData.memberId}/location/${responseData.locationId}`;
+          dispatch(locationPost({ locationId: locationURI, address: responseData.location }));
+        }
 
         if (responseData.gender && responseData.location) {
           navigate('/');
