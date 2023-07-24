@@ -28,9 +28,23 @@ const EditUserInfo = () => {
   const [userFoodTag, setUserFoodTag] = useState(1);
 
   useEffect(() => {
-    patchData();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getData = async () => {
+    (await authApi)
+      .get(`/users/mypage/${userId}`)
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data);
+        UserGender(res.data);
+        setUserImg(res.data.image);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const patchData = async () => {
     (await authApi)
@@ -39,12 +53,6 @@ const EditUserInfo = () => {
         foodTag: {
           foodTagId: userFoodTag,
         },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setUserData(res.data);
-        UserGender(res.data);
-        setUserImg(res.data.image);
       })
       .catch((err) => {
         console.log(err);
