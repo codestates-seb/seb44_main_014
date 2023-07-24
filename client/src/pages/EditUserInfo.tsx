@@ -7,7 +7,8 @@ import Button from '../components/UI/Button.tsx';
 import { checkedValue, selectOneCheckbox } from '../util/common.ts';
 import { IUserState } from '../store/userSlice.ts';
 import axios from 'axios';
-import { getCookie } from '../util/cookie/index.ts';
+import { ILocationState } from '../store/locationSlice.ts';
+import authApi from '../util/api/authApi.tsx';
 
 const EditUserInfo = () => {
   const [userData, setUserData] = useState({
@@ -21,24 +22,19 @@ const EditUserInfo = () => {
     },
   });
   const userId = useSelector((state: IUserState) => state.user.memberId);
+  const address = useSelector((state: ILocationState) => state.location.address);
   const [userImg, setUserImg] = useState('');
   const [userGender, setUserGender] = useState('');
   const [userFoodTag, setUserFoodTag] = useState(1);
 
   useEffect(() => {
-    axios
-      .patch(
-        `${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}/edit`,
-        {
-          image: userImg,
-          foodTag: {
-            foodTagId: userFoodTag,
-          },
-        },
-        {
-          headers: { Authorization: getCookie('accessToken') },
-        }
-      )
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getData = async () => {
+    (await authApi)
+      .get(`/users/mypage/${userId}`)
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
@@ -48,29 +44,26 @@ const EditUserInfo = () => {
       .catch((err) => {
         console.log(err);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
+
+  const patchData = async () => {
+    (await authApi)
+      .patch(`/users/mypage/${userId}/edit`, {
+        image: userImg,
+        foodTag: {
+          foodTagId: userFoodTag,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
     selectOneCheckbox(e);
     const foodTag = checkedValue(e);
     setUserFoodTag(parseInt(foodTag, 10));
     console.log(userFoodTag);
-  };
-
-  const Check = () => {
-    axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}/edit`,
-      {
-        image: userImg,
-        foodTag: {
-          foodTagId: userFoodTag,
-        },
-      },
-      {
-        headers: { Authorization: getCookie('accessToken') },
-      }
-    );
   };
 
   const UserGender = (data: any) => {
@@ -102,12 +95,18 @@ const EditUserInfo = () => {
   return (
     <MainContainer>
       <UserImgContainer>
-        <UserImg></UserImg>
+        {userImg != '' ? (
+          <UserImg src={userImg} />
+        ) : (
+          <UserImg src="https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png" />
+        )}
       </UserImgContainer>
-      <ImgEditor htmlFor="profileImg_uploads">
-        프로필 사진 변경
-        <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange}></input>
-      </ImgEditor>
+      <ImgEditorContainer>
+        <ImgEditor htmlFor="profileImg_uploads">
+          프로필 사진 변경
+          <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange}></input>
+        </ImgEditor>
+      </ImgEditorContainer>
       <UneditableContainer>
         <UneditableComponent>
           <EditorTitle>이메일</EditorTitle>
@@ -126,7 +125,7 @@ const EditUserInfo = () => {
       </UserGenderEditContainer>
       <UserLocationEditContainer>
         <EditorTitle className={'GenderTitle'}>지역</EditorTitle>
-        <div>{userData.location}</div>
+        <div>{address}</div>
       </UserLocationEditContainer>
       <UserTagEditContainer>
         <EditorTitle className={'GenderTitle'}>음식 태그</EditorTitle>
@@ -149,9 +148,9 @@ const EditUserInfo = () => {
         </UserTagBox>
       </UserTagEditContainer>
       <ButtonContainer>
-        <Button onClick={Check}>
-          <Link to="/board">저장</Link>
-        </Button>
+        <Link to="/board">
+          <Button onClick={patchData}>저장</Button>
+        </Link>
       </ButtonContainer>
     </MainContainer>
   );
@@ -161,6 +160,11 @@ const MainContainer = styled.div`
   margin: 3.125rem auto;
   width: 40.625rem;
   height: 46.875rem;
+
+  @media (max-width: 768px) {
+    max-width: 360px;
+    min-height: 500px;
+  }
 `;
 
 const UserImgContainer = styled.div`
@@ -170,14 +174,23 @@ const UserImgContainer = styled.div`
   width: 15.625rem;
   height: 15.625rem;
   margin: 0 auto 1.875rem;
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
-const UserImg = styled.div`
+const UserImg = styled.img`
   width: 15.625rem;
   height: 15.625rem;
   padding: 3.125rem;
-  background: black;
   border-radius: 50%;
+`;
+
+const ImgEditorContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const ImgEditor = styled.label`
@@ -209,12 +222,20 @@ const UneditableContainer = styled.div`
   align-items: center;
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const UneditableComponent = styled.div`
   width: 18.75rem;
   height: 3.75rem;
   margin: 0 0.625rem;
+
+  @media (max-width: 768px) {
+    margin-top: 1.875rem;
+  }
 `;
 
 const UndeitableTextBox = styled.p`
@@ -248,6 +269,10 @@ const UserTagEditContainer = styled.div`
   height: 3.75rem;
   margin-top: 30px;
   margin-left: 0.9375rem;
+
+  @media (max-width: 768px) {
+    width: 18.75rem;
+  }
 `;
 
 const UserTagBox = styled.div`
