@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { IUserState } from '../store/userSlice.ts';
 import { useSelector } from 'react-redux';
 import authApi from '../util/api/authApi.tsx';
+import { Link } from 'react-router-dom';
 
 const MoreInfoWritings = () => {
   const [lists, setLists] = useState<IMypagePosts[]>([]);
@@ -14,6 +15,22 @@ const MoreInfoWritings = () => {
     getList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const statusTextChange = (status: string) => {
+    let statusText: string;
+    // let statusColor: string;
+    if (status === 'END') {
+      statusText = '모집 종료';
+      // statusColor = '#EE3D16';
+    } else if (status === 'COMPLETE') {
+      statusText = '모집 완료';
+      // statusColor = '#FFD233';
+    } else {
+      statusText = '모집 중';
+      // statusColor = '#28CA6B';
+    }
+    return statusText;
+  };
 
   const getList = async () => {
     try {
@@ -26,17 +43,14 @@ const MoreInfoWritings = () => {
   return (
     <WritingsContainer>
       <WritingsTitle>작성한 게시글</WritingsTitle>
-      {/* <WritingContentsContainer>
-        <ContentsTitle>연남동 OO라멘 2인 선착순!</ContentsTitle>
-        <ContentsParagraph>연남동 OO라멘 오후 2시에 2분만 선착···</ContentsParagraph>
-        <ContentsMetting>모집 완료 </ContentsMetting>
-      </WritingContentsContainer> */}
       {lists.length === 0 && <NoBoardList />}
       {lists.map((list) => (
         <WritingContentsContainer key={list.postId}>
-          <ContentsTitle>{list.title}</ContentsTitle>
-          <ContentsParagraph>{list.content}</ContentsParagraph>
-          <ContentsMetting>{list.status} </ContentsMetting>
+          <ContentsTitle>
+            <Link to={`/board/posts/${list.postId}`}>{list.title}</Link>
+          </ContentsTitle>
+          <ContentsParagraph dangerouslySetInnerHTML={{ __html: list.content }} />
+          <ContentsMetting>{statusTextChange(list.status)} </ContentsMetting>
         </WritingContentsContainer>
       ))}
     </WritingsContainer>
@@ -44,7 +58,7 @@ const MoreInfoWritings = () => {
 };
 
 const WritingsContainer = styled.div`
-  height: 500px;
+  min-height: calc(100% - 200px);
   margin: 50px;
 `;
 
