@@ -5,7 +5,6 @@ import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
 import authApi from '../util/api/authApi.tsx';
 import { getCookie } from '../util/cookie/index.ts';
-// import NoBoardList from '../components/Board/NoBoardList.tsx';
 
 interface Post {
   postId: number;
@@ -86,8 +85,6 @@ const Mypage = () => {
   });
   const userId = useSelector((state: IUserState) => state.user.memberId);
   const [foodTagName, setFoodTagName] = useState('# 한식');
-  // const [meetingTitle, setMeetingTitle] = useState('참여 중인 모임이 없습니다.');
-  // const [meetingMates, setMeetingMates] = useState('참여자가 없습니다.');
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [meetings, setMeetings] = useState<Meetings[]>([]);
@@ -104,13 +101,6 @@ const Mypage = () => {
       setFoodTagName('# 양식');
     } else {
       setFoodTagName('기타');
-    }
-  };
-
-  const userMeeting = (data: any) => {
-    if (data.mates[0].postId != 0) {
-      setMeetingTitle(data.mates[0].title);
-      setMeetingMates(`참여자: ${data.mates[0].mateMembers[0].name}`);
     }
   };
 
@@ -229,7 +219,7 @@ const Mypage = () => {
       <UserContainer className={'MeetingContainer'}>
         <UserContentsTitle>참여 중인 모임</UserContentsTitle>
         <UserContentBox className={'MeetingBox'}>
-          {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
+          {/* {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
           {meetings.map((meeting) => (
             <UserContentsContainer key={meeting.postId}>
               <UserContents className={'InfoContents'}>
@@ -244,7 +234,7 @@ const Mypage = () => {
                 })}
               </UserContents>
             </UserContentsContainer>
-          ))}
+          ))} */}
         </UserContentBox>
       </UserContainer>
       <UserContainer className={'PostsContainer'}>
