@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import authApi from '../util/api/authApi.tsx';
 
 const MoreInfoWritings = () => {
-  const [lists, setLists] = useState<IMypagePosts>([]);
+  const [lists, setLists] = useState<IMypagePosts[]>([]);
   const memberId = useSelector((state: IUserState) => state.user.memberId);
 
   useEffect(() => {
@@ -16,8 +16,12 @@ const MoreInfoWritings = () => {
   }, []);
 
   const getList = async () => {
-    const response = await (await authApi).get(`/users/mypage/${memberId}/posts`);
-    setLists(response.data);
+    try {
+      const response = await (await authApi).get(`/users/mypage/${memberId}/posts`);
+      setLists(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <WritingsContainer>
@@ -28,8 +32,8 @@ const MoreInfoWritings = () => {
         <ContentsMetting>모집 완료 </ContentsMetting>
       </WritingContentsContainer> */}
       {lists.length === 0 && <NoBoardList />}
-      {lists.map((list, idx) => (
-        <WritingContentsContainer key={idx}>
+      {lists.map((list) => (
+        <WritingContentsContainer key={list.postId}>
           <ContentsTitle>{list.title}</ContentsTitle>
           <ContentsParagraph>{list.content}</ContentsParagraph>
           <ContentsMetting>{list.status} </ContentsMetting>
