@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
 import authApi from '../util/api/authApi.tsx';
 import { getCookie } from '../util/cookie/index.ts';
-import NoBoardList from '../components/Board/NoBoardList.tsx';
+// import NoBoardList from '../components/Board/NoBoardList.tsx';
 
 interface Post {
   postId: number;
@@ -86,8 +86,8 @@ const Mypage = () => {
   });
   const userId = useSelector((state: IUserState) => state.user.memberId);
   const [foodTagName, setFoodTagName] = useState('# 한식');
-  const [meetingTitle, setMeetingTitle] = useState('참여 중인 모임이 없습니다.');
-  const [meetingMates, setMeetingMates] = useState('참여자가 없습니다.');
+  // const [meetingTitle, setMeetingTitle] = useState('참여 중인 모임이 없습니다.');
+  // const [meetingMates, setMeetingMates] = useState('참여자가 없습니다.');
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [meetings, setMeetings] = useState<Meetings[]>([]);
@@ -232,15 +232,17 @@ const Mypage = () => {
           {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
           {meetings.map((meeting) => (
             <UserContentsContainer key={meeting.postId}>
-              <UserContentsBoxTitle>
-                <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
-              </UserContentsBoxTitle>
-              <UserContents>{meeting.mateMembers[0].name}</UserContents>
-              {/* {meeting.mateMembers.map((member) => {
-                <div key={member.memberId}>
-                  <div>{member.name}</div>
-                </div>;
-              })} */}
+              <UserContents className={'InfoContents'}>
+                <UserContentsBoxTitle>
+                  <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
+                </UserContentsBoxTitle>
+                참여자:
+                {meeting.mateMembers.map((member) => {
+                  <div key={member.memberId}>
+                    <div>{member.name}</div>
+                  </div>;
+                })}
+              </UserContents>
             </UserContentsContainer>
           ))}
         </UserContentBox>
@@ -412,7 +414,7 @@ const UserContents = styled.div`
   padding: 20px;
 
   &.InfoContents {
-    padding: 30px;
+    padding: 20px 20px 10px;
   }
 `;
 
