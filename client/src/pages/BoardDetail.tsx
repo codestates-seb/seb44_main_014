@@ -24,6 +24,7 @@ const BoardDetail = () => {
   const params = useParams();
   const postId = Number(params.postId);
   const userId = useSelector((state: IUserState) => state.user.memberId);
+  const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
 
   const [detailData, setDetailData] = useState<IBoardDetailData>({
     title: '',
@@ -114,9 +115,8 @@ const BoardDetail = () => {
           alert('이미 참여 신청한 모임입니다.');
         } else if (err.response.status === 403) {
           alert('신청 불가한 모임입니다.');
-        } else if (err.response.status === 500) {
+        } else if (!isLoggedIn) {
           alert('로그인 후 신청해주세요.');
-          navigate('/login');
         }
       });
   };
