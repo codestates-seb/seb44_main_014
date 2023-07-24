@@ -114,6 +114,9 @@ const BoardDetail = () => {
           alert('이미 참여 신청한 모임입니다.');
         } else if (err.response.status === 403) {
           alert('신청 불가한 모임입니다.');
+        } else if (err.response.status === 500) {
+          alert('로그인 후 신청해주세요.');
+          navigate('/login');
         }
       });
   };
@@ -208,6 +211,7 @@ const TextArea = styled.div`
   line-height: 1.5;
   img {
     width: 100%;
+    max-width: 500px;
   }
 `;
 
