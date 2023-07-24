@@ -148,7 +148,7 @@ const EditUserInfo = () => {
         </UserTagBox>
       </UserTagEditContainer>
       <ButtonContainer>
-        <Link to="/board">
+        <Link to={`/users/mypage/${userId}`}>
           <Button onClick={patchData}>저장</Button>
         </Link>
       </ButtonContainer>
