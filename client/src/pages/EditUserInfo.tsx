@@ -43,6 +43,7 @@ const EditUserInfo = () => {
         console.log(res.data);
         setUserData(res.data);
         UserGender(res.data);
+        setUserImg(res.data.image);
       })
       .catch((err) => {
         console.log(err);
@@ -70,6 +71,23 @@ const EditUserInfo = () => {
         headers: { Authorization: getCookie('accessToken') },
       }
     );
+  };
+
+  const handleImageChange = async (e) => {
+    const selectedImage = e.target.files[0];
+    const formData = new FormData();
+    formData.append('multipartFile', selectedImage);
+
+    const imageResponseUrl = await axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/users/images/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      })
+      .then((res) => res.data[0]);
+    setUserInfo({ ...userInfo, image: imageResponseUrl });
+    setPreview(userImg);
   };
 
   const UserGender = (data: any) => {
