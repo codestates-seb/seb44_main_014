@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import authApi from '../util/api/authApi.tsx';
 
 const MoreInfoComments = () => {
-  const [lists, setLists] = useState<IMypagePosts>([]);
+  const [lists, setLists] = useState<IMypageComments[]>([]);
   const memberId = useSelector((state: IUserState) => state.user.memberId);
 
   useEffect(() => {
@@ -23,8 +23,8 @@ const MoreInfoComments = () => {
     <WritingsContainer>
       <WritingsTitle>작성한 댓글</WritingsTitle>
       {lists.length === 0 && <NoBoardList />}
-      {lists.map((list, idx) => (
-        <WritingContentsContainer key={idx}>
+      {lists.map((list) => (
+        <WritingContentsContainer key={list.postId}>
           <ContentsTitle>{list.title}</ContentsTitle>
           <ContentsParagraph>{list.content}</ContentsParagraph>
         </WritingContentsContainer>
