@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { ILocationState, locationPost } from '../store/locationSlice.ts';
 import { useNavigate } from 'react-router-dom';
+import { IUserState } from '../store/userSlice.ts';
 
 declare global {
   interface Window {
@@ -34,6 +35,7 @@ const Location = () => {
   const dispatch = useDispatch();
 
   const locationId = useSelector((state: ILocationState) => state.location.locationId);
+  const isLogin = useSelector((state: IUserState) => state.user.isLogin);
 
   useEffect(() => {
     const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -120,10 +122,13 @@ const Location = () => {
   };
 
   const handleLocationChange = () => {
-    if (address) {
+    if (address && isLogin) {
       saveLocation(coordinate.latitude, coordinate.longitude, address);
       alert('위치가 저장되었습니다.');
       navigate('/');
+    } else if (!isLogin) {
+      alert('로그인 후 사용가능합니다.');
+      navigate('/login');
     } else {
       alert('위치를 선택해주세요.');
     }
