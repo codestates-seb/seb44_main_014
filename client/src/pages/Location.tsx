@@ -2,8 +2,8 @@ import { styled } from 'styled-components';
 import { useState, useEffect } from 'react';
 import Button from '../components/UI/Button.tsx';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { ILocationState } from '../store/locationSlice.ts';
+import { useSelector, useDispatch } from 'react-redux';
+import { ILocationState, locationPost } from '../store/locationSlice.ts';
 import { useNavigate } from 'react-router-dom';
 
 declare global {
@@ -31,9 +31,9 @@ const Location = () => {
   const [address, setAddress] = useState('');
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const locationId = useSelector((state: ILocationState) => state.location.locationId);
-  console.log(locationId);
 
   useEffect(() => {
     const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -107,6 +107,7 @@ const Location = () => {
 
   const saveLocation = (latitude: number, longitude: number, address: string) => {
     try {
+      dispatch(locationPost({ locationId: locationId, address: address }));
       const response = axios.patch(`${import.meta.env.VITE_APP_API_URL}${locationId}`, {
         latitude,
         longitude,
@@ -119,9 +120,13 @@ const Location = () => {
   };
 
   const handleLocationChange = () => {
-    saveLocation(coordinate.latitude, coordinate.longitude, address);
-    alert('위치가 저장되었습니다.');
-    navigate('/');
+    if (address) {
+      saveLocation(coordinate.latitude, coordinate.longitude, address);
+      alert('위치가 저장되었습니다.');
+      navigate('/');
+    } else {
+      alert('위치를 선택해주세요.');
+    }
   };
 
   return (
