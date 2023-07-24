@@ -43,6 +43,7 @@ const EditUserInfo = () => {
         console.log(res.data);
         setUserData(res.data);
         UserGender(res.data);
+        setUserImg(res.data.image);
       })
       .catch((err) => {
         console.log(err);
@@ -80,12 +81,33 @@ const EditUserInfo = () => {
       setUserGender('여성');
     }
   };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files?.[0];
+    if (!selectedImage) return;
+
+    const formData = new FormData();
+    formData.append('multipartFile', selectedImage);
+
+    const imageResponseUrl = await axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/users/images/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      })
+      .then((res) => res.data[0]);
+    setUserImg(imageResponseUrl);
+  };
   return (
     <MainContainer>
       <UserImgContainer>
         <UserImg></UserImg>
       </UserImgContainer>
-      <ImgEditor>프로필 사진 변경</ImgEditor>
+      <ImgEditor htmlFor="profileImg_uploads">
+        프로필 사진 변경
+        <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange}></input>
+      </ImgEditor>
       <UneditableContainer>
         <UneditableComponent>
           <EditorTitle>이메일</EditorTitle>
@@ -158,10 +180,14 @@ const UserImg = styled.div`
   border-radius: 50%;
 `;
 
-const ImgEditor = styled.h1`
+const ImgEditor = styled.label`
   font-size: 1rem;
   text-align: center;
   cursor: pointer;
+
+  input {
+    display: none;
+  }
 
   &:hover {
     text-decoration: underline;

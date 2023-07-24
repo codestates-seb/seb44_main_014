@@ -2,11 +2,22 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import Tagcheckbox from '../components/UI/Tagcheckbox.tsx';
-// import Toggle from '../components/UI/Toggle.tsx';
 import { IUserState } from '../store/userSlice.ts';
-import axios from 'axios';
+import authApi from '../util/api/authApi.tsx';
 import { getCookie } from '../util/cookie/index.ts';
+import NoBoardList from '../components/Board/NoBoardList.tsx';
+
+interface Post {
+  postId: number;
+  title: string;
+  status: string;
+}
+
+interface Comment {
+  postId: number;
+  commentId: number;
+  content: string;
+}
 
 const Mypage = () => {
   const [userData, setUserData] = useState({
@@ -17,7 +28,7 @@ const Mypage = () => {
     foodTag: {
       foodTagId: 1,
     },
-    eatStatus: '',
+    eatStatus: false,
     posts: [
       {
         postId: 1,
@@ -63,10 +74,9 @@ const Mypage = () => {
   const [foodTagName, setFoodTagName] = useState('# 한식');
   const [meetingTitle, setMeetingTitle] = useState('참여 중인 모임이 없습니다.');
   const [meetingMates, setMeetingMates] = useState('참여자가 없습니다.');
-  const [posts, setPosts] = useState('작성한 게시글이 없습니다.');
-  const [comments, setComments] = useState('작성한 댓글이 없습니다.');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [userImage, setUserImage] = useState('');
-  const [eatStatus, setEatStatus] = useState(false);
 
   const userFoodTag = (data: any) => {
     if (data.foodTag.foodTagId === 1) {
@@ -91,22 +101,40 @@ const Mypage = () => {
 
   const userPosts = (data: any) => {
     if (data.posts[0].postId != 0) {
-      setPosts(data.posts[0].title);
+      setPosts(data.posts);
     }
   };
 
   const userComments = (data: any) => {
     if (data.comments[0].commentId != 0) {
-      setComments(data.comments[0].content);
+      setComments(data.comments);
+    }
+  };
+  const [isOn, setIsOn] = useState(false);
+  const ToggleHandler = async () => {
+    setIsOn(!isOn);
+    try {
+      const axiosInstance = await authApi; // Resolve the promise to get the Axios instance
+      const response = await axiosInstance.patch(
+        `/users/mypage/${userId}?eatStatus=${!isOn}`,
+        {},
+        {
+          headers: { Authorization: getCookie('accessToken') },
+        }
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}`, {
-        headers: { Authorization: getCookie('accessToken') },
-      })
-      .then((res) => {
+    const fetchData = async () => {
+      try {
+        const axiosInstance = await authApi; // Resolve the promise to get the Axios instance
+        const res = await axiosInstance.get(`/users/mypage/${userId}`, {
+          headers: { Authorization: getCookie('accessToken') },
+        });
         console.log(res);
         setUserData(res.data);
         userFoodTag(res.data);
@@ -114,54 +142,39 @@ const Mypage = () => {
         userPosts(res.data);
         userComments(res.data);
         setUserImage(res.data.image);
-      })
-      .catch((err) => {
+        setIsOn(res.data.eatStatus);
+
+        const toggleCheckboxes = document.getElementsByName('toggle');
+        if (res.data.eatStatus === true) {
+          for (let i = 0; i < toggleCheckboxes.length; i++) {
+            const checkbox = toggleCheckboxes[i] as HTMLInputElement;
+            checkbox.checked = true;
+          }
+        } else {
+          for (let i = 0; i < toggleCheckboxes.length; i++) {
+            const checkbox = toggleCheckboxes[i] as HTMLInputElement;
+            checkbox.checked = false;
+          }
+        }
+      } catch (err) {
         console.log(err);
-      });
+      }
+    };
+
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const userPosts = ({ user: any }) => {
-  //   return (
-  //     <div key={user.posts.postId}>
-  //       <UserContentsBoxTitle>
-  //         <Link to="/board">{user.posts.title}</Link>
-  //       </UserContentsBoxTitle>
-  //       <UserContentsBoxParagraph>{user.posts.status}</UserContentsBoxParagraph>
-  //     </div>
-  //   );
-  // };
-
-  // const dataComments = ({ user: any }) => {
-  //   return (
-  //     <div key={user.posts.commentId}>
-  //       <UserContentsContainer>
-  //         <UserContentsBoxTitle>
-  //           <Link to="/board">{user.comments.content}</Link>
-  //         </UserContentsBoxTitle>
-  //       </UserContentsContainer>
-  //     </div>
-  //   );
-  // };
-
   // 토글
-  const [isOn, setIsOn] = useState(true);
-
-  const ToggleHandler = () => {
-    setIsOn(!isOn);
-    axios.patch(`${import.meta.env.VITE_APP_API_URL}/users/mypage/${userId}?eatStatus=${isOn}`, {
-      headers: { Authorization: getCookie('accessToken') },
-    });
-  };
 
   return (
     <BodyContainer>
       <UserProfileContainer>
         <UserImageContainer>
           {userImage != '' ? (
-            <UserImage style={{ backgroundImage: `url(${userImage})` }}></UserImage>
+            <UserImage src={userImage} />
           ) : (
-            <UserImage style={{ background: `#000` }}></UserImage>
+            <UserImage src="https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png" />
           )}
         </UserImageContainer>
         <UserInfoContainer>
@@ -184,13 +197,14 @@ const Mypage = () => {
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
-              <ToggleContainer onClick={ToggleHandler} isOn={isOn}>
-                <ToggleBtn />
+              <ToggleContainer className={'switch'}>
+                <input type="checkbox" name="toggle" onClick={ToggleHandler} />
+                <span className={'slider round'}></span>
               </ToggleContainer>
             </UserContentsContainer>
             <UserContentsContainer className={'InfoContainer'}>
               <UserInfoTitle className={'Edit'}>
-                <Link to="/users/mypage/:memberId/edit">프로필 수정</Link>
+                <Link to={`/users/mypage/${userId}/edit`}>프로필 수정</Link>
               </UserInfoTitle>
             </UserContentsContainer>
           </UserContents>
@@ -212,34 +226,42 @@ const Mypage = () => {
       <UserContainer className={'PostsContainer'}>
         <UserContentsContainer>
           <UserContentsTitle>작성한 게시글</UserContentsTitle>
-          <Link to="/users/mypage/:memberId/questions">
+          <Link to={`/users/mypage/${userId}/questions`}>
             <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
           </Link>
         </UserContentsContainer>
+      </UserContainer>
+      <UserContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <div>{posts}</div>
-              </UserContentsBoxTitle>
-            </UserContentsContainer>
+            {posts.length === 0 && <NoBoardList />}
+            {posts.map((post) => (
+              <UserContentsContainer key={post.postId}>
+                <UserContentsBoxTitle>
+                  <Link to={`/board/posts/${post.postId}`}>{post.title}</Link>
+                </UserContentsBoxTitle>
+              </UserContentsContainer>
+            ))}
           </UserContents>
         </UserContentBox>
       </UserContainer>
       <UserContainer className={'PostsContainer'}>
         <UserContentsContainer>
           <UserContentsTitle>작성한 댓글</UserContentsTitle>
-          <Link to="/users/mypage/:memberId/comments">
+          <Link to={`/users/mypage/${userId}/comments`}>
             <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
           </Link>
         </UserContentsContainer>
         <UserContentBox className={'PostsBox'}>
           <UserContents>
-            <UserContentsContainer>
-              <UserContentsBoxTitle>
-                <div>{comments}</div>
-              </UserContentsBoxTitle>
-            </UserContentsContainer>
+            {comments.length === 0 && <NoBoardList />}
+            {comments.map((comment) => (
+              <UserContentsContainer key={comment.postId}>
+                <UserContentsBoxTitle>
+                  <Link to={`/board/posts/${comment.postId}`}>{comment.content}</Link>
+                </UserContentsBoxTitle>
+              </UserContentsContainer>
+            ))}
           </UserContents>
         </UserContentBox>
       </UserContainer>
@@ -274,7 +296,7 @@ const UserImageContainer = styled.div`
   height: 20.625rem;
 `;
 
-const UserImage = styled.div`
+const UserImage = styled.img`
   width: 250px;
   height: 250px;
   padding: 50px;
@@ -335,7 +357,8 @@ const UserContainer = styled.div`
     }
   }
   &.PostsContainer {
-    height: 160px;
+    height: 20px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -411,27 +434,62 @@ const UserContentsContainer = styled.div`
 
 // 토글
 
-const ToggleContainer = styled.button<{ isOn: boolean }>`
-  display: flex;
-  justify-content: ${(props) => (props.isOn ? 'flex-start' : 'flex-end')};
-  align-items: center;
-  z-index: 0;
-  width: 45px;
-  height: 24px;
-  background: ${(props) => (props.isOn ? 'var(--color-gray)' : 'var(--color-orange)')};
-  border: 1px solid;
-  border-color: ${(props) => (props.isOn ? 'var(--color-gray)' : 'var(--color-orange)')};
-  border-radius: 1.25rem;
-`;
+const ToggleContainer = styled.label`
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
 
-const ToggleBtn = styled.button`
-  width: 20px;
-  height: 20px;
-  margin-left: 0.125rem;
-  margin-right: 0.125rem;
-  background-color: #fff;
-  border: 1px solid #fff;
-  border-radius: 50%;
+    width: 60px;
+    height: 34px;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+  .slider:before {
+    position: absolute;
+    content: '';
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  input:checked + .slider {
+    background-color: var(--color-orange);
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-orange);
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
 `;
 
 export default Mypage;
