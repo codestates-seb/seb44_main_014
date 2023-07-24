@@ -73,8 +73,19 @@ const EditUserInfo = () => {
     );
   };
 
-  const handleImageChange = async (e) => {
-    const selectedImage = e.target.files[0];
+  const UserGender = (data: any) => {
+    if (data.gender === 'MALE') {
+      setUserGender('남성');
+    }
+    if (data.gender === 'FEMALE') {
+      setUserGender('여성');
+    }
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files?.[0];
+    if (!selectedImage) return;
+
     const formData = new FormData();
     formData.append('multipartFile', selectedImage);
 
@@ -86,24 +97,17 @@ const EditUserInfo = () => {
         withCredentials: true,
       })
       .then((res) => res.data[0]);
-    setUserInfo({ ...userInfo, image: imageResponseUrl });
-    setPreview(userImg);
-  };
-
-  const UserGender = (data: any) => {
-    if (data.gender === 'MALE') {
-      setUserGender('남성');
-    }
-    if (data.gender === 'FEMALE') {
-      setUserGender('여성');
-    }
+    setUserImg(imageResponseUrl);
   };
   return (
     <MainContainer>
       <UserImgContainer>
         <UserImg></UserImg>
       </UserImgContainer>
-      <ImgEditor>프로필 사진 변경</ImgEditor>
+      <ImgEditor htmlFor="profileImg_uploads">
+        프로필 사진 변경
+        <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange}></input>
+      </ImgEditor>
       <UneditableContainer>
         <UneditableComponent>
           <EditorTitle>이메일</EditorTitle>
@@ -176,10 +180,14 @@ const UserImg = styled.div`
   border-radius: 50%;
 `;
 
-const ImgEditor = styled.h1`
+const ImgEditor = styled.label`
   font-size: 1rem;
   text-align: center;
   cursor: pointer;
+
+  input {
+    display: none;
+  }
 
   &:hover {
     text-decoration: underline;
