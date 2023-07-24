@@ -100,6 +100,22 @@ const Mypage = () => {
     }
   };
 
+  const statusTextChange = (status: string) => {
+    let statusText: string;
+    // let statusColor: string;
+    if (status === 'END') {
+      statusText = '모집 종료';
+      // statusColor = '#EE3D16';
+    } else if (status === 'COMPLETE') {
+      statusText = '모집 완료';
+      // statusColor = '#FFD233';
+    } else {
+      statusText = '모집 중';
+      // statusColor = '#28CA6B';
+    }
+    return statusText;
+  };
+
   const userPosts = (data: any) => {
     if (data.posts[0].postId != 0) {
       setPosts(data.posts);
@@ -249,6 +265,7 @@ const Mypage = () => {
                 <UserContentsBoxTitle>
                   <Link to={`/board/posts/${post.postId}`}>{post.title}</Link>
                 </UserContentsBoxTitle>
+                <ContentStatus>{statusTextChange(post.status)}</ContentStatus>
               </UserContentsContainer>
             ))}
           </UserContents>
@@ -313,7 +330,6 @@ const UserImage = styled.img`
 `;
 
 const UserInfoContainer = styled.div`
-  width: 68.125rem;
   margin: auto;
   border: 1px solid var(--color-gray);
   border-radius: 0.625rem;
@@ -323,6 +339,9 @@ const UserInfoContainer = styled.div`
   }
   @media (max-width: 768px) {
     max-width: 19.6875rem;
+  }
+  @media (min-width: 1026px) {
+    width: 68.125rem;
   }
 `;
 
@@ -436,6 +455,8 @@ const UserContentsContainer = styled.div`
     margin-bottom: 30px;
   }
 `;
+
+const ContentStatus = styled.div``;
 
 // 토글
 
