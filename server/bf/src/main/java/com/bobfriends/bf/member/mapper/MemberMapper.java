@@ -69,6 +69,7 @@ public interface MemberMapper {
                 MemberDto.Response.builder()
                         .image(member.getImage())
                         .name(member.getName())
+                        .gender(member.getGender())
                         .email(member.getEmail())
                         .avgStarRate(member.getAvgStarRate())
                         .eatStatus(member.isEatStatus())
