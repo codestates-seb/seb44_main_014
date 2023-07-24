@@ -37,6 +37,9 @@ const InputLabel = styled.label`
   input[type='radio']:checked ~ span {
     background-image: url('/img/radio_selected.png');
   }
+  input[type='radio']:disabled ~ span {
+    background-image: url('/img/radio_disabled.png');
+  }
 `;
 
 const RadioInput = styled.input`
