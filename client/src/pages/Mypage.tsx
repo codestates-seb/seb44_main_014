@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
 import authApi from '../util/api/authApi.tsx';
 import { getCookie } from '../util/cookie/index.ts';
+import { IMateMember } from '../interface/board.ts';
 
 interface Post {
   postId: number;
@@ -22,12 +23,7 @@ interface Meetings {
   mateId: number;
   postId: number;
   title: string;
-  mateMembers: [
-    {
-      memberId: number;
-      name: string;
-    }
-  ];
+  mateMembers: IMateMember[];
   postMemberId: number;
   postMemberName: string;
 }
@@ -143,7 +139,6 @@ const Mypage = () => {
         console.log(res);
         setUserData(res.data);
         userFoodTag(res.data);
-        userMeeting(res.data);
         userPosts(res.data);
         userComments(res.data);
         setUserImage(res.data.image);
@@ -219,22 +214,22 @@ const Mypage = () => {
       <UserContainer className={'MeetingContainer'}>
         <UserContentsTitle>참여 중인 모임</UserContentsTitle>
         <UserContentBox className={'MeetingBox'}>
-          {/* {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
-          {meetings.map((meeting) => (
-            <UserContentsContainer key={meeting.postId}>
-              <UserContents className={'InfoContents'}>
-                <UserContentsBoxTitle>
-                  <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
-                </UserContentsBoxTitle>
-                참여자:
-                {meeting.mateMembers.map((member) => {
-                  <div key={member.memberId}>
-                    <div>{member.name}</div>
-                  </div>;
-                })}
-              </UserContents>
-            </UserContentsContainer>
-          ))} */}
+          <UserContents>
+            {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
+            {meetings.map((meeting) => (
+              <UserContentsContainer key={meeting.postId}>
+                <UserContents className={'InfoContents'}>
+                  <UserContentsBoxTitle>
+                    <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
+                  </UserContentsBoxTitle>
+                  {/* 참여자: */}
+                  {/* {meeting.mateMembers.map((member) => {
+                  <UserInfoParagraph key={member.memberId}>{member}</UserInfoParagraph>;
+                })} */}
+                </UserContents>
+              </UserContentsContainer>
+            ))}
+          </UserContents>
         </UserContentBox>
       </UserContainer>
       <UserContainer className={'PostsContainer'}>
@@ -318,11 +313,10 @@ const UserImage = styled.img`
 `;
 
 const UserInfoContainer = styled.div`
-  width: 1090px;
-  height: 350px;
+  width: 68.125rem;
   margin: auto;
   border: 1px solid var(--color-gray);
-  border-radius: 10px;
+  border-radius: 0.625rem;
 
   @media (max-width: 1024px) {
     max-width: 37.5rem;
@@ -364,14 +358,12 @@ const UserContainer = styled.div`
   margin-bottom: 50px;
 
   &.MeetingContainer {
-    height: 120px;
-
     @media (max-width: 1024px) {
       margin-top: 25rem;
     }
   }
   &.PostsContainer {
-    height: 20px;
+    margin-top: 60px;
     margin-bottom: 10px;
   }
 `;
@@ -379,7 +371,6 @@ const UserContainer = styled.div`
 const UserContentsTitle = styled.h1`
   padding-left: 10px;
   padding-bottom: 10px;
-  height: 30px;
   font-size: 20px;
 
   @media (max-width: 1024px) {
