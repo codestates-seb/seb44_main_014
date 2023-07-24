@@ -18,7 +18,6 @@ const UserRating = () => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate`)
       .then((res) => {
-        console.log(res);
         setUserLists(res.data.mate_member);
         setIsLoading(false);
       })

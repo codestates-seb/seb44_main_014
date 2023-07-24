@@ -36,7 +36,6 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(res);
 
       if (quillRef.current) {
         // 현재 Editor 커서 위치에 서버로부터 전달받은 이미지 불러오는 url을 이용하여 이미지 태그 추가
@@ -83,7 +82,6 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
         }}
         // onChange={(content, delta, source, editor) => {
         //   setInfo({ ...info, content: editor.getHTML() });
-        //   console.log(content, delta, source, editor);
         // }}
       />
     </CustomReactQuill>

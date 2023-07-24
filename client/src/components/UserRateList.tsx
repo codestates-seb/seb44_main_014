@@ -29,8 +29,7 @@ const UserRateList = ({ list }: IMateInfo) => {
   const postStarRate = () => {
     axios
       .post(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate/userRate`, userRateInfo)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         setIsSubmitted(true);
         handleDisableBtn();
       })
@@ -38,7 +37,6 @@ const UserRateList = ({ list }: IMateInfo) => {
         console.log(err);
       });
   };
-  console.log(isSubmitted);
 
   const handleRateValue = (e: React.MouseEvent<HTMLInputElement>) => {
     setUserRateInfo({ ...userRateInfo, starRate: Number(checkedValue(e)) });

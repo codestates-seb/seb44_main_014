@@ -23,7 +23,6 @@ const AfterLogin = () => {
       (await authApi)
         .get(`/home`)
         .then((res) => {
-          console.log(res.data);
           setLists(res.data);
           setIsLoading(false);
         })
@@ -132,6 +131,7 @@ const BannerSection = styled.div`
   height: 200px;
   padding: 0 1.875rem;
   background-image: url('/img/background_grocery.jpg');
+  /* background-image: url('/img/main_food.jpg'); */
   background-color: rgba(0, 0, 0, 0.3);
   background-size: cover;
   background-repeat: no-repeat;

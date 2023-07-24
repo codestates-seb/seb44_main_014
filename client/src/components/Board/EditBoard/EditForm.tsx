@@ -31,8 +31,7 @@ const EditForm = () => {
   });
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  console.log(info);
-  console.log(isDisabled);
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
@@ -97,8 +96,7 @@ const EditForm = () => {
   const patchSubmitInfo = async () => {
     (await authApi)
       .patch(`/board/posts/${postId}/edit`, info)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         if (info.status === 'END' && !isDisabled) {
           navigate(`/board/post/${postId}/mate`);
         } else {

@@ -73,7 +73,7 @@ const BoardDetail = () => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const { mate } = res.data;
         setDetailData(res.data);
         setUpdateMate({ mate });
@@ -89,7 +89,7 @@ const BoardDetail = () => {
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate`)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const { mate_member } = res.data;
         setMateData(mate_member);
       })
@@ -124,8 +124,7 @@ const BoardDetail = () => {
   const deletePost = async () => {
     (await authApi)
       .delete(`/board/posts/${postId}`)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         navigate('/board');
       })
       .catch((err) => {
