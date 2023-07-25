@@ -9,10 +9,12 @@ import ApplyParticipate from '../components/Board/BoardDetail/ApplyParticipate.t
 import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
 import Loading from '../components/Loading.tsx';
+import AlertPopup from '../components/UI/AlertPopup.tsx';
 
 import authApi from '../util/api/authApi.tsx';
 import { IBoardDetailData } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
+import { showModal } from '../util/common.ts';
 
 interface IMember {
   memberId: number;
@@ -60,6 +62,7 @@ const BoardDetail = () => {
   const { content, member, comments } = detailData;
   const [updateMate, setUpdateMate] = useState({ mate: { findNum: 0, mateNum: 0 } });
   const [mateData, setMateData] = useState<IMember[] | []>([]);
+  const [boardDeleteAlert, setBoardDeleteAlert] = useState<boolean>(false);
 
   const showParticipant = mateData.filter((mate) => mate.memberId === userId).length;
 
@@ -139,38 +142,51 @@ const BoardDetail = () => {
   }
 
   return (
-    <DetailContainer>
-      {/* 상단 정보 영역 */}
-      <BoardDetailHeader boardInfo={detailData} />
-      <ContentsSection>
-        <ContentsWrapper>
-          {/* 내용 영역 */}
-          <TextContainer>
-            <TextArea dangerouslySetInnerHTML={{ __html: content }} />
-            {userId === member.memberId && (
-              <ModifyButtons>
-                <Link to={`/board/posts/${postId}/edit`}>수정</Link>
-                <button type="button" onClick={() => deletePost()}>
-                  삭제
-                </button>
-              </ModifyButtons>
-            )}
-          </TextContainer>
-          {/* 참가 신청 영역 */}
-          <ApplyParticipate
-            postApplyData={postApplyData}
-            updateMate={updateMate.mate}
-            showParticipant={showParticipant}
-            mateData={mateData}
-            memberId={member.memberId}
-          />
-        </ContentsWrapper>
-        {/* 작성자 프로필 영역 */}
-        <WriterProfile profileInfo={member} />
-      </ContentsSection>
-      {/* 댓글 영역 */}
-      <BoardComment commentInfo={comments} />
-    </DetailContainer>
+    <>
+      {boardDeleteAlert && (
+        <AlertPopup purpose={'삭제'} purposeHandler={deletePost} closeHandler={setBoardDeleteAlert}>
+          게시물을 삭제하시겠습니까?
+        </AlertPopup>
+      )}
+      <DetailContainer>
+        {/* 상단 정보 영역 */}
+        <BoardDetailHeader boardInfo={detailData} />
+        <ContentsSection>
+          <ContentsWrapper>
+            {/* 내용 영역 */}
+            <TextContainer>
+              <TextArea dangerouslySetInnerHTML={{ __html: content }} />
+              {userId === member.memberId && (
+                <ModifyButtons>
+                  <Link to={`/board/posts/${postId}/edit`}>수정</Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBoardDeleteAlert(true);
+                      showModal();
+                    }}
+                  >
+                    삭제
+                  </button>
+                </ModifyButtons>
+              )}
+            </TextContainer>
+            {/* 참가 신청 영역 */}
+            <ApplyParticipate
+              postApplyData={postApplyData}
+              updateMate={updateMate.mate}
+              showParticipant={showParticipant}
+              mateData={mateData}
+              memberId={member.memberId}
+            />
+          </ContentsWrapper>
+          {/* 작성자 프로필 영역 */}
+          <WriterProfile profileInfo={member} />
+        </ContentsSection>
+        {/* 댓글 영역 */}
+        <BoardComment commentInfo={comments} />
+      </DetailContainer>
+    </>
   );
 };
 

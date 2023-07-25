@@ -5,8 +5,9 @@ import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
+import AlertPopup from '../../UI/AlertPopup.tsx';
 import { IComments } from '../../../interface/board.ts';
-import { timeStamp } from '../../../util/common.ts';
+import { timeStamp, showModal } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
 import authApi from '../../../util/api/authApi.tsx';
 
@@ -22,6 +23,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
     memberId: memberId,
     content: content,
   });
+  const [commentDeleteAlert, setCommentDeleteAlert] = useState<boolean>(false);
 
   const params = useParams();
   const postId = Number(params.postId);
@@ -51,57 +53,71 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   };
 
   return (
-    <CommentList>
-      <WriterInfo>
-        <div>
-          <WriterId>{name}</WriterId>
-          <WriterScore>
-            <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate.toFixed(1)}
-          </WriterScore>
-        </div>
-        <CommentTime>{newTime}</CommentTime>
-      </WriterInfo>
-      {/* 기본 */}
+    <>
+      {commentDeleteAlert && (
+        <AlertPopup purpose={'삭제'} purposeHandler={deleteComment} closeHandler={setCommentDeleteAlert}>
+          댓글을 삭제하시겠습니까?
+        </AlertPopup>
+      )}
+      <CommentList>
+        <WriterInfo>
+          <div>
+            <WriterId>{name}</WriterId>
+            <WriterScore>
+              <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate.toFixed(1)}
+            </WriterScore>
+          </div>
+          <CommentTime>{newTime}</CommentTime>
+        </WriterInfo>
+        {/* 기본 */}
 
-      {!modifyComment && (
-        <div>
-          <CommentContent>{commentContent.content}</CommentContent>
-          {/* 작성자에게만 노출 */}
-          {userId === memberId && (
+        {!modifyComment && (
+          <div>
+            <CommentContent>{commentContent.content}</CommentContent>
+            {/* 작성자에게만 노출 */}
+            {userId === memberId && (
+              <ModifyButtons>
+                <button onClick={() => setModifyComment(!modifyComment)}>수정</button>
+                <button
+                  onClick={() => {
+                    setCommentDeleteAlert(true);
+                    showModal();
+                  }}
+                >
+                  삭제
+                </button>
+              </ModifyButtons>
+            )}
+          </div>
+        )}
+        {/* 수정 모드 */}
+        {modifyComment && (
+          <div>
+            <CommentTextbox>
+              <textarea
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                  setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
+                }}
+                value={commentContent.content}
+                placeholder="댓글을 작성해주세요."
+                max-length={100}
+              />
+            </CommentTextbox>
             <ModifyButtons>
-              <button onClick={() => setModifyComment(!modifyComment)}>수정</button>
-              <button onClick={() => deleteComment()}>삭제</button>
+              {/* patch 요청 함수 연결 */}
+              <button
+                onClick={() => {
+                  setModifyComment(!modifyComment);
+                  patchComment();
+                }}
+              >
+                저장
+              </button>
             </ModifyButtons>
-          )}
-        </div>
-      )}
-      {/* 수정 모드 */}
-      {modifyComment && (
-        <div>
-          <CommentTextbox>
-            <textarea
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
-              }}
-              value={commentContent.content}
-              placeholder="댓글을 작성해주세요."
-              max-length={100}
-            />
-          </CommentTextbox>
-          <ModifyButtons>
-            {/* patch 요청 함수 연결 */}
-            <button
-              onClick={() => {
-                setModifyComment(!modifyComment);
-                patchComment();
-              }}
-            >
-              저장
-            </button>
-          </ModifyButtons>
-        </div>
-      )}
-    </CommentList>
+          </div>
+        )}
+      </CommentList>
+    </>
   );
 };
 

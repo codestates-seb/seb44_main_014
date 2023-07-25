@@ -43,7 +43,7 @@ const ApplyParticipate = ({
           신청
         </button>
       </ApplyParticipant>
-      {(showParticipant !== 0 || memberId === userId) && (
+      {(showParticipant !== 0 || (memberId === userId && mateData.length !== 0)) && (
         <ParticipantId>
           <span>참가자: &nbsp;</span>
           {mateData.map((mate, idx) => (
