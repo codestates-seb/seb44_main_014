@@ -98,17 +98,17 @@ const Login = () => {
           처음이신가요? <a href="/users/signup">회원가입</a>으로 가기
         </div>
       </SignUpTextContainer>
-      <OAuthButtonContainer>
-        {/* <OAuthButtonSection
+      {/* <OAuthButtonContainer> */}
+      {/* <OAuthButtonSection
           href={`${import.meta.env.VITE_APP_API_URL}/oauth2/authorization/google`}
           onClick={handleGoogleLogin}
         >
           google
         </OAuthButtonSection> */}
-        {/* <GoogleLoginButton></GoogleLoginButton> */}
-        <OAuthButtonSection>Kakao</OAuthButtonSection>
+      {/* <GoogleLoginButton></GoogleLoginButton> */}
+      {/* <OAuthButtonSection>Kakao</OAuthButtonSection>
         <OAuthButtonSection>Naver</OAuthButtonSection>
-      </OAuthButtonContainer>
+      </OAuthButtonContainer> */}
     </LoginContainer>
   );
 };
@@ -163,15 +163,15 @@ const SignUpTextContainer = styled.section`
   }
 `;
 
-const OAuthButtonContainer = styled.article`
-  display: flex;
-  flex-direction: column;
-  > button:nth-child(2) {
-    margin: 10px 0;
-  }
-`;
-const OAuthButtonSection = styled.button`
-  height: 40px;
-  background-color: var(--color-gray);
-  border-color: black;
-`;
+// const OAuthButtonContainer = styled.article`
+//   display: flex;
+//   flex-direction: column;
+//   > button:nth-child(2) {
+//     margin: 10px 0;
+//   }
+// `;
+// const OAuthButtonSection = styled.button`
+//   height: 40px;
+//   background-color: var(--color-gray);
+//   border-color: black;
+// `;

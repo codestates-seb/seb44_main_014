@@ -7,37 +7,48 @@ import { faLocationDot, faBars, faXmark } from '@fortawesome/free-solid-svg-icon
 import { IUserState } from '../../store/userSlice.ts';
 import ToggleMenu from './ToggleMenu.tsx';
 import Logout from '../Logout/Logout.tsx';
+import { ILocationState } from '../../store/locationSlice.ts';
 
 const Header = () => {
   const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
   const memberId = useSelector((state: IUserState) => state.user.memberId);
+  const locationAddress = useSelector((state: ILocationState) => state.location.address);
   const [showToggleMenu, setShowToggleMenu] = useState<boolean>(false);
 
   return (
     <>
       <HeaderContainer>
-        <HeaderWrapper>
-          <Link to="/location" onClick={() => setShowToggleMenu(false)}>
+        {locationAddress || !isLoggedIn ? (
+          <HeaderWrapper>
+            <Link to="/location" onClick={() => setShowToggleMenu(false)}>
+              <LocationBtn>
+                <FontAwesomeIcon icon={faLocationDot} />
+              </LocationBtn>
+            </Link>
+            <Link to="/" onClick={() => setShowToggleMenu(false)}>
+              <Logo>#밥친구</Logo>
+            </Link>
+            <MenuBtn onClick={() => setShowToggleMenu(!showToggleMenu)}>
+              {showToggleMenu ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faBars} />}
+            </MenuBtn>
+            <PCNav>
+              <Link to="/board">보드</Link>
+              {!isLoggedIn ? (
+                <Link to="/users/signup">회원가입</Link>
+              ) : (
+                <Link to={`/users/mypage/${memberId}`}>마이페이지</Link>
+              )}
+              {!isLoggedIn ? <Link to="/login">로그인</Link> : <Logout setShowToggleMenu={setShowToggleMenu} />}
+            </PCNav>
+          </HeaderWrapper>
+        ) : (
+          <HeaderWrapper>
             <LocationBtn>
               <FontAwesomeIcon icon={faLocationDot} />
             </LocationBtn>
-          </Link>
-          <Link to="/" onClick={() => setShowToggleMenu(false)}>
             <Logo>#밥친구</Logo>
-          </Link>
-          <MenuBtn onClick={() => setShowToggleMenu(!showToggleMenu)}>
-            {showToggleMenu ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faBars} />}
-          </MenuBtn>
-          <PCNav>
-            <Link to="/board">보드</Link>
-            {!isLoggedIn ? (
-              <Link to="/users/signup">회원가입</Link>
-            ) : (
-              <Link to={`/users/mypage/${memberId}`}>마이페이지</Link>
-            )}
-            {!isLoggedIn ? <Link to="/login">로그인</Link> : <Logout setShowToggleMenu={setShowToggleMenu} />}
-          </PCNav>
-        </HeaderWrapper>
+          </HeaderWrapper>
+        )}
       </HeaderContainer>
       {showToggleMenu && <ToggleMenu setShowToggleMenu={setShowToggleMenu} />}
     </>
