@@ -27,7 +27,11 @@ const SearchFilter = ({ filterInfo, setFilterInfo, setCurrentApi }: IFilterData)
 
   return (
     <SeachSection>
-      {isLoggedIn && <LocationText>{address}</LocationText>}
+      {isLoggedIn && (
+        <LocationText>
+          <p>{address}</p>
+        </LocationText>
+      )}
       <InputArea>
         <Label htmlFor="search">검색</Label>
         <InputSearch
@@ -101,22 +105,26 @@ const LocationText = styled.div`
   left: 0;
   top: 50px;
   width: 100%;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 30px;
+  padding: 0.5rem 0;
   background-color: rgba(0, 0, 0, 0.5);
-  color: #ffffff;
-  font-family: 'NanumSquare', sans-serif;
-  font-size: 0.875rem;
-  @media screen and (min-width: 768px) {
-    padding-left: 80px;
-  }
   @media screen and (min-width: 1024px) {
     top: 70px;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    padding-left: 50px;
-    font-size: 1rem;
+    padding: 0.8rem 0;
+  }
+  p {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 30px;
+    color: #ffffff;
+    font-family: 'NanumSquare', sans-serif;
+    font-size: 0.875rem;
+    @media screen and (min-width: 768px) {
+      padding: 0 80px;
+    }
+    @media screen and (min-width: 1024px) {
+      padding: 0 50px;
+      font-size: 1rem;
+    }
   }
 `;
 
