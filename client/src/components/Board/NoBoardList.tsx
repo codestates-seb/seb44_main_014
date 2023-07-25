@@ -15,9 +15,6 @@ const ListContainer = styled.li`
   border: 1px solid var(--color-gray);
   border-radius: 8px;
   box-sizing: border-box;
-  &:hover {
-    border: 1px solid var(--color-orange);
-  }
   @media screen and (min-width: 1024px) {
     padding: 1.25rem;
     margin-bottom: 1.25rem;

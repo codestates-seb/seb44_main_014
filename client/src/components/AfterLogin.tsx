@@ -3,13 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 
-import BoardList from './Board/BoardList.tsx';
-import Loading from './Loading.tsx';
-import NoBoardList from './Board/NoBoardList.tsx';
-import { IBoardList } from '../interface/board.ts';
-import { category } from '../store/listCategorySlice.ts';
-import { ILocationState } from '../store/locationSlice.ts';
 import authApi from '../util/api/authApi.tsx';
+import BoardList from './Board/BoardList.tsx';
+import NoBoardList from './Board/NoBoardList.tsx';
+import MainListArea from './MainListArea.tsx';
+
+import { category } from '../store/listCategorySlice.ts';
+import { IBoardList } from '../interface/board.ts';
+import { ILocationState } from '../store/locationSlice.ts';
+import { IUserState } from '../store/userSlice.ts';
+import { FOOD_TAGS } from '../constant/constant.ts';
 
 const AfterLogin = () => {
   const navigate = useNavigate();
@@ -17,6 +20,16 @@ const AfterLogin = () => {
   const [lists, setLists] = useState<IBoardList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const address = useSelector((state: ILocationState) => state.location.address);
+  const foodTag = useSelector((state: IUserState) => state.user.foodTagId);
+
+  let userFoodTag: number;
+  if (!foodTag) {
+    userFoodTag = 1;
+  } else {
+    userFoodTag = foodTag;
+  }
+
+  const customTagListTitle = FOOD_TAGS.filter((tag) => tag.id === userFoodTag)[0].text;
 
   useEffect(() => {
     const getBoarList = async () => {
@@ -34,6 +47,21 @@ const AfterLogin = () => {
     getBoarList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleMoreCustomList = () => {
+    navigate('/board');
+  };
+
+  const handleMoreEatingList = () => {
+    navigate('/board');
+    dispatch(category('EATING'));
+  };
+
+  const handleMoreShoppingList = () => {
+    navigate('/board');
+    dispatch(category('SHOPPING'));
+  };
+
   return (
     <>
       <LocationText>
@@ -48,84 +76,43 @@ const AfterLogin = () => {
         {/* <BannerTitle>밥친구</BannerTitle> */}
       </BannerSection>
       <ListSection>
-        <ListBlock>
-          <TitleArea>
-            <TitleH3>밥 먹기 최신 글</TitleH3>
-            <MoreButton
-              onClick={() => {
-                navigate('/board');
-                dispatch(category('EATING'));
-              }}
-            >
-              더 보기
-            </MoreButton>
-          </TitleArea>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <ul>
-              {lists.filter((list) => list.category === 'EATING').length === 0 && <NoBoardList />}
-              {lists
-                .filter((list) => list.category === 'EATING')
-                .slice(0, 4)
-                .map((list, idx) => (
-                  <BoardList key={idx} list={list} />
-                ))}
-            </ul>
-          )}
-        </ListBlock>
-        <ListBlock>
-          <TitleArea>
-            <TitleH3>장 보기 최신 글</TitleH3>
-            <MoreButton
-              onClick={() => {
-                navigate('/board');
-                dispatch(category('SHOPPING'));
-              }}
-            >
-              더 보기
-            </MoreButton>
-          </TitleArea>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <ul>
-              {lists.filter((list) => list.category === 'SHOPPING').length === 0 && <NoBoardList />}
-              {lists
-                .filter((list) => list.category === 'SHOPPING')
-                .slice(0, 4)
-                .map((list, idx) => (
-                  <BoardList key={idx} list={list} />
-                ))}
-            </ul>
-          )}
-        </ListBlock>
-        <ListBlock>
-          <TitleArea>
-            <TitleH3># 한식 최신 글</TitleH3>
-            <MoreButton
-              onClick={() => {
-                navigate('/board');
-                // dispatch(category('SHOPPING'));
-              }}
-            >
-              더 보기
-            </MoreButton>
-          </TitleArea>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <ul>
-              {lists.filter((list) => list.postTag.foodTagId === 1).length === 0 && <NoBoardList />}
-              {lists
-                .filter((list) => list.postTag.foodTagId === 1)
-                .slice(0, 4)
-                .map((list, idx) => (
-                  <BoardList key={idx} list={list} />
-                ))}
-            </ul>
-          )}
-        </ListBlock>
+        <MainListArea
+          title={`사용자 맞춤 게시글: ${customTagListTitle}`}
+          moreBtnHandler={handleMoreCustomList}
+          isLoading={isLoading}
+        >
+          <ul>
+            {lists.filter((list) => list.postTag.foodTagId === userFoodTag).length === 0 && <NoBoardList />}
+            {lists
+              .filter((list) => list.postTag.foodTagId === userFoodTag)
+              .slice(0, 4)
+              .map((list, idx) => (
+                <BoardList key={idx} list={list} />
+              ))}
+          </ul>
+        </MainListArea>
+        <MainListArea title={'밥 먹기 최신 글'} moreBtnHandler={handleMoreEatingList} isLoading={isLoading}>
+          <ul>
+            {lists.filter((list) => list.category === 'EATING').length === 0 && <NoBoardList />}
+            {lists
+              .filter((list) => list.category === 'EATING')
+              .slice(0, 4)
+              .map((list, idx) => (
+                <BoardList key={idx} list={list} />
+              ))}
+          </ul>
+        </MainListArea>
+        <MainListArea title={'장 보기 최신 글'} moreBtnHandler={handleMoreShoppingList} isLoading={isLoading}>
+          <ul>
+            {lists.filter((list) => list.category === 'SHOPPING').length === 0 && <NoBoardList />}
+            {lists
+              .filter((list) => list.category === 'SHOPPING')
+              .slice(0, 4)
+              .map((list, idx) => (
+                <BoardList key={idx} list={list} />
+              ))}
+          </ul>
+        </MainListArea>
       </ListSection>
     </>
   );
@@ -199,46 +186,6 @@ const ListSection = styled.ul`
   }
   @media screen and (min-width: 1024px) {
     padding: 0 3.125rem 5rem;
-  }
-`;
-
-const ListBlock = styled.li`
-  margin-top: 3rem;
-  @media screen and (min-width: 1024px) {
-    margin-top: 5rem;
-  }
-`;
-
-const TitleArea = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
-  @media screen and (min-width: 768px) {
-    margin-bottom: 1.875rem;
-  }
-  @media screen and (min-width: 1024px) {
-  }
-`;
-
-const TitleH3 = styled.h3`
-  padding-left: 1rem;
-  font-family: 'NanumSquare', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  @media screen and (min-width: 768px) {
-  }
-  @media screen and (min-width: 1024px) {
-    font-size: 1.5rem;
-  }
-`;
-
-const MoreButton = styled.button`
-  padding-right: 1rem;
-  font-size: 13px;
-  @media screen and (min-width: 768px) {
-  }
-  @media screen and (min-width: 1024px) {
   }
 `;
 
