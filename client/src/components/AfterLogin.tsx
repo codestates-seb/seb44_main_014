@@ -37,7 +37,12 @@ const AfterLogin = () => {
   return (
     <>
       <BannerSection>
-        <BannerTitle>밥친구</BannerTitle>
+        <BannerTitle>
+          회원가입 후 게시글이 안 보이신다면 새로고침을 해주세요!
+          <br />
+          현재 해결 중에 있는 부분입니다..🥹
+        </BannerTitle>
+        {/* <BannerTitle>밥친구</BannerTitle> */}
       </BannerSection>
       <ListSection>
         <ListBlock>
@@ -131,12 +136,13 @@ const BannerSection = styled.div`
   height: 200px;
   padding: 0 1.875rem;
   background-image: url('/img/background_grocery.jpg');
-  /* background-image: url('/img/main_food.jpg'); */
   background-color: rgba(0, 0, 0, 0.3);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   background-blend-mode: multiply;
+  text-align: center;
+  line-height: 1.5;
   @media screen and (min-width: 768px) {
     height: 300px;
   }
