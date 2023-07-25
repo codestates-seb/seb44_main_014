@@ -55,13 +55,15 @@ public interface MateMemberMapper {
         MateMemberDto.MateMemberGetResponses responses = new MateMemberDto.MateMemberGetResponses();
         List<MateMemberDto.MateMemberGetResponse> list = new ArrayList<>();
 
-
         for (MateMember mateMember : mateMembers) {
             MateMemberDto.MateMemberGetResponse response = new MateMemberDto.MateMemberGetResponse();
 
             response.setMemberId(mateMember.getMember().getMemberId());
             response.setName(mateMember.getMember().getName());
-
+            response.setImage(mateMember.getMember().getImage());
+            response.setGender(mateMember.getMember().getGender());
+            response.setAvgStarRate(mateMember.getMember().getAvgStarRate());
+            response.setEatStatus(mateMember.getMember().isEatStatus());
             list.add(response);
         }
 
