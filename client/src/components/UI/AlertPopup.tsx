@@ -44,7 +44,7 @@ const AlertPopup = ({ children, purpose, purposeHandler, closeHandler }: IAlertP
 };
 
 const AlertContainer = styled.div`
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
