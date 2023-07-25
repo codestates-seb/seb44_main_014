@@ -139,6 +139,8 @@ const EditForm = () => {
       alert('내용을 작성해주세요.');
     } else if (!info.mate.mateNum) {
       alert('원하는 인원 수를 작성해주세요.');
+    } else if (info.mate.mateNum < 1 || info.mate.mateNum > 20) {
+      alert('인원은 1명 이상, 20명 이하만 가능합니다.');
     } else {
       if (!info.genderTag || info.genderTag.genderTagId === 0) {
         setInfo({ ...info, genderTag: null });
@@ -210,6 +212,7 @@ const EditForm = () => {
             type="number"
             value={Number(info.mate.mateNum)}
             min={1}
+            max={20}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setInfo({ ...info, mate: { mateNum: Number((e.target as HTMLInputElement).value) } })
             }

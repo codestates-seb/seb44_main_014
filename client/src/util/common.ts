@@ -36,3 +36,11 @@ export const selectOneCheckbox = (e: React.MouseEvent<HTMLInputElement>) => {
     }
   }
 };
+
+export const showModal = () => {
+  document.body.style.overflow = 'hidden';
+};
+
+export const hideModal = () => {
+  document.body.style.overflow = 'unset';
+};
