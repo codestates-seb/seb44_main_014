@@ -77,13 +77,13 @@ public class LocationService {
         List<Long> memberIdList = locationRepository.findByNativeQuery(point);
 
         List<Post> postsByMemberId = memberIdList.stream()
-                .flatMap(id -> postRepository.findAllByMemberId(id).stream())
+                .flatMap(id -> postRepository.findNotEndPostsByMemberId(id).stream())
                 .collect(Collectors.toList());
 
         Collections.sort(postsByMemberId, (post1, post2) -> post2.getCreatedAt().compareTo(post1.getCreatedAt()));
 
         if (memberIdList.size() < 3)
-            return  postRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
+            return postRepository.findNotEndPosts(Sort.by(Sort.Direction.DESC,"createdAt"));
         else
             return postsByMemberId;
     }
