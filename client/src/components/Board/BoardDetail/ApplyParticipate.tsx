@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
+import { IUserState } from '../../../store/userSlice.ts';
 
 interface IMember {
   memberId: number;
@@ -14,8 +16,17 @@ interface IApplyParticipateProps {
   updateMate: IMate;
   showParticipant: number;
   mateData: IMember[];
+  memberId: number;
 }
-const ApplyParticipate = ({ postApplyData, updateMate, showParticipant, mateData }: IApplyParticipateProps) => {
+const ApplyParticipate = ({
+  postApplyData,
+  updateMate,
+  showParticipant,
+  mateData,
+  memberId,
+}: IApplyParticipateProps) => {
+  const userId = useSelector((state: IUserState) => state.user.memberId);
+
   return (
     <ParticipantContainer>
       <ApplyParticipant>
@@ -32,7 +43,7 @@ const ApplyParticipate = ({ postApplyData, updateMate, showParticipant, mateData
           신청
         </button>
       </ApplyParticipant>
-      {showParticipant !== 0 && (
+      {(showParticipant !== 0 || memberId === userId) && (
         <ParticipantId>
           <span>참가자: &nbsp;</span>
           {mateData.map((mate, idx) => (

@@ -162,6 +162,7 @@ const BoardDetail = () => {
             updateMate={updateMate.mate}
             showParticipant={showParticipant}
             mateData={mateData}
+            memberId={member.memberId}
           />
         </ContentsWrapper>
         {/* 작성자 프로필 영역 */}
