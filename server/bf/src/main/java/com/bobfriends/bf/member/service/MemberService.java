@@ -101,6 +101,15 @@ public class MemberService {
     }
 
 
+    /** 닉네임 중복 확인 **/
+    public Boolean verifyExistName(MemberDto.CheckName checkName) {
+
+        boolean isNameDuplicated = memberRepository.existsByName(checkName.getName());
+
+        return isNameDuplicated;
+    }
+
+
 
     /** eatStatus 수정 **/
     @Transactional
