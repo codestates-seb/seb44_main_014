@@ -1,6 +1,7 @@
 package com.bobfriends.bf.comment.dto;
 
 
+import com.bobfriends.bf.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,6 +69,9 @@ public class CommentDto {
         private long commentId;
         private String content;
         private long memberId;
+        private String image;
+        private Member.genderStatus gender;
+        private boolean eatStatus;
         private float avgStarRate;
         private String name;
         private LocalDateTime createdAt;

@@ -106,10 +106,13 @@ public class PostService {
 
         return post;
     }
+
+
     /** 로그인 전 전체 질문 검색 **/
     public Page<Post> searchPostsNotLogin(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag){
         return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
     }
+
 
     /** 로그인 후 (위치 적용) 전체 질문 검색 **/
     public Page<Post> searchPosts(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag, String token){

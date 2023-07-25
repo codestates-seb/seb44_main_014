@@ -52,6 +52,9 @@ public interface CommentMapper {
 
 
     @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "member.image", target = "image")
+    @Mapping(source = "member.gender", target = "gender")
+    @Mapping(source = "member.eatStatus", target = "eatStatus")
     @Mapping(source = "member.avgStarRate", target = "avgStarRate")
     @Mapping(source = "member.name", target = "name")
     CommentDto.DetailResponse commentToCommentDetailResponse(Comment comment);
