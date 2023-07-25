@@ -53,6 +53,7 @@ const Login = () => {
             memberId: responseData.memberId,
             isLogin: true,
             email: email,
+            foodTagId: responseData.foodTagId,
           })
         );
 

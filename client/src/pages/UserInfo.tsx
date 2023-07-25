@@ -9,7 +9,7 @@ import ZipCodeInput from '../components/zipCodeInput.tsx';
 import { useNavigate } from 'react-router-dom';
 import { FOOD_TAGS } from '../constant/constant.ts';
 import { locationPost } from '../store/locationSlice.ts';
-import { IUserState } from '../store/userSlice.ts';
+import { IUserState, foodTagChange } from '../store/userSlice.ts';
 // login, signup, userinfo에서 모두 버튼을 누르면 다 validate해야하는데 하나의 컴포넌트로 묶을 수는 없을까?? 뭔가 form, input같은걸로 태그달면 할 수 있을 것 같은데
 interface IUserInfo {
   name: string;
@@ -147,6 +147,14 @@ const UserInfo = () => {
           location
         );
         dispatch(locationPost({ locationId: response.headers.location, address: location.address }));
+
+        if (userInfo.foodTag !== null) {
+          dispatch(
+            foodTagChange({
+              foodTagId: userInfo.foodTag.foodTagId,
+            })
+          );
+        }
 
         alert('제출이 완료되었습니다.');
         // login 상태 들고 가야해
