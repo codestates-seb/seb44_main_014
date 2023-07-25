@@ -78,6 +78,14 @@ public class MemberDto {
         }
     }
 
+    /** 닉네임 중복 확인 **/
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CheckName {
+        private String name;
+    }
+
     /** 최초 등록 response **/
     @Getter @Setter
     @AllArgsConstructor

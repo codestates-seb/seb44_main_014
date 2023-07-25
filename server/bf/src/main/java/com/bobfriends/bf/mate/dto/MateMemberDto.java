@@ -48,12 +48,6 @@ public class MateMemberDto {
         private Member.genderStatus gender;
         private float avgStarRate;
         private boolean eatStatus;
-
-        // Todo : 성별, 이미지, 조용히 밥 먹어요 상태, 별점
-        //      "image": "이미지3",
-        //         "gender": "MALE",
-        //         "avgStarRate": 3.0,
-        //         "eatStatus": true
     }
     @Getter @Setter
     @NoArgsConstructor

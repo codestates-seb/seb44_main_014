@@ -54,6 +54,21 @@ public class MemberController {
     }
 
 
+    /** 닉네임 중복 확인 **/
+    @PostMapping("/userInfo/check-name")
+    public ResponseEntity checkName (@RequestBody MemberDto.CheckName checkName) {
+
+        Boolean isNameDuplicated = memberService.verifyExistName(checkName);
+
+        if (isNameDuplicated) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } else {
+            return ResponseEntity.ok("Name is available");
+        }
+    }
+
+
+
     /** 회원 마이페이지 조회 **/
     @GetMapping("/mypage/{member-id}")
     public ResponseEntity getMember (@Positive @PathVariable("member-id") long memberId){
