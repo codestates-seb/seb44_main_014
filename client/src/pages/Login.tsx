@@ -63,6 +63,7 @@ const Login = () => {
 
         if (responseData.gender && responseData.location) {
           navigate('/');
+          window.location.reload();
         } else {
           navigate(`/users/userInfo/${responseData.memberId}`);
         }
