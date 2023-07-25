@@ -38,11 +38,11 @@ const AfterLogin = () => {
     <>
       <LocationText>{address}</LocationText>
       <BannerSection>
-        <h2>
+        <BannerTitle>
           회원가입 후 게시글이 안 보이신다면 새로고침을 해주세요!
           <br />
           현재 해결 중에 있는 부분입니다..🥹
-        </h2>
+        </BannerTitle>
         {/* <BannerTitle>밥친구</BannerTitle> */}
       </BannerSection>
       <ListSection>
@@ -151,27 +151,35 @@ const BannerSection = styled.div`
 
 const LocationText = styled.div`
   position: absolute;
-  left: 30px;
+  left: 0;
   top: 50px;
   width: 100%;
-  color: #ffffff;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 30px;
   background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-family: 'NanumSquare', sans-serif;
+  font-size: 0.875rem;
   @media screen and (min-width: 768px) {
-    left: 80px;
+    padding-left: 80px;
   }
   @media screen and (min-width: 1024px) {
-    left: 50px;
     top: 70px;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 50px;
+    font-size: 1rem;
   }
 `;
 
 const BannerTitle = styled.h2`
   font-family: 'NanumSquare', sans-serif;
   color: #ffffff;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   @media screen and (min-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 `;
 

@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import { GENDER_TAGS, FOOD_TAGS } from '../../constant/constant.ts';
 import { IFilterInfo } from '../../interface/board.ts';
+import { ILocationState } from '../../store/locationSlice.ts';
+import { IUserState } from '../../store/userSlice.ts';
 
 interface IFilterData {
   filterInfo: IFilterInfo;
@@ -19,9 +22,12 @@ const SearchFilter = ({ filterInfo, setFilterInfo, setCurrentApi }: IFilterData)
     setCurrentApi(`&keyword=${keyword}&category=${filterInfo.category}`);
     setKeyword('');
   };
+  const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
+  const address = useSelector((state: ILocationState) => state.location.address);
 
   return (
     <SeachSection>
+      {isLoggedIn && <LocationText>{address}</LocationText>}
       <InputArea>
         <Label htmlFor="search">검색</Label>
         <InputSearch
@@ -87,6 +93,30 @@ const SeachSection = styled.section`
   background-blend-mode: multiply;
   @media screen and (min-width: 768px) {
     height: 300px;
+  }
+`;
+
+const LocationText = styled.div`
+  position: absolute;
+  left: 0;
+  top: 50px;
+  width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-family: 'NanumSquare', sans-serif;
+  font-size: 0.875rem;
+  @media screen and (min-width: 768px) {
+    padding-left: 80px;
+  }
+  @media screen and (min-width: 1024px) {
+    top: 70px;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 50px;
+    font-size: 1rem;
   }
 `;
 
