@@ -15,7 +15,13 @@ public interface PostRepository extends JpaRepository<Post, Long> , PostReposito
     /** 정렬 **/
     List<Post> findAll(Sort sort);
 
+    @Query("SELECT p FROM Post p WHERE p.status <> 'END'")
+    List<Post> findNotEndPosts(Sort sort);
+
     @Query("SELECT p FROM Post p WHERE p.member.id = :memberId")
     List<Post> findAllByMemberId(@Param("memberId") Long memberId);
+
+    @Query("SELECT p FROM Post p WHERE p.member.id = :memberId AND p.status <> 'END'")
+    List<Post> findNotEndPostsByMemberId(@Param("memberId") Long memberId);
 
 }

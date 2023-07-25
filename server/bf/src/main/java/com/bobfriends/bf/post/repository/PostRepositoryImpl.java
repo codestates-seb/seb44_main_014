@@ -24,9 +24,10 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
 
 
     @Override
-    public Page<Post> findBySearchOption(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag) {
+    public Page<Post> findBySearchOption(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag, String recruit) {
         JPQLQuery<Post> query = queryFactory.selectFrom(post)
-                .where(eqCategory(category), containTitleOrContent(keyword), eqGenderTag(genderTag), eqFoodTag(foodTag));
+                .where(eqCategory(category), containTitleOrContent(keyword), eqGenderTag(genderTag), eqFoodTag(foodTag),
+                        eqRecruit(recruit));
 
         // page 처리 구현체 (페이징)
         List<Post> posts = this.getQuerydsl().applyPagination(pageable, query).fetch();
@@ -35,9 +36,10 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
     }
 
     @Override
-    public List<Post> findBySearchOptionNoPage(String keyword, String category, Long genderTag, Long foodTag) {
+    public List<Post> findBySearchOptionNoPage(String keyword, String category, Long genderTag, Long foodTag, String recruit) {
         JPQLQuery<Post> query = queryFactory.selectFrom(post)
-                .where(eqCategory(category), containTitleOrContent(keyword), eqGenderTag(genderTag), eqFoodTag(foodTag));
+                .where(eqCategory(category), containTitleOrContent(keyword), eqGenderTag(genderTag), eqFoodTag(foodTag),
+                        eqRecruit(recruit));
 
         // 페이징 x
         List<Post> posts = query.fetch();
@@ -72,5 +74,12 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
             return null;
         }
         return post.postTag.foodTag.foodTagId.eq(foodTag);
+    }
+
+    private BooleanExpression eqRecruit(String recruit) {
+        if (recruit == null || recruit.isEmpty()) {
+            return null;
+        }
+        return post.status.eq(Post.recruitStatus.valueOf(recruit));
     }
 }

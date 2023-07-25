@@ -70,15 +70,16 @@ public class PostController {
 
     /** 로그인 전-> 질문 검색 (검색어, 태그) **/
     @GetMapping("/search/notlogin")
-    public ResponseEntity searchPostbynotlogin(PageRequest pageRequest,
+    public ResponseEntity searchPostByNotLogin(PageRequest pageRequest,
                                      @RequestParam(required = false) String keyword,
                                      @RequestParam(required = false) String category,
                                      @RequestParam(required = false) Long genderTag,
-                                     @RequestParam(required = false) Long foodTag){
+                                     @RequestParam(required = false) Long foodTag,
+                                     @RequestParam(required = false) String recruit) {
 
         // custom pageRequest
         Pageable pageable = pageRequest.of();
-        Page<Post> pagePosts = postService.searchPostsNotLogin(pageable, keyword, category, genderTag, foodTag);
+        Page<Post> pagePosts = postService.searchPostsNotLogin(pageable, keyword, category, genderTag, foodTag, recruit);
 
         List<Post> posts = pagePosts.getContent();
 
@@ -93,11 +94,12 @@ public class PostController {
                                      @RequestParam(required = false) String category,
                                      @RequestParam(required = false) Long genderTag,
                                      @RequestParam(required = false) Long foodTag,
+                                     @RequestParam(required = false) String recruit,
                                      @RequestHeader("authorization") String token){
 
         // custom pageRequest
         Pageable pageable = pageRequest.of();
-        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag,token);
+        Page<Post> pagePosts = postService.searchPosts(pageable, keyword, category, genderTag, foodTag, recruit, token);
 
         List<Post> posts = pagePosts.getContent();
 
