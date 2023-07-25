@@ -214,6 +214,12 @@ const TextArea = styled.div`
     width: 100%;
     max-width: 500px;
   }
+  em {
+    font-style: italic;
+  }
+  strong {
+    font-weight: 700;
+  }
 `;
 
 const ModifyButtons = styled.div`

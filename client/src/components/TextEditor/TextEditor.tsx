@@ -103,5 +103,11 @@ const CustomReactQuill = styled.div`
     @media screen and (min-width: 768px) {
       height: 300px;
     }
+    em {
+      font-style: italic;
+    }
+    strong {
+      font-weight: 700;
+    }
   }
 `;
