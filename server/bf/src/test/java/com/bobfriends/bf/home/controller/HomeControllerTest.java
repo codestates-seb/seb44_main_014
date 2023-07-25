@@ -1,7 +1,6 @@
 package com.bobfriends.bf.home.controller;
 
 import com.bobfriends.bf.auth.config.SecurityConfiguration;
-import com.bobfriends.bf.helper.StubData;
 import com.bobfriends.bf.post.dto.PostDto;
 import com.bobfriends.bf.post.entity.Post;
 import com.bobfriends.bf.post.mapper.PostMapper;
