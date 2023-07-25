@@ -109,13 +109,13 @@ public class PostService {
 
 
     /** 로그인 전 전체 질문 검색 **/
-    public Page<Post> searchPostsNotLogin(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag){
-        return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
+    public Page<Post> searchPostsNotLogin(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag, String recruit){
+        return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag, recruit);
     }
 
 
     /** 로그인 후 (위치 적용) 전체 질문 검색 **/
-    public Page<Post> searchPosts(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag, String token){
+    public Page<Post> searchPosts(Pageable pageable, String keyword, String category, Long genderTag, Long foodTag, String recruit, String token){
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
@@ -132,7 +132,7 @@ public class PostService {
 
         /** 여기까지가 위치로 뽑은 근방에 있는 member의 postList**/
 
-        List <Post> filteredPosts = postRepository.findBySearchOptionNoPage(keyword, category, genderTag, foodTag);
+        List <Post> filteredPosts = postRepository.findBySearchOptionNoPage(keyword, category, genderTag, foodTag, recruit);
 
         List<Post> commonPosts = postsByMemberId.stream()
                 .filter(filteredPosts::contains)
@@ -143,7 +143,7 @@ public class PostService {
         int end = Math.min((start + pageable.getPageSize()), commonPosts.size());
 
         if (memberIdList.size() < 3)
-            return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag);
+            return postRepository.findBySearchOption(pageable, keyword, category, genderTag, foodTag, recruit);
         else
             return new PageImpl<>(commonPosts.subList(start, end), pageable, commonPosts.size());
 
