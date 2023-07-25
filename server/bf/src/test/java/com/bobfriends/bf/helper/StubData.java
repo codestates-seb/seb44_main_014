@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
 public class StubData {
 
-    /** Post **/
     public static class MockPost {
         private static Map<HttpMethod, Object> stubRequestBody;
         static {
@@ -124,7 +124,7 @@ public class StubData {
     }
 
 
-    /** PostTag **/
+
     public static class MockPostTag {
         private static Map<String,Object> stubRequestBody;
         static {
@@ -139,7 +139,7 @@ public class StubData {
     }
 
 
-    /** Mate **/
+
     public static class MockMate {
         private static Map<String,Object> stubRequestBody;
 
@@ -154,3 +154,5 @@ public class StubData {
     }
 
 }
+
+ */
