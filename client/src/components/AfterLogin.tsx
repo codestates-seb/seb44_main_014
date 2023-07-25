@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch /*, useSelector*/ } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 
 import BoardList from './Board/BoardList.tsx';
@@ -8,7 +8,7 @@ import Loading from './Loading.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import { IBoardList } from '../interface/board.ts';
 import { category } from '../store/listCategorySlice.ts';
-// import { IUserState } from '../store/userSlice.ts';
+import { ILocationState } from '../store/locationSlice.ts';
 import authApi from '../util/api/authApi.tsx';
 
 const AfterLogin = () => {
@@ -16,7 +16,7 @@ const AfterLogin = () => {
   const dispatch = useDispatch();
   const [lists, setLists] = useState<IBoardList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
+  const address = useSelector((state: ILocationState) => state.location.address);
 
   useEffect(() => {
     const getBoarList = async () => {
@@ -36,6 +36,7 @@ const AfterLogin = () => {
   }, []);
   return (
     <>
+      <LocationText>{address}</LocationText>
       <BannerSection>
         <BannerTitle>
           회원가입 후 게시글이 안 보이신다면 새로고침을 해주세요!
@@ -148,13 +149,37 @@ const BannerSection = styled.div`
   }
 `;
 
+const LocationText = styled.div`
+  position: absolute;
+  left: 0;
+  top: 50px;
+  width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-family: 'NanumSquare', sans-serif;
+  font-size: 0.875rem;
+  @media screen and (min-width: 768px) {
+    padding-left: 80px;
+  }
+  @media screen and (min-width: 1024px) {
+    top: 70px;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 50px;
+    font-size: 1rem;
+  }
+`;
+
 const BannerTitle = styled.h2`
   font-family: 'NanumSquare', sans-serif;
   color: #ffffff;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   @media screen and (min-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 `;
 
