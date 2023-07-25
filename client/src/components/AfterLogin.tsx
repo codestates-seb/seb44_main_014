@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch /*, useSelector*/ } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 
 import BoardList from './Board/BoardList.tsx';
@@ -8,7 +8,7 @@ import Loading from './Loading.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import { IBoardList } from '../interface/board.ts';
 import { category } from '../store/listCategorySlice.ts';
-// import { IUserState } from '../store/userSlice.ts';
+import { ILocationState } from '../store/locationSlice.ts';
 import authApi from '../util/api/authApi.tsx';
 
 const AfterLogin = () => {
@@ -16,7 +16,7 @@ const AfterLogin = () => {
   const dispatch = useDispatch();
   const [lists, setLists] = useState<IBoardList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
+  const address = useSelector((state: ILocationState) => state.location.address);
 
   useEffect(() => {
     const getBoarList = async () => {
@@ -36,12 +36,13 @@ const AfterLogin = () => {
   }, []);
   return (
     <>
+      <LocationText>{address}</LocationText>
       <BannerSection>
-        <BannerTitle>
+        <h2>
           회원가입 후 게시글이 안 보이신다면 새로고침을 해주세요!
           <br />
           현재 해결 중에 있는 부분입니다..🥹
-        </BannerTitle>
+        </h2>
         {/* <BannerTitle>밥친구</BannerTitle> */}
       </BannerSection>
       <ListSection>
@@ -145,6 +146,22 @@ const BannerSection = styled.div`
   line-height: 1.5;
   @media screen and (min-width: 768px) {
     height: 300px;
+  }
+`;
+
+const LocationText = styled.div`
+  position: absolute;
+  left: 30px;
+  top: 50px;
+  width: 100%;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.5);
+  @media screen and (min-width: 768px) {
+    left: 80px;
+  }
+  @media screen and (min-width: 1024px) {
+    left: 50px;
+    top: 70px;
   }
 `;
 
