@@ -24,9 +24,14 @@ const Logout = ({ setShowToggleMenu }: ISHowToggle) => {
       })
     );
     dispatch(locationLogout({ locationId: null }));
-    await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
-      headers: { Refresh: getCookie('refreshToken') },
-    });
+    try {
+      await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
+        headers: { Refresh: getCookie('refreshToken') },
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+
     removeCookie('accessToken');
     removeCookie('refreshToken');
 
