@@ -46,13 +46,12 @@ public class PostRepositoryImpl extends QuerydslRepositorySupport implements Pos
     }
     private BooleanExpression eqCategory(String category){
         if (category == null || category.isEmpty()) {
-            // 디폴트 값인 EATING
+
             return post.category.eq(Post.categoryStatus.EATING);
         }
         return post.category.eq(Post.categoryStatus.valueOf(category));
     }
 
-    /** title 이나 content 에 해당 keyword 가 포함되어있으면 **/
     private BooleanExpression containTitleOrContent(String keyword){
         if (keyword == null || keyword.isEmpty()) {
             return null;
