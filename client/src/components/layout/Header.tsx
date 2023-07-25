@@ -43,9 +43,6 @@ const Header = () => {
           </HeaderWrapper>
         ) : (
           <HeaderWrapper>
-            <LocationBtn>
-              <FontAwesomeIcon icon={faLocationDot} />
-            </LocationBtn>
             <Logo>#밥친구</Logo>
           </HeaderWrapper>
         )}
