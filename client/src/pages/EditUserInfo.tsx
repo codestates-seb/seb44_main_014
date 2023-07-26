@@ -71,7 +71,7 @@ const EditUserInfo = () => {
           foodTagId: userFoodTag,
         },
       })
-      .then((res) => {
+      .then(() => {
         dispatch(
           foodTagChange({
             memberId: userId,
