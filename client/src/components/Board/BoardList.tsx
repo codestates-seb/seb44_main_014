@@ -134,6 +134,7 @@ const ListTag = styled.span`
 const ListStatus = styled.span<IStyledProps>`
   position: relative;
   font-size: 0.75rem;
+  line-height: 1;
   z-index: -1;
   &::after {
     position: absolute;
@@ -142,8 +143,8 @@ const ListStatus = styled.span<IStyledProps>`
     transform: translateY(-50%);
     display: block;
     content: '';
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     background-color: ${(props) => props.$statusColor};
     border-radius: 5px;
   }

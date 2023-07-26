@@ -133,8 +133,8 @@ const InfoMode = styled.span<IStyledProps>`
     transform: translateY(-50%);
     display: block;
     content: '';
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     background-color: ${(props) => (props.$isActive === true ? '#28CA6B' : '#EE3D16')};
     border-radius: 5px;
   }
