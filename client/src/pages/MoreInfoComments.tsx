@@ -4,7 +4,8 @@ import { IMypageComments } from '../interface/mypage.ts';
 import { useState, useEffect } from 'react';
 import { IUserState } from '../store/userSlice.ts';
 import { useSelector } from 'react-redux';
-import api from '../util/api/api.tsx';
+import instance from '../util/api/instance.ts';
+// import api from '../util/api/api.tsx';
 import { Link } from 'react-router-dom';
 
 const MoreInfoComments = () => {
@@ -17,7 +18,7 @@ const MoreInfoComments = () => {
   }, []);
 
   const getList = async () => {
-    const response = await (await api()).get(`/users/mypage/${memberId}/comments`);
+    const response = await instance.get(`/users/mypage/${memberId}/comments`);
     setLists(response.data);
   };
   return (

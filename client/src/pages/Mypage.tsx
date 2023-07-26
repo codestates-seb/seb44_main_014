@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
-import api from '../util/api/api.tsx';
+import instance from '../util/api/instance.ts';
+// import api from '../util/api/api.tsx';
 import { IMateMember } from '../interface/board.ts';
 import Loading from '../components/Loading.tsx';
 
@@ -90,7 +91,7 @@ const Mypage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      (await api())
+      await instance
         .get(`/users/mypage/${userId}`)
         .then((res: any) => {
           setUserData(res.data);
@@ -114,8 +115,8 @@ const Mypage = () => {
   const ToggleHandler = async () => {
     setIsOn(!isOn);
     try {
-      const axiosInstance = await api(); // Resolve the promise to get the Axios instance
-      await axiosInstance.patch(`/users/mypage/${userId}?eatStatus=${!isOn}`);
+      // const axiosInstance = await api(); // Resolve the promise to get the Axios instance
+      await instance.patch(`/users/mypage/${userId}?eatStatus=${!isOn}`);
     } catch (err) {
       console.log(err);
     }

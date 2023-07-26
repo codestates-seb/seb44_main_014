@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import Comment from './Comment.tsx';
 
-import api from '../../../util/api/api.tsx';
+import instance from '../../../util/api/instance.ts';
+// import api from '../../../util/api/api.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
 
@@ -33,7 +34,7 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
 
   const postComment = async () => {
     if (isLoggedIn) {
-      (await api())
+      await instance
         .post(`/board/posts/${postId}/comments`, commentContent)
         .then((res) => {
           console.log(res);

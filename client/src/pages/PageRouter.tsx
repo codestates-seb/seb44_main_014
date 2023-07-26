@@ -17,10 +17,10 @@ import MoreInfoWritings from './MoreInfoWritings.tsx';
 import UserRating from './UserRating.tsx';
 import BobFriendIntro from './BobFriendIntro.tsx';
 import PageNotFound from './PageNotFound.tsx';
-import useLogoutAndRedirect from '../components/Logout/useLogout.tsx';
+// import useLogoutAndRedirect from '../components/Logout/useLogout.tsx';
 
 const PageRouter = () => {
-  useLogoutAndRedirect();
+  // useLogoutAndRedirect();
   return (
     <MainContainer>
       <Routes>
