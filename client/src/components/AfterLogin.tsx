@@ -68,7 +68,7 @@ const AfterLogin = () => {
         <p>{address}</p>
       </LocationText>
       <BannerSection>
-        <BannerTitle>밥친구</BannerTitle>
+        <BannerTitle>같이 밥 먹을 친구 / 장 볼 친구를 찾아보세요!</BannerTitle>
       </BannerSection>
       <ListSection>
         <MainListArea
