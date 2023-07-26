@@ -67,9 +67,11 @@ const ZipCodeInput: React.FC<IZipCodeInputProps> = ({ location, setLocation, loc
     <LocationContainer>
       <LocationTitle>지역 선택 *</LocationTitle>
       <LocationInputContainer>
-        <LocationInput> {location.address}</LocationInput>
-        <LocationButton onClick={handle.clickButton}>우편번호</LocationButton>
-        <ErrorMessage>{locationErrMsg}</ErrorMessage>
+        <LocationInputSection>
+          <LocationInput> {location.address}</LocationInput>
+          <LocationButton onClick={handle.clickButton}>우편번호</LocationButton>
+        </LocationInputSection>
+        <LocationErrorMessage>{locationErrMsg}</LocationErrorMessage>
       </LocationInputContainer>
       {openPostcode && (
         <DaumPostcode
@@ -90,6 +92,10 @@ const LocationTitle = styled.div`
   margin: 0 0 10px 0;
 `;
 const LocationInputContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
+const LocationInputSection = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -115,7 +121,7 @@ const LocationButton = styled.button`
     background-color: #d8820a;
   }
 `;
-const ErrorMessage = styled.div`
+const LocationErrorMessage = styled.div`
   margin: 10px 0 10px 0;
   color: var(--status-finished);
 `;

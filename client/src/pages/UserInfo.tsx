@@ -127,7 +127,7 @@ const UserInfo = () => {
     } else {
       setGenderErrMsg('');
     }
-    if (!location) {
+    if (!location.address) {
       setLocationErrMsg('지역은 필수로 입력해야합니다.');
       userInfoErr = true;
     } else {
