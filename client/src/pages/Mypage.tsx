@@ -115,8 +115,7 @@ const Mypage = () => {
     setIsOn(!isOn);
     try {
       const axiosInstance = await api(); // Resolve the promise to get the Axios instance
-      const res = await axiosInstance.patch(`/users/mypage/${userId}?eatStatus=${!isOn}`);
-      console.log(res);
+      await axiosInstance.patch(`/users/mypage/${userId}?eatStatus=${!isOn}`);
     } catch (err) {
       console.log(err);
     }
@@ -153,19 +152,19 @@ const Mypage = () => {
   };
 
   const userPosts = (data: any) => {
-    if (data.posts[0].postId != 0) {
+    if (Array.isArray(data.posts) && data.posts.length !== 0) {
       setPosts(data.posts);
     }
   };
 
   const userComments = (data: any) => {
-    if (data.comments[0].commentId != 0) {
+    if (Array.isArray(data.comments) && data.comments.length !== 0) {
       setComments(data.comments);
     }
   };
 
   return (
-    <>
+    <div>
       {isLoading && <Loading />}
       {!isLoading && (
         <BodyContainer>
@@ -221,10 +220,10 @@ const Mypage = () => {
                       <UserContentsBoxTitle>
                         <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
                       </UserContentsBoxTitle>
-                      {/* 참여자: */}
-                      {/* {meeting.mateMembers.map((member) => {
-                  <UserInfoParagraph key={member.memberId}>{member}</UserInfoParagraph>;
-                })} */}
+                      참여자:
+                      {meeting.mateMembers.map((member) => (
+                        <UserInfoParagraph key={member.mateMemberId}>{member.name}</UserInfoParagraph>
+                      ))}
                     </UserContents>
                   </UserContentsContainer>
                 ))}
@@ -276,7 +275,7 @@ const Mypage = () => {
           </UserContainer>
         </BodyContainer>
       )}
-    </>
+    </div>
   );
 };
 
