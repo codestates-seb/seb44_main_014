@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 
-import api from '../util/api/api.tsx';
+import instance from '../util/api/instance.ts';
+// import api from '../util/api/api.tsx';
 import BoardList from './Board/BoardList.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import MainListArea from './MainListArea.tsx';
@@ -33,7 +34,7 @@ const AfterLogin = () => {
 
   useEffect(() => {
     const getBoarList = async () => {
-      (await api())
+      await instance
         .get(`/home`)
         .then((res) => {
           setLists(res.data);

@@ -10,7 +10,8 @@ import ProfilePopup from './ProfilePopup.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp, showModal } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
-import api from '../../../util/api/api.tsx';
+// import api from '../../../util/api/api.tsx';
+import instance from '../../../util/api/instance.ts';
 
 type CommentInfoProps = {
   commentInfo: IComments;
@@ -33,7 +34,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   const newTime = timeStamp(new Date(createdAt));
 
   const patchComment = async () => {
-    (await api())
+    await instance
       .patch(`/board/posts/${postId}/comments/${commentId}`, commentContent)
       .then((res) => {
         setCommentContent({ ...commentContent, content: res.data.content });
@@ -44,7 +45,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   };
 
   const deleteComment = async () => {
-    (await api())
+    await instance
       .delete(`/board/posts/${postId}/comments/${commentId}`)
       .then(() => {
         location.reload();

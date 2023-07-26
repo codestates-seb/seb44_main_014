@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
-import api from '../util/api/api.tsx';
+import instance from '../util/api/instance.ts';
+// import api from '../util/api/api.tsx';
 import { IMateMember } from '../interface/board.ts';
 import Loading from '../components/Loading.tsx';
 
@@ -90,17 +91,16 @@ const Mypage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      (await api())
+      await instance
         .get(`/users/mypage/${userId}`)
         .then((res: any) => {
-          console.log(res.data);
           setUserData(res.data);
           userFoodTag(res.data);
           userPosts(res.data);
           userComments(res.data);
           setUserImage(res.data.image);
           setIsOn(res.data.eatStatus);
-          setMeetings(res.data.mates);
+          setMeetings([...res.data.mates, ...res.data.postMates]);
           setIsLoading(false);
         })
         .catch((err: any) => {
@@ -115,9 +115,8 @@ const Mypage = () => {
   const ToggleHandler = async () => {
     setIsOn(!isOn);
     try {
-      const axiosInstance = await api(); // Resolve the promise to get the Axios instance
-      const res = await axiosInstance.patch(`/users/mypage/${userId}?eatStatus=${!isOn}`);
-      console.log(res);
+      // const axiosInstance = await api(); // Resolve the promise to get the Axios instance
+      await instance.patch(`/users/mypage/${userId}?eatStatus=${!isOn}`);
     } catch (err) {
       console.log(err);
     }
@@ -154,19 +153,19 @@ const Mypage = () => {
   };
 
   const userPosts = (data: any) => {
-    if (data.posts[0].postId != 0) {
+    if (Array.isArray(data.posts) && data.posts.length !== 0) {
       setPosts(data.posts);
     }
   };
 
   const userComments = (data: any) => {
-    if (data.comments[0].commentId != 0) {
+    if (Array.isArray(data.comments) && data.comments.length !== 0) {
       setComments(data.comments);
     }
   };
 
   return (
-    <>
+    <div>
       {isLoading && <Loading />}
       {!isLoading && (
         <BodyContainer>
@@ -182,15 +181,15 @@ const Mypage = () => {
               <UserContents className={'InfoContents'}>
                 <UserContentsContainer className={'InfoContainer'}>
                   <UserInfoTitle>이름</UserInfoTitle>
-                  <UserInfoParagraph>{userData.name}</UserInfoParagraph>
+                  <UserInfolist>{userData.name}</UserInfolist>
                 </UserContentsContainer>
                 <UserContentsContainer className={'InfoContainer'}>
                   <UserInfoTitle>이메일</UserInfoTitle>
-                  <UserInfoParagraph>{userData.email}</UserInfoParagraph>
+                  <UserInfolist>{userData.email}</UserInfolist>
                 </UserContentsContainer>
                 <UserContentsContainer className={'InfoContainer'}>
                   <UserInfoTitle>매너 별점</UserInfoTitle>
-                  <UserInfoParagraph>{userData.avgStarRate.toFixed(1)}</UserInfoParagraph>
+                  <UserInfolist>{userData.avgStarRate.toFixed(1)}</UserInfolist>
                 </UserContentsContainer>
                 <UserContentsContainer className={'Tag'}>
                   <UserInfoTitle className={'Tag'}>태그</UserInfoTitle>
@@ -218,14 +217,18 @@ const Mypage = () => {
                 {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
                 {meetings.map((meeting) => (
                   <UserContentsContainer key={meeting.postId}>
-                    <UserContents className={'InfoContents'}>
+                    <UserContents className={'MeetingContents'}>
                       <UserContentsBoxTitle>
                         <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
                       </UserContentsBoxTitle>
-                      {/* 참여자: */}
-                      {/* {meeting.mateMembers.map((member) => {
-                  <UserInfoParagraph key={member.memberId}>{member}</UserInfoParagraph>;
-                })} */}
+                      <UserInfoul>
+                        <UserInfolist className={'meetingList'}>참여자:</UserInfolist>
+                        {meeting.mateMembers.map((member) => (
+                          <UserInfolist key={member.mateMemberId} className={'meetingList'}>
+                            {member.name}
+                          </UserInfolist>
+                        ))}
+                      </UserInfoul>
                     </UserContents>
                   </UserContentsContainer>
                 ))}
@@ -277,13 +280,17 @@ const Mypage = () => {
           </UserContainer>
         </BodyContainer>
       )}
-    </>
+    </div>
   );
 };
 
 const BodyContainer = styled.div`
-  margin: 3.125rem;
+  margin: 50px;
   min-height: 1000px;
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+  }
 `;
 
 const UserProfileContainer = styled.div`
@@ -306,6 +313,11 @@ const UserImageContainer = styled.div`
   margin: auto;
   width: 20.625rem;
   height: 20.625rem;
+
+  @media (max-width: 1024px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 const UserImage = styled.img`
@@ -313,6 +325,11 @@ const UserImage = styled.img`
   height: 250px;
   padding: 50px;
   border-radius: 50%;
+
+  @media (max-width: 1024px) {
+    width: 220px;
+    height: 220px;
+  }
 `;
 
 const UserInfoContainer = styled.div`
@@ -353,9 +370,24 @@ const UserInfoTitle = styled.h1`
   }
 `;
 
-const UserInfoParagraph = styled.p`
-  margin-left: 30px;
-  font-size: 15px;
+const UserInfoul = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+`;
+
+const UserInfolist = styled.li`
+  margin-left: 1.875rem;
+  font-size: 0.9375rem;
+
+  &.meetingList {
+    margin-left: 0;
+    margin-right: 0.9375rem;
+
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+  }
 `;
 
 const UserContainer = styled.div`
@@ -364,7 +396,7 @@ const UserContainer = styled.div`
 
   &.MeetingContainer {
     @media (max-width: 1024px) {
-      margin-top: 25rem;
+      margin-top: 240px;
     }
   }
   &.PostsContainer {
@@ -375,7 +407,7 @@ const UserContainer = styled.div`
 
 const UserContentsTitle = styled.h1`
   padding-left: 10px;
-  padding-bottom: 10px;
+  margin-bottom: 10px;
   font-size: 20px;
 
   @media (max-width: 1024px) {
@@ -402,6 +434,9 @@ const UserContents = styled.div`
   &.InfoContents {
     padding: 20px 20px 10px;
   }
+  &.MeetingContents {
+    padding: 0;
+  }
 `;
 
 const UserContentsBoxTitle = styled.div`
@@ -409,6 +444,7 @@ const UserContentsBoxTitle = styled.div`
   font-size: 16px;
 
   @media (max-width: 1024px) {
+    margin-bottom: 15px;
     font-size: 14px;
   }
 `;
@@ -442,7 +478,13 @@ const UserContentsContainer = styled.div`
   }
 `;
 
-const ContentStatus = styled.div``;
+const ContentStatus = styled.div`
+  font-size: 14px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+`;
 
 // 토글
 

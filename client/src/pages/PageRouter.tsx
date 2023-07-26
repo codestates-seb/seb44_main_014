@@ -15,11 +15,12 @@ import EditUserInfo from './EditUserInfo.tsx';
 import MoreInfoComments from './MoreInfoComments.tsx';
 import MoreInfoWritings from './MoreInfoWritings.tsx';
 import UserRating from './UserRating.tsx';
+import BobFriendIntro from './BobFriendIntro.tsx';
 import PageNotFound from './PageNotFound.tsx';
-import useLogoutAndRedirect from '../components/Logout/useLogout.tsx';
+// import useLogoutAndRedirect from '../components/Logout/useLogout.tsx';
 
 const PageRouter = () => {
-  useLogoutAndRedirect();
+  // useLogoutAndRedirect();
   return (
     <MainContainer>
       <Routes>
@@ -37,6 +38,7 @@ const PageRouter = () => {
         <Route path="/board/posts/:postId/edit" element={<EditBoard />} />
         <Route path="/board/posts" element={<PostBoard />} />
         <Route path="/location" element={<Location />} />
+        <Route path="/introduction" element={<BobFriendIntro />} />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </MainContainer>

@@ -40,10 +40,11 @@ const Login = () => {
       try {
         const response = await postLogin(email, password);
 
-        localStorage.setItem('login-token', response.headers.authorization);
-        localStorage.setItem('login-refresh', response.headers.refresh);
         // setCookie('accessToken', response.headers.authorization);
         // setCookie('refreshToken', response.headers.refresh);
+
+        localStorage.setItem('login-token', response.headers.authorization);
+        localStorage.setItem('login-refresh', response.headers.refresh);
 
         localStorage.setItem('expiredAt', moment().add(1, 'hour').format('yyyy-MM-DD HH:mm:ss'));
 
