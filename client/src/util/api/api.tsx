@@ -8,7 +8,7 @@ const api = async () => {
   const expiredAt = localStorage.getItem('expiredAt');
 
   // accessToken 만료(10초전)시 /auth/reissue로 요청보내서 새로운 accessToken받기
-  if (moment(expiredAt).diff(moment()) < 60000 && refreshToken) {
+  if (moment(expiredAt).diff(moment()) < 600000 && refreshToken) {
     try {
       const response = await axios({
         method: 'post',

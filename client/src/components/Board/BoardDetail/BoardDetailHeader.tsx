@@ -102,9 +102,6 @@ const TitleLeft = styled.div`
   display: flex;
   align-items: center;
   width: calc(100% - 80px);
-  @media screen and (min-width: 768px) {
-    width: auto;
-  }
   @media screen and (min-width: 1024px) {
     max-width: calc(100% - 90px);
   }
@@ -148,8 +145,8 @@ const ListStatus = styled.span<IStyledProps>`
     transform: translateY(-50%);
     display: block;
     content: '';
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     background-color: ${(props) => props.$statusColor};
     border-radius: 5px;
   }

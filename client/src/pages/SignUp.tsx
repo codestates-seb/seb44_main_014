@@ -14,38 +14,37 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value.includes('@')) {
+      setEmailErrMsg('이메일형식이 올바르지 않습니다. (ex. bobfriend@bobfriend.com)');
+    } else {
+      setEmailErrMsg('');
+    }
     setEmail(e.target.value);
     return;
   };
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-]).{8,100}$/.test(e.target.value)) {
+      setPwdErrMsg('비밀번호는 특수문자, 영문, 숫자 포함  8글자 이상 입니다.');
+    } else {
+      setPwdErrMsg('');
+    }
     setPassword(e.target.value);
     return;
   };
   const handleSamePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (password !== e.target.value) {
+      setSamePwdErrMsg('비밀번호 확인이 비밀번호와 일치하지 않습니다.');
+    } else {
+      setSamePwdErrMsg('');
+    }
     setSamePassword(e.target.value);
     return;
   };
+
   const signUpValidate = async () => {
-    let signUpErr = false;
-    if (!email.includes('@')) {
-      setEmailErrMsg('이메일형식이 올바르지 않습니다.');
-      signUpErr = true;
-    } else {
-      setEmailErrMsg('');
-    }
-
-    if (!/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-]).{8,100}$/.test(password)) {
-      setPwdErrMsg('비밀번호는 특수문자, 영문, 숫자 포함  8글자 이상 입니다.');
-      signUpErr = true;
-    } else {
-      setPwdErrMsg('');
-    }
-
-    if (password !== samePassword) {
-      setSamePwdErrMsg('비밀번호 확인이 비밀번호와 일치하지 않습니다.');
-      signUpErr = true;
-    } else {
-      setSamePwdErrMsg('');
+    let signUpErr = true;
+    if (!emailErrMsg && !pwdErrMsg && !samePwdErrMsg) {
+      signUpErr = false;
     }
 
     if (!signUpErr) {
@@ -56,11 +55,13 @@ const SignUp = () => {
         navigate('/login');
       } catch (error: any) {
         if (error.response.status === 409) {
-          alert(error.response.message);
+          alert('이미 가입된 계정입니다.');
         } else {
           alert(error.response.message);
         }
       }
+    } else {
+      alert('조건에 맞는 회원정보를 입력해주세요.');
     }
   };
 
@@ -89,11 +90,11 @@ const SignUp = () => {
           회원이신가요? <a href="/login">로그인</a>으로 가기
         </div>
       </LoginTextContainer>
-      <OAuthButtonContainer>
+      {/* <OAuthButtonContainer>
         <OAuthButtonSection>Google</OAuthButtonSection>
         <OAuthButtonSection>Kakao</OAuthButtonSection>
         <OAuthButtonSection>Naver</OAuthButtonSection>
-      </OAuthButtonContainer>
+      </OAuthButtonContainer> */}
     </SignUpContainer>
   );
 };
@@ -148,15 +149,15 @@ const LoginTextContainer = styled.section`
   }
 `;
 
-const OAuthButtonContainer = styled.article`
-  display: flex;
-  flex-direction: column;
-  > button:nth-child(2) {
-    margin: 10px 0;
-  }
-`;
-const OAuthButtonSection = styled.button`
-  height: 40px;
-  background-color: var(--color-gray);
-  border-color: black;
-`;
+// const OAuthButtonContainer = styled.article`
+//   display: flex;
+//   flex-direction: column;
+//   > button:nth-child(2) {
+//     margin: 10px 0;
+//   }
+// `;
+// const OAuthButtonSection = styled.button`
+//   height: 40px;
+//   background-color: var(--color-gray);
+//   border-color: black;
+// `;
