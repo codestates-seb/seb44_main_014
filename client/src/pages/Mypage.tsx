@@ -101,9 +101,6 @@ const Mypage = () => {
           setUserImage(res.data.image);
           setIsOn(res.data.eatStatus);
           setMeetings(res.data.mates);
-
-          const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
-          toggleCheckbox.checked = res.data.eatStatus;
           setIsLoading(false);
         })
         .catch((err: any) => {
@@ -202,7 +199,7 @@ const Mypage = () => {
                 <UserContentsContainer className={'InfoContainer'}>
                   <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
                   <ToggleContainer className={'switch'}>
-                    <input type="checkbox" name="toggle" onClick={ToggleHandler} />
+                    <input type="checkbox" name="toggle" onClick={ToggleHandler} defaultChecked={isOn} />
                     <span className={'slider round'}></span>
                   </ToggleContainer>
                 </UserContentsContainer>
