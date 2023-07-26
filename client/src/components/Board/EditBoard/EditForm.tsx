@@ -62,9 +62,7 @@ const EditForm = () => {
 
   useEffect(() => {
     const categoryRadios = document.getElementsByName('category');
-    console.log(0);
     for (let i = 0; i < categoryRadios.length; i++) {
-      console.log(1);
       if (info.category === (categoryRadios[i] as HTMLInputElement).value) {
         (categoryRadios[i] as HTMLInputElement).checked = true;
       }
