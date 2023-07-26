@@ -15,7 +15,7 @@ import NoBoardList from '../components/Board/NoBoardList.tsx';
 import { category, ICategoryState } from '../store/listCategorySlice.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
-import authApi from '../util/api/authApi.tsx';
+import api from '../util/api/api.tsx';
 
 const Board = () => {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ const Board = () => {
 
   useEffect(() => {
     const getBoardList = async () => {
-      (await authApi)
+      (await api())
         .get(`/board/search?page=${filterInfo.page}${currentApi}`)
         .then((res) => {
           setPageInfo(res.data.pageInfo);

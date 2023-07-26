@@ -8,7 +8,7 @@ import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 import Loading from '../../Loading.tsx';
 
-import authApi from '../../../util/api/authApi.tsx';
+import api from '../../../util/api/api.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IEditInfo } from '../../../interface/board.ts';
 import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
@@ -84,17 +84,11 @@ const EditForm = () => {
       if (info.status === (statusRadios[i] as HTMLInputElement).value) {
         (statusRadios[i] as HTMLInputElement).checked = true;
       }
-      // if (info.status === 'END') {
-      //   for (let j = 0; j < statusRadios.length; j++) {
-      //     (statusRadios[j] as HTMLInputElement).disabled = true;
-      //   }
-      //   setIsDisabled(true);
-      // }
     }
   }, [info]);
 
   const patchSubmitInfo = async () => {
-    (await authApi)
+    (await api())
       .patch(`/board/posts/${postId}/edit`, info)
       .then(() => {
         if (info.status === 'END' && !isDisabled) {
