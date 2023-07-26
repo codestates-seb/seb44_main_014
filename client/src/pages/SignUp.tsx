@@ -89,11 +89,11 @@ const SignUp = () => {
           회원이신가요? <a href="/login">로그인</a>으로 가기
         </div>
       </LoginTextContainer>
-      <OAuthButtonContainer>
+      {/* <OAuthButtonContainer>
         <OAuthButtonSection>Google</OAuthButtonSection>
         <OAuthButtonSection>Kakao</OAuthButtonSection>
         <OAuthButtonSection>Naver</OAuthButtonSection>
-      </OAuthButtonContainer>
+      </OAuthButtonContainer> */}
     </SignUpContainer>
   );
 };
@@ -148,15 +148,15 @@ const LoginTextContainer = styled.section`
   }
 `;
 
-const OAuthButtonContainer = styled.article`
-  display: flex;
-  flex-direction: column;
-  > button:nth-child(2) {
-    margin: 10px 0;
-  }
-`;
-const OAuthButtonSection = styled.button`
-  height: 40px;
-  background-color: var(--color-gray);
-  border-color: black;
-`;
+// const OAuthButtonContainer = styled.article`
+//   display: flex;
+//   flex-direction: column;
+//   > button:nth-child(2) {
+//     margin: 10px 0;
+//   }
+// `;
+// const OAuthButtonSection = styled.button`
+//   height: 40px;
+//   background-color: var(--color-gray);
+//   border-color: black;
+// `;
