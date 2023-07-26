@@ -8,7 +8,7 @@ const api = async () => {
   const expiredAt = localStorage.getItem('expiredAt');
 
   // accessToken 만료(10초전)시 /auth/reissue로 요청보내서 새로운 accessToken받기
-  if (moment(expiredAt).diff(moment()) < 1000 && refreshToken) {
+  if (moment(expiredAt).diff(moment()) < 600000 && refreshToken) {
     try {
       const response = await axios({
         method: 'post',
@@ -23,7 +23,7 @@ const api = async () => {
       });
 
       setCookie('accessToken', response.headers.authorization);
-      localStorage.setItem('expiredAt', moment().add(0.015, 'hour').format('yyyy-MM-DD HH:mm:ss'));
+      localStorage.setItem('expiredAt', moment().add(1, 'hour').format('yyyy-MM-DD HH:mm:ss'));
     } catch (error) {
       // Handle the error (e.g., logout and redirect to login page)
       console.error('Error refreshing access token:', error);

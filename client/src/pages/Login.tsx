@@ -43,7 +43,7 @@ const Login = () => {
         setCookie('accessToken', response.headers.authorization);
         setCookie('refreshToken', response.headers.refresh);
 
-        localStorage.setItem('expiredAt', moment().add(0.015, 'hour').format('yyyy-MM-DD HH:mm:ss'));
+        localStorage.setItem('expiredAt', moment().add(1, 'hour').format('yyyy-MM-DD HH:mm:ss'));
 
         const responseData = response.data;
         alert('로그인에 성공했습니다.');
