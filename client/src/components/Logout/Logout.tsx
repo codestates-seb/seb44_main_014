@@ -21,6 +21,7 @@ const Logout = ({ setShowToggleMenu }: ISHowToggle) => {
         memberId: null,
         isLogin: false,
         email: null,
+        foodTagId: null,
       })
     );
     dispatch(locationLogout({ locationId: null }));
