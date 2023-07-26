@@ -72,20 +72,20 @@ const EditUserInfo = () => {
     }
   };
 
-  // const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const selectedImage = e.target.files?.[0];
-  //   if (!selectedImage) return;
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files?.[0];
+    if (!selectedImage) return;
 
-  //   const formData = new FormData();
-  //   formData.append('multipartFile', selectedImage);
+    const formData = new FormData();
+    formData.append('multipartFile', selectedImage);
 
-  //   const imageResponseUrl = (await api())
-  //     .patch(`${import.meta.env.VITE_APP_API_URL}/users/images/upload`, formData, {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => res.data[0]);
-  //   setUserImg(imageResponseUrl);
-  // };
+    // const imageResponseUrl = (await api())
+    //   .patch(`${import.meta.env.VITE_APP_API_URL}/users/images/upload`, formData, {
+    //     withCredentials: true,
+    //   })
+    //   .then((res) => res.data[0]);
+    // setUserImg(imageResponseUrl);
+  };
   return (
     <MainContainer>
       <UserImgContainer>
