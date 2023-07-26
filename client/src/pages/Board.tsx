@@ -60,6 +60,8 @@ const Board = () => {
         .then((res) => {
           setPageInfo(res.data.pageInfo);
           setLists(res.data.data);
+          setNewer(true);
+          setMostViewed(false);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -75,6 +77,8 @@ const Board = () => {
         .then((res) => {
           setPageInfo(res.data.pageInfo);
           setLists(res.data.data);
+          setNewer(true);
+          setMostViewed(false);
           setIsLoading(false);
         })
         .catch((err) => {
