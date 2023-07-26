@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
-import authApi from '../util/api/authApi.tsx';
-import { getCookie } from '../util/cookie/index.ts';
+import api from '../util/api/api.tsx';
 import { IMateMember } from '../interface/board.ts';
 
 interface Post {
@@ -84,7 +83,19 @@ const Mypage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [meetings, setMeetings] = useState<Meetings[]>([]);
+
   const [userImage, setUserImage] = useState('');
+
+  const ToggleHandler = async () => {
+    setIsOn(!isOn);
+    try {
+      const axiosInstance = await api(); // Resolve the promise to get the Axios instance
+      const res = await axiosInstance.patch(`/users/mypage/${userId}?eatStatus=${!isOn}`);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const userFoodTag = (data: any) => {
     if (data.foodTag.foodTagId === 1) {
@@ -96,8 +107,24 @@ const Mypage = () => {
     } else if (data.foodTag.foodTagId === 4) {
       setFoodTagName('# 양식');
     } else {
-      setFoodTagName('기타');
+      setFoodTagName('# 기타');
     }
+  };
+
+  const statusTextChange = (status: string) => {
+    let statusText: string;
+    // let statusColor: string;
+    if (status === 'END') {
+      statusText = '모집 종료';
+      // statusColor = '#EE3D16';
+    } else if (status === 'COMPLETE') {
+      statusText = '모집 완료';
+      // statusColor = '#FFD233';
+    } else {
+      statusText = '모집 중';
+      // statusColor = '#28CA6B';
+    }
+    return statusText;
   };
 
   const userPosts = (data: any) => {
@@ -112,61 +139,32 @@ const Mypage = () => {
     }
   };
   const [isOn, setIsOn] = useState(false);
-  const ToggleHandler = async () => {
-    setIsOn(!isOn);
-    try {
-      const axiosInstance = await authApi; // Resolve the promise to get the Axios instance
-      const response = await axiosInstance.patch(
-        `/users/mypage/${userId}?eatStatus=${!isOn}`,
-        {},
-        {
-          headers: { Authorization: getCookie('accessToken') },
-        }
-      );
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const axiosInstance = await authApi; // Resolve the promise to get the Axios instance
-        const res = await axiosInstance.get(`/users/mypage/${userId}`, {
-          headers: { Authorization: getCookie('accessToken') },
-        });
-        console.log(res);
-        setUserData(res.data);
-        userFoodTag(res.data);
-        userPosts(res.data);
-        userComments(res.data);
-        setUserImage(res.data.image);
-        setIsOn(res.data.eatStatus);
-        setMeetings(res.data.mates);
+        try {
+          const axiosInstance = await api(); // Resolve the promise to get the Axios instance
+          const res = await axiosInstance.get(`/users/mypage/${userId}`);
+          console.log(res);
+          setUserData(res.data);
+          userFoodTag(res.data);
+          userPosts(res.data);
+          userComments(res.data);
+          setUserImage(res.data.image);
+          setIsOn(res.data.eatStatus);
+          setMeetings(res.data.mates);
 
-        const toggleCheckboxes = document.getElementsByName('toggle');
-        if (res.data.eatStatus === true) {
-          for (let i = 0; i < toggleCheckboxes.length; i++) {
-            const checkbox = toggleCheckboxes[i] as HTMLInputElement;
-            checkbox.checked = true;
-          }
-        } else {
-          for (let i = 0; i < toggleCheckboxes.length; i++) {
-            const checkbox = toggleCheckboxes[i] as HTMLInputElement;
-            checkbox.checked = false;
-          }
+          const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
+          toggleCheckbox.checked = isOn;
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
-      }
-    };
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // 토글
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      },
+      [isOn];
+  });
 
   return (
     <BodyContainer>
@@ -249,6 +247,7 @@ const Mypage = () => {
                 <UserContentsBoxTitle>
                   <Link to={`/board/posts/${post.postId}`}>{post.title}</Link>
                 </UserContentsBoxTitle>
+                <ContentStatus>{statusTextChange(post.status)}</ContentStatus>
               </UserContentsContainer>
             ))}
           </UserContents>
@@ -313,7 +312,6 @@ const UserImage = styled.img`
 `;
 
 const UserInfoContainer = styled.div`
-  width: 68.125rem;
   margin: auto;
   border: 1px solid var(--color-gray);
   border-radius: 0.625rem;
@@ -323,6 +321,9 @@ const UserInfoContainer = styled.div`
   }
   @media (max-width: 768px) {
     max-width: 19.6875rem;
+  }
+  @media (min-width: 1026px) {
+    width: 68.125rem;
   }
 `;
 
@@ -436,6 +437,8 @@ const UserContentsContainer = styled.div`
     margin-bottom: 30px;
   }
 `;
+
+const ContentStatus = styled.div``;
 
 // 토글
 
