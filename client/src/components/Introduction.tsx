@@ -66,6 +66,11 @@ const Introduction = () => {
             <br />
             낯선이와의 만남이 걱정 된다면?
           </DescriptionP>
+          <DescriptionP>
+            게시물 수정에서 모집종료 처리!
+            <br />
+            솔직한 매너 별점을 매겨보자!
+          </DescriptionP>
         </FlexOrder>
       </Section4>
     </>
