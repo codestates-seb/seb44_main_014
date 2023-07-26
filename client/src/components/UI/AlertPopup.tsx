@@ -51,7 +51,9 @@ const AlertContainer = styled.div`
   width: 80vw;
   max-width: 350px;
   background-color: var(--color-white);
+  border: 1px solid var(--color-gray);
   border-radius: 8px;
+  z-index: 5;
 `;
 
 const AlertText = styled.p`
