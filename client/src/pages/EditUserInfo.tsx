@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { styled } from 'styled-components';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 import Button from '../components/UI/Button.tsx';
-import { checkedValue, selectOneCheckbox } from '../util/common.ts';
-import { IUserState, foodTagChange } from '../store/userSlice.ts';
-import { ILocationState } from '../store/locationSlice.ts';
+import { checkedValue, selectOneCheckbox, showModal } from '../util/common.ts';
+import { IUserState, foodTagChange, logout } from '../store/userSlice.ts';
+import { ILocationState, locationLogout } from '../store/locationSlice.ts';
 import api from '../util/api/api.tsx';
 import Loading from '../components/Loading.tsx';
 import { FOOD_TAGS } from '../constant/constant.ts';
+import AlertPopup from '../components/UI/AlertPopup.tsx';
 
 const EditUserInfo = () => {
   const dispatch = useDispatch();
@@ -31,13 +32,13 @@ const EditUserInfo = () => {
   const [userGender, setUserGender] = useState('');
   const [userFoodTag, setUserFoodTag] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       (await api())
         .get(`/users/mypage/${userId}`)
         .then((res) => {
-          console.log(res);
           setUserData(res.data);
           UserGender(res.data);
           setUserImg(res.data.image);
@@ -71,7 +72,6 @@ const EditUserInfo = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         dispatch(
           foodTagChange({
             memberId: userId,
@@ -92,7 +92,7 @@ const EditUserInfo = () => {
     const foodTag = checkedValue(e);
     setUserFoodTag(Number(foodTag));
   };
-  console.log(userFoodTag);
+
   const UserGender = (data: any) => {
     if (data.gender === 'MALE') {
       setUserGender('남성');
@@ -117,11 +117,38 @@ const EditUserInfo = () => {
     // setUserImg(imageResponseUrl);
   };
 
+  const handleSecede = async () => {
+    (await api())
+      .delete(`/users/mypage/${userId}/edit`)
+      .then((res) => {
+        console.log(res);
+        localStorage.clear();
+        dispatch(
+          logout({
+            memberId: null,
+            isLogin: false,
+            email: null,
+            foodTagId: null,
+          })
+        );
+        dispatch(locationLogout({ locationId: null }));
+        navigate('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   if (!userImg) {
     setUserImg('https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png');
   }
   return (
     <>
+      {showAlert && (
+        <AlertPopup purpose={'탈퇴'} purposeHandler={handleSecede} closeHandler={setShowAlert}>
+          정말 탈퇴하시겠습니까?
+        </AlertPopup>
+      )}
       {isLoading && <Loading />}
       {!isLoading && (
         <MainContainer>
@@ -167,6 +194,14 @@ const EditUserInfo = () => {
           <ButtonContainer>
             <Button onClick={patchData}>저장</Button>
           </ButtonContainer>
+          <SecedeButton
+            onClick={() => {
+              setShowAlert(true);
+              showModal();
+            }}
+          >
+            회원탈퇴
+          </SecedeButton>
         </MainContainer>
       )}
     </>
@@ -176,7 +211,7 @@ const EditUserInfo = () => {
 const MainContainer = styled.div`
   margin: 3.125rem auto;
   width: 40.625rem;
-  height: 46.875rem;
+  /* height: 46.875rem; */
 
   @media (max-width: 768px) {
     max-width: 360px;
@@ -297,8 +332,18 @@ const UserTagBox = styled.div`
 `;
 
 const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
   margin-left: 0.9375rem;
   margin-top: 30px;
+  margin-bottom: 50px;
+`;
+
+const SecedeButton = styled.button`
+  display: block;
+  font-size: 13px;
+  margin-left: auto;
+  margin-bottom: 80px;
 `;
 
 export default EditUserInfo;
