@@ -142,29 +142,28 @@ const Mypage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-        try {
-          const axiosInstance = await api(); // Resolve the promise to get the Axios instance
-          const res = await axiosInstance.get(`/users/mypage/${userId}`);
-          console.log(res);
-          setUserData(res.data);
-          userFoodTag(res.data);
-          userPosts(res.data);
-          userComments(res.data);
-          setUserImage(res.data.image);
-          setIsOn(res.data.eatStatus);
-          setMeetings(res.data.mates);
+      try {
+        const axiosInstance = await api(); // Resolve the promise to get the Axios instance
+        const res = await axiosInstance.get(`/users/mypage/${userId}`);
+        console.log(res);
+        setUserData(res.data);
+        userFoodTag(res.data);
+        userPosts(res.data);
+        userComments(res.data);
+        setUserImage(res.data.image);
+        setIsOn(res.data.eatStatus);
+        setMeetings(res.data.mates);
 
-          const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
-          toggleCheckbox.checked = isOn;
-        } catch (err) {
-          console.log(err);
-        }
+        const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
+        toggleCheckbox.checked = isOn;
+      } catch (err) {
+        console.log(err);
+      }
 
-        fetchData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      },
-      [isOn];
-  });
+      fetchData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    };
+  }, [isOn, userId]);
 
   return (
     <BodyContainer>
