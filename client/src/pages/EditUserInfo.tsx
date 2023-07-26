@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { styled } from 'styled-components';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
@@ -13,6 +13,7 @@ import { FOOD_TAGS } from '../constant/constant.ts';
 
 const EditUserInfo = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     image: '',
     name: '',
@@ -79,6 +80,7 @@ const EditUserInfo = () => {
             foodTagId: Number(userFoodTag),
           })
         );
+        navigate(`/users/mypage/${userId}`);
       })
       .catch((err) => {
         console.log(err);
@@ -163,9 +165,7 @@ const EditUserInfo = () => {
             </UserTagBox>
           </UserTagEditContainer>
           <ButtonContainer>
-            <Link to={`/users/mypage/${userId}`}>
-              <Button onClick={patchData}>저장</Button>
-            </Link>
+            <Button onClick={patchData}>저장</Button>
           </ButtonContainer>
         </MainContainer>
       )}
