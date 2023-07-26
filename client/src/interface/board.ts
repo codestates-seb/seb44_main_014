@@ -47,6 +47,9 @@ export interface IComments {
   avgStarRate: number;
   name: string;
   createdAt: string;
+  image: string;
+  gender: string;
+  eatStatus: boolean;
 }
 
 // Page BoardDetail - general info
@@ -78,6 +81,16 @@ export interface IBoardDetailData {
   };
   mateMembers: IMateMember[];
   comments: IComments[];
+}
+
+// Page BoardDetail - Participants info
+export interface IParticipants {
+  memberId: number;
+  name: string;
+  image: string;
+  gender: string;
+  eatStatus: boolean;
+  avgStarRate: number;
 }
 
 // Page PostBoard - post info

@@ -68,7 +68,7 @@ const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
       </DetailTitleArea>
       <DetailInfoArea>
         <InfoLeft>
-          <InfoTag>{newFoodTag}</InfoTag>
+          {boardInfo.category === 'EATING' && <InfoTag>{newFoodTag}</InfoTag>}
           <InfoTag>{newGenderTag}</InfoTag>
           <InfoNum>
             <FontAwesomeIcon icon={faEye} /> {viewCount}

@@ -1,11 +1,9 @@
 import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
-import { IUserState } from '../../../store/userSlice.ts';
 
-interface IMember {
-  memberId: number;
-  name: string;
-}
+import ParticipantList from './ParticipantList.tsx';
+import { IUserState } from '../../../store/userSlice.ts';
+import { IParticipants } from '../../../interface/board.ts';
 
 interface IMate {
   findNum: number;
@@ -15,7 +13,7 @@ interface IApplyParticipateProps {
   postApplyData: () => void;
   updateMate: IMate;
   showParticipant: number;
-  mateData: IMember[];
+  mateData: IParticipants[];
   memberId: number;
 }
 const ApplyParticipate = ({
@@ -44,12 +42,14 @@ const ApplyParticipate = ({
         </button>
       </ApplyParticipant>
       {(showParticipant !== 0 || (memberId === userId && mateData.length !== 0)) && (
-        <ParticipantId>
+        <ParticipantIdArea>
           <span>참가자: &nbsp;</span>
           {mateData.map((mate, idx) => (
-            <span key={idx}>&nbsp; {mate.name}</span>
+            <ParticipantList key={idx} mate={mate}>
+              {mate.name}
+            </ParticipantList>
           ))}
-        </ParticipantId>
+        </ParticipantIdArea>
       )}
     </ParticipantContainer>
   );
@@ -82,7 +82,8 @@ const ApplyParticipant = styled.div`
   }
 `;
 
-const ParticipantId = styled.div`
+const ParticipantIdArea = styled.div`
+  position: relative;
   padding: 0.625rem;
   border: 1px solid var(--color-gray);
   border-radius: 0.625rem;

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import AlertPopup from '../../UI/AlertPopup.tsx';
+import ProfilePopup from './ProfilePopup.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp, showModal } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
@@ -16,15 +17,16 @@ type CommentInfoProps = {
 };
 
 const Comment = ({ commentInfo }: CommentInfoProps) => {
-  const { name, content, createdAt, avgStarRate, memberId, commentId } = commentInfo;
+  const { name, content, createdAt, avgStarRate, memberId, commentId, image, gender, eatStatus } = commentInfo;
   const userId = useSelector((state: IUserState) => state.user.memberId);
-  const [modifyComment, setModifyComment] = useState(false);
+  const [modifyComment, setModifyComment] = useState<boolean>(false);
   const [commentContent, setCommentContent] = useState({
     memberId: memberId,
     content: content,
   });
   const [commentDeleteAlert, setCommentDeleteAlert] = useState<boolean>(false);
-
+  const [showProfile, setShowProfile] = useState<boolean>(false);
+  const profileInfo = { name, avgStarRate, memberId, image, gender, eatStatus };
   const params = useParams();
   const postId = Number(params.postId);
 
@@ -60,9 +62,12 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
         </AlertPopup>
       )}
       <CommentList>
+        {showProfile && (
+          <ProfilePopup className={'comment'} userInfo={profileInfo} handleShowProfile={setShowProfile} />
+        )}
         <WriterInfo>
           <div>
-            <WriterId>{name}</WriterId>
+            <WriterId onClick={() => setShowProfile(true)}>{name}</WriterId>
             <WriterScore>
               <FontAwesomeIcon icon={faStar} style={{ color: '#FFD233' }} /> {avgStarRate.toFixed(1)}
             </WriterScore>
@@ -122,6 +127,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 };
 
 const CommentList = styled.li`
+  position: relative;
   margin-top: 0.625rem;
   padding: 1rem;
   background-color: var(--color-white);
