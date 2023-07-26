@@ -46,7 +46,6 @@ const SignUp = () => {
     if (!emailErrMsg && !pwdErrMsg && !samePwdErrMsg) {
       signUpErr = false;
     }
-    console.log(signUpErr);
 
     if (!signUpErr) {
       try {

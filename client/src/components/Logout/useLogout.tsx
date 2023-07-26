@@ -12,11 +12,12 @@ import moment from 'moment';
 const useLogoutAndRedirect = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const refreshToken = getCookie('refreshToken');
   const expiredAt = localStorage.getItem('expiredAt');
 
   useEffect(() => {
     const handleLogout = async () => {
-      if (moment(expiredAt).diff(moment()) <= 0) {
+      if (moment(expiredAt).diff(moment()) <= 0 || (expiredAt && !refreshToken)) {
         localStorage.clear();
         dispatch(
           logout({
@@ -38,6 +39,7 @@ const useLogoutAndRedirect = () => {
         removeCookie('accessToken');
         removeCookie('refreshToken');
 
+        alert('로그인에 오류가 발생하여 자동 로그아웃 되었습니다.');
         navigate('/login'); // Redirect to the login page after logout
         // To prevent bugs related to user change, you can add a page reload
         window.location.reload();
