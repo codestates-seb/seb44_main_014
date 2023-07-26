@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { styled } from 'styled-components';
 import TagCheckbox from '../components/UI/TagCheckbox.tsx';
 import Button from '../components/UI/Button.tsx';
 import { checkedValue, selectOneCheckbox } from '../util/common.ts';
-import { IUserState } from '../store/userSlice.ts';
+import { IUserState, foodTagChange } from '../store/userSlice.ts';
 import { ILocationState } from '../store/locationSlice.ts';
 import api from '../util/api/api.tsx';
+import Loading from '../components/Loading.tsx';
+import { FOOD_TAGS } from '../constant/constant.ts';
 
 const EditUserInfo = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     image: '',
     name: '',
@@ -21,28 +25,42 @@ const EditUserInfo = () => {
     },
   });
   const userId = useSelector((state: IUserState) => state.user.memberId);
+  const userEmail = useSelector((state: IUserState) => state.user.email);
   const address = useSelector((state: ILocationState) => state.location.address);
   const [userImg, setUserImg] = useState('');
   const [userGender, setUserGender] = useState('');
   const [userFoodTag, setUserFoodTag] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const getData = async () => {
+      (await api())
+        .get(`/users/mypage/${userId}`)
+        .then((res) => {
+          console.log(res);
+          setUserData(res.data);
+          UserGender(res.data);
+          setUserImg(res.data.image);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    };
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getData = async () => {
-    (await api())
-      .get(`/users/mypage/${userId}`)
-      .then((res) => {
-        setUserData(res.data);
-        UserGender(res.data);
-        setUserImg(res.data.image);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  useEffect(() => {
+    const foodCheckboxes = document.getElementsByName('food');
+    for (let i = 0; i < foodCheckboxes.length; i++) {
+      if (userData.foodTag.foodTagId === Number((foodCheckboxes[i] as HTMLInputElement).value)) {
+        (foodCheckboxes[i] as HTMLInputElement).checked = true;
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
 
   const patchData = async () => {
     (await api())
@@ -52,6 +70,18 @@ const EditUserInfo = () => {
           foodTagId: userFoodTag,
         },
       })
+      .then((res) => {
+        console.log(res.data);
+        dispatch(
+          foodTagChange({
+            memberId: userId,
+            isLogin: true,
+            email: userEmail,
+            foodTagId: Number(userFoodTag),
+          })
+        );
+        navigate(`/users/mypage/${userId}`);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -60,9 +90,9 @@ const EditUserInfo = () => {
   const handleFoodTag = (e: React.MouseEvent<HTMLInputElement>) => {
     selectOneCheckbox(e);
     const foodTag = checkedValue(e);
-    setUserFoodTag(parseInt(foodTag, 10));
+    setUserFoodTag(Number(foodTag));
   };
-
+  console.log(userFoodTag);
   const UserGender = (data: any) => {
     if (data.gender === 'MALE') {
       setUserGender('남성');
@@ -86,67 +116,60 @@ const EditUserInfo = () => {
     //   .then((res) => res.data[0]);
     // setUserImg(imageResponseUrl);
   };
+
+  if (!userImg) {
+    setUserImg('https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png');
+  }
   return (
-    <MainContainer>
-      <UserImgContainer>
-        {userImg != '' ? (
-          <UserImg src={userImg} />
-        ) : (
-          <UserImg src="https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png" />
-        )}
-      </UserImgContainer>
-      <ImgEditorContainer>
-        <ImgEditor htmlFor="profileImg_uploads">
-          프로필 사진 변경
-          <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange}></input>
-        </ImgEditor>
-      </ImgEditorContainer>
-      <UneditableContainer>
-        <UneditableComponent>
-          <EditorTitle>이메일</EditorTitle>
-          <UndeitableTextBox>{userData.email}</UndeitableTextBox>
-        </UneditableComponent>
-        <UneditableComponent>
-          <EditorTitle>활동명</EditorTitle>
-          <UndeitableTextBox>{userData.name}</UndeitableTextBox>
-        </UneditableComponent>
-      </UneditableContainer>
-      <UserGenderEditContainer>
-        <EditorTitle className={'GenderTitle'}>성별</EditorTitle>
-        <UserGenderEditPositioner>
-          <div>{userGender}</div>
-        </UserGenderEditPositioner>
-      </UserGenderEditContainer>
-      <UserLocationEditContainer>
-        <EditorTitle className={'GenderTitle'}>지역</EditorTitle>
-        <div>{address}</div>
-      </UserLocationEditContainer>
-      <UserTagEditContainer>
-        <EditorTitle className={'GenderTitle'}>음식 태그</EditorTitle>
-        <UserTagBox>
-          <TagCheckbox type="food" value={1} handleGetValue={handleFoodTag}>
-            # 한식
-          </TagCheckbox>
-          <TagCheckbox type="food" value={2} handleGetValue={handleFoodTag}>
-            # 중식
-          </TagCheckbox>
-          <TagCheckbox type="food" value={3} handleGetValue={handleFoodTag}>
-            # 양식
-          </TagCheckbox>
-          <TagCheckbox type="food" value={4} handleGetValue={handleFoodTag}>
-            # 일식
-          </TagCheckbox>
-          <TagCheckbox type="food" value={5} handleGetValue={handleFoodTag}>
-            # 기타
-          </TagCheckbox>
-        </UserTagBox>
-      </UserTagEditContainer>
-      <ButtonContainer>
-        <Link to={`/users/mypage/${userId}`}>
-          <Button onClick={patchData}>저장</Button>
-        </Link>
-      </ButtonContainer>
-    </MainContainer>
+    <>
+      {isLoading && <Loading />}
+      {!isLoading && (
+        <MainContainer>
+          <UserImgContainer>
+            <UserImg src={userImg} />
+          </UserImgContainer>
+          <ImgEditorContainer>
+            <ImgEditor htmlFor="profileImg_uploads">
+              프로필 사진 변경
+              <input type="file" id="profileImg_uploads" accept="image/*" onChange={handleImageChange}></input>
+            </ImgEditor>
+          </ImgEditorContainer>
+          <UneditableContainer>
+            <UneditableComponent>
+              <EditorTitle>이메일</EditorTitle>
+              <UndeitableTextBox>{userData.email}</UndeitableTextBox>
+            </UneditableComponent>
+            <UneditableComponent>
+              <EditorTitle>활동명</EditorTitle>
+              <UndeitableTextBox>{userData.name}</UndeitableTextBox>
+            </UneditableComponent>
+          </UneditableContainer>
+          <UserGenderEditContainer>
+            <EditorTitle className={'GenderTitle'}>성별</EditorTitle>
+            <UserGenderEditPositioner>
+              <div>{userGender}</div>
+            </UserGenderEditPositioner>
+          </UserGenderEditContainer>
+          <UserLocationEditContainer>
+            <EditorTitle className={'GenderTitle'}>지역</EditorTitle>
+            <div>{address}</div>
+          </UserLocationEditContainer>
+          <UserTagEditContainer>
+            <EditorTitle className={'GenderTitle'}>음식 태그</EditorTitle>
+            <UserTagBox>
+              {FOOD_TAGS.map((tag) => (
+                <TagCheckbox key={tag.id} type="food" value={tag.id} handleGetValue={handleFoodTag}>
+                  {tag.text}
+                </TagCheckbox>
+              ))}
+            </UserTagBox>
+          </UserTagEditContainer>
+          <ButtonContainer>
+            <Button onClick={patchData}>저장</Button>
+          </ButtonContainer>
+        </MainContainer>
+      )}
+    </>
   );
 };
 

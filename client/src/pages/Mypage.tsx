@@ -88,29 +88,29 @@ const Mypage = () => {
   const [userImage, setUserImage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = async () => {
-    (await api())
-      .get(`/users/mypage/${userId}`)
-      .then((res: any) => {
-        setUserData(res.data);
-        userFoodTag(res.data);
-        userPosts(res.data);
-        userComments(res.data);
-        setUserImage(res.data.image);
-        setIsOn(res.data.eatStatus);
-        setMeetings(res.data.mates);
-
-        const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
-        toggleCheckbox.checked = res.data.eatStatus;
-        setIsLoading(false);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        setIsLoading(false);
-      });
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      (await api())
+        .get(`/users/mypage/${userId}`)
+        .then((res: any) => {
+          console.log(res.data);
+          setUserData(res.data);
+          userFoodTag(res.data);
+          userPosts(res.data);
+          userComments(res.data);
+          setUserImage(res.data.image);
+          setIsOn(res.data.eatStatus);
+          setMeetings(res.data.mates);
+
+          const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
+          toggleCheckbox.checked = res.data.eatStatus;
+          setIsLoading(false);
+        })
+        .catch((err: any) => {
+          console.log(err);
+          setIsLoading(false);
+        });
+    };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -171,113 +171,115 @@ const Mypage = () => {
   return (
     <>
       {isLoading && <Loading />}
-      <BodyContainer>
-        <UserProfileContainer>
-          <UserImageContainer>
-            {userImage != '' ? (
-              <UserImage src={userImage} />
-            ) : (
-              <UserImage src="https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png" />
-            )}
-          </UserImageContainer>
-          <UserInfoContainer>
-            <UserContents className={'InfoContents'}>
-              <UserContentsContainer className={'InfoContainer'}>
-                <UserInfoTitle>이름</UserInfoTitle>
-                <UserInfoParagraph>{userData.name}</UserInfoParagraph>
-              </UserContentsContainer>
-              <UserContentsContainer className={'InfoContainer'}>
-                <UserInfoTitle>이메일</UserInfoTitle>
-                <UserInfoParagraph>{userData.email}</UserInfoParagraph>
-              </UserContentsContainer>
-              <UserContentsContainer className={'InfoContainer'}>
-                <UserInfoTitle>매너 별점</UserInfoTitle>
-                <UserInfoParagraph>{userData.avgStarRate.toFixed(1)}</UserInfoParagraph>
-              </UserContentsContainer>
-              <UserContentsContainer className={'Tag'}>
-                <UserInfoTitle className={'Tag'}>태그</UserInfoTitle>
-                <div>{foodTagName}</div>
-              </UserContentsContainer>
-              <UserContentsContainer className={'InfoContainer'}>
-                <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
-                <ToggleContainer className={'switch'}>
-                  <input type="checkbox" name="toggle" onClick={ToggleHandler} />
-                  <span className={'slider round'}></span>
-                </ToggleContainer>
-              </UserContentsContainer>
-              <UserContentsContainer className={'InfoContainer'}>
-                <UserInfoTitle className={'Edit'}>
-                  <Link to={`/users/mypage/${userId}/edit`}>프로필 수정</Link>
-                </UserInfoTitle>
-              </UserContentsContainer>
-            </UserContents>
-          </UserInfoContainer>
-        </UserProfileContainer>
-        <UserContainer className={'MeetingContainer'}>
-          <UserContentsTitle>참여 중인 모임</UserContentsTitle>
-          <UserContentBox className={'MeetingBox'}>
-            <UserContents>
-              {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
-              {meetings.map((meeting) => (
-                <UserContentsContainer key={meeting.postId}>
-                  <UserContents className={'InfoContents'}>
-                    <UserContentsBoxTitle>
-                      <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
-                    </UserContentsBoxTitle>
-                    {/* 참여자: */}
-                    {/* {meeting.mateMembers.map((member) => {
+      {!isLoading && (
+        <BodyContainer>
+          <UserProfileContainer>
+            <UserImageContainer>
+              {userImage != '' ? (
+                <UserImage src={userImage} />
+              ) : (
+                <UserImage src="https://bobimage.s3.ap-northeast-2.amazonaws.com/member/defaultProfile.png" />
+              )}
+            </UserImageContainer>
+            <UserInfoContainer>
+              <UserContents className={'InfoContents'}>
+                <UserContentsContainer className={'InfoContainer'}>
+                  <UserInfoTitle>이름</UserInfoTitle>
+                  <UserInfoParagraph>{userData.name}</UserInfoParagraph>
+                </UserContentsContainer>
+                <UserContentsContainer className={'InfoContainer'}>
+                  <UserInfoTitle>이메일</UserInfoTitle>
+                  <UserInfoParagraph>{userData.email}</UserInfoParagraph>
+                </UserContentsContainer>
+                <UserContentsContainer className={'InfoContainer'}>
+                  <UserInfoTitle>매너 별점</UserInfoTitle>
+                  <UserInfoParagraph>{userData.avgStarRate.toFixed(1)}</UserInfoParagraph>
+                </UserContentsContainer>
+                <UserContentsContainer className={'Tag'}>
+                  <UserInfoTitle className={'Tag'}>태그</UserInfoTitle>
+                  <div>{foodTagName}</div>
+                </UserContentsContainer>
+                <UserContentsContainer className={'InfoContainer'}>
+                  <UserInfoTitle className={'Quite'}>조용히 밥만 먹어요</UserInfoTitle>
+                  <ToggleContainer className={'switch'}>
+                    <input type="checkbox" name="toggle" onClick={ToggleHandler} />
+                    <span className={'slider round'}></span>
+                  </ToggleContainer>
+                </UserContentsContainer>
+                <UserContentsContainer className={'InfoContainer'}>
+                  <UserInfoTitle className={'Edit'}>
+                    <Link to={`/users/mypage/${userId}/edit`}>프로필 수정</Link>
+                  </UserInfoTitle>
+                </UserContentsContainer>
+              </UserContents>
+            </UserInfoContainer>
+          </UserProfileContainer>
+          <UserContainer className={'MeetingContainer'}>
+            <UserContentsTitle>참여 중인 모임</UserContentsTitle>
+            <UserContentBox className={'MeetingBox'}>
+              <UserContents>
+                {meetings.length === 0 && <p>참여 중인 모임이 없습니다.</p>}
+                {meetings.map((meeting) => (
+                  <UserContentsContainer key={meeting.postId}>
+                    <UserContents className={'InfoContents'}>
+                      <UserContentsBoxTitle>
+                        <Link to={`/board/posts/${meeting.postId}`}>{meeting.title}</Link>
+                      </UserContentsBoxTitle>
+                      {/* 참여자: */}
+                      {/* {meeting.mateMembers.map((member) => {
                   <UserInfoParagraph key={member.memberId}>{member}</UserInfoParagraph>;
                 })} */}
-                  </UserContents>
-                </UserContentsContainer>
-              ))}
-            </UserContents>
-          </UserContentBox>
-        </UserContainer>
-        <UserContainer className={'PostsContainer'}>
-          <UserContentsContainer>
-            <UserContentsTitle>작성한 게시글</UserContentsTitle>
-            <Link to={`/users/mypage/${userId}/questions`}>
-              <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
-            </Link>
-          </UserContentsContainer>
-        </UserContainer>
-        <UserContainer>
-          <UserContentBox className={'PostsBox'}>
-            <UserContents>
-              {posts.length === 0 && <p>작성한 게시글이 없습니다.</p>}
-              {posts.map((post) => (
-                <UserContentsContainer key={post.postId}>
-                  <UserContentsBoxTitle>
-                    <Link to={`/board/posts/${post.postId}`}>{post.title}</Link>
-                  </UserContentsBoxTitle>
-                  <ContentStatus>{statusTextChange(post.status)}</ContentStatus>
-                </UserContentsContainer>
-              ))}
-            </UserContents>
-          </UserContentBox>
-        </UserContainer>
-        <UserContainer className={'PostsContainer'}>
-          <UserContentsContainer>
-            <UserContentsTitle>작성한 댓글</UserContentsTitle>
-            <Link to={`/users/mypage/${userId}/comments`}>
-              <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
-            </Link>
-          </UserContentsContainer>
-          <UserContentBox className={'PostsBox'}>
-            <UserContents>
-              {comments.length === 0 && <p>작성한 댓글이 없습니다.</p>}
-              {comments.map((comment) => (
-                <UserContentsContainer key={comment.postId}>
-                  <UserContentsBoxTitle>
-                    <Link to={`/board/posts/${comment.postId}`}>{comment.content}</Link>
-                  </UserContentsBoxTitle>
-                </UserContentsContainer>
-              ))}
-            </UserContents>
-          </UserContentBox>
-        </UserContainer>
-      </BodyContainer>
+                    </UserContents>
+                  </UserContentsContainer>
+                ))}
+              </UserContents>
+            </UserContentBox>
+          </UserContainer>
+          <UserContainer className={'PostsContainer'}>
+            <UserContentsContainer>
+              <UserContentsTitle>작성한 게시글</UserContentsTitle>
+              <Link to={`/users/mypage/${userId}/questions`}>
+                <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
+              </Link>
+            </UserContentsContainer>
+          </UserContainer>
+          <UserContainer>
+            <UserContentBox className={'PostsBox'}>
+              <UserContents>
+                {posts.length === 0 && <p>작성한 게시글이 없습니다.</p>}
+                {posts.map((post) => (
+                  <UserContentsContainer key={post.postId}>
+                    <UserContentsBoxTitle>
+                      <Link to={`/board/posts/${post.postId}`}>{post.title}</Link>
+                    </UserContentsBoxTitle>
+                    <ContentStatus>{statusTextChange(post.status)}</ContentStatus>
+                  </UserContentsContainer>
+                ))}
+              </UserContents>
+            </UserContentBox>
+          </UserContainer>
+          <UserContainer className={'PostsContainer'}>
+            <UserContentsContainer>
+              <UserContentsTitle>작성한 댓글</UserContentsTitle>
+              <Link to={`/users/mypage/${userId}/comments`}>
+                <UserContentsBoxParagraph className={'MoreInfoLink'}>더보기</UserContentsBoxParagraph>
+              </Link>
+            </UserContentsContainer>
+            <UserContentBox className={'PostsBox'}>
+              <UserContents>
+                {comments.length === 0 && <p>작성한 댓글이 없습니다.</p>}
+                {comments.map((comment) => (
+                  <UserContentsContainer key={comment.postId}>
+                    <UserContentsBoxTitle>
+                      <Link to={`/board/posts/${comment.postId}`}>{comment.content}</Link>
+                    </UserContentsBoxTitle>
+                  </UserContentsContainer>
+                ))}
+              </UserContents>
+            </UserContentBox>
+          </UserContainer>
+        </BodyContainer>
+      )}
     </>
   );
 };
