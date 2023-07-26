@@ -94,13 +94,17 @@ const Mypage = () => {
       await instance
         .get(`/users/mypage/${userId}`)
         .then((res: any) => {
+          const mates: Meetings[] = res.data.mates;
+          const postMates: Meetings[] = res.data.postMates;
+          const mergedArray: Meetings[] = [...mates, ...postMates];
+          mergedArray.sort((a, b) => b.postId - a.postId);
           setUserData(res.data);
           userFoodTag(res.data);
           userPosts(res.data);
           userComments(res.data);
           setUserImage(res.data.image);
           setIsOn(res.data.eatStatus);
-          setMeetings([...res.data.mates, ...res.data.postMates]);
+          setMeetings(mergedArray);
           setIsLoading(false);
         })
         .catch((err: any) => {
