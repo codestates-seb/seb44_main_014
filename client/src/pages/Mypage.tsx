@@ -86,6 +86,26 @@ const Mypage = () => {
 
   const [userImage, setUserImage] = useState('');
 
+  const fetchData = async () => {
+    (await api())
+      .get(`/users/mypage/${userId}`)
+      .then((res: any) => {
+        setUserData(res.data);
+        userFoodTag(res.data);
+        userPosts(res.data);
+        userComments(res.data);
+        setUserImage(res.data.image);
+        setIsOn(res.data.eatStatus);
+        setMeetings(res.data.mates);
+
+        const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
+        toggleCheckbox.checked = isOn;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
   const ToggleHandler = async () => {
     setIsOn(!isOn);
     try {
@@ -103,9 +123,9 @@ const Mypage = () => {
     } else if (data.foodTag.foodTagId === 2) {
       setFoodTagName('# 중식');
     } else if (data.foodTag.foodTagId === 3) {
-      setFoodTagName('# 일식');
-    } else if (data.foodTag.foodTagId === 4) {
       setFoodTagName('# 양식');
+    } else if (data.foodTag.foodTagId === 4) {
+      setFoodTagName('# 일식');
     } else {
       setFoodTagName('# 기타');
     }
@@ -141,29 +161,9 @@ const Mypage = () => {
   const [isOn, setIsOn] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const axiosInstance = await api(); // Resolve the promise to get the Axios instance
-        const res = await axiosInstance.get(`/users/mypage/${userId}`);
-        console.log(res);
-        setUserData(res.data);
-        userFoodTag(res.data);
-        userPosts(res.data);
-        userComments(res.data);
-        setUserImage(res.data.image);
-        setIsOn(res.data.eatStatus);
-        setMeetings(res.data.mates);
-
-        const toggleCheckbox = document.querySelector('input[name="toggle"]') as HTMLInputElement;
-        toggleCheckbox.checked = isOn;
-      } catch (err) {
-        console.log(err);
-      }
-
-      fetchData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    };
-  }, [isOn, userId]);
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <BodyContainer>

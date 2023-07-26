@@ -131,10 +131,10 @@ const EditUserInfo = () => {
             # 중식
           </TagCheckbox>
           <TagCheckbox type="food" value={3} handleGetValue={handleFoodTag}>
-            # 일식
+            # 양식
           </TagCheckbox>
           <TagCheckbox type="food" value={4} handleGetValue={handleFoodTag}>
-            # 양식
+            # 일식
           </TagCheckbox>
           <TagCheckbox type="food" value={5} handleGetValue={handleFoodTag}>
             # 기타
