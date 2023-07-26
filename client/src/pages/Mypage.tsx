@@ -93,7 +93,6 @@ const Mypage = () => {
       (await api())
         .get(`/users/mypage/${userId}`)
         .then((res: any) => {
-          console.log(res.data);
           setUserData(res.data);
           userFoodTag(res.data);
           userPosts(res.data);
