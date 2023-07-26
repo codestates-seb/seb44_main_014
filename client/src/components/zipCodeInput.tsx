@@ -107,6 +107,7 @@ const LocationInput = styled.div`
   border: 1px solid var(--color-gray);
 `;
 const LocationButton = styled.button`
+  margin: 0 0 0 10px;
   display: flex;
   justify-content: center;
   align-items: center;
