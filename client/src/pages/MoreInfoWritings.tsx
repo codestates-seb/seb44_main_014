@@ -5,7 +5,8 @@ import { useState, useEffect } from 'react';
 import { IUserState } from '../store/userSlice.ts';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import api from '../util/api/api.tsx';
+// import api from '../util/api/api.tsx';
+import instance from '../util/api/instance.ts';
 
 const MoreInfoWritings = () => {
   const [lists, setLists] = useState<IMypagePosts[]>([]);
@@ -34,7 +35,7 @@ const MoreInfoWritings = () => {
 
   const getList = async () => {
     try {
-      const response = await (await api()).get(`/users/mypage/${memberId}/posts`);
+      const response = await instance.get(`/users/mypage/${memberId}/posts`);
       setLists(response.data);
     } catch (error) {
       console.log(error);

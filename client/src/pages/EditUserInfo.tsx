@@ -7,7 +7,8 @@ import Button from '../components/UI/Button.tsx';
 import { checkedValue, selectOneCheckbox, showModal } from '../util/common.ts';
 import { IUserState, foodTagChange, logout } from '../store/userSlice.ts';
 import { ILocationState, locationLogout } from '../store/locationSlice.ts';
-import api from '../util/api/api.tsx';
+import instance from '../util/api/instance.ts';
+// import api from '../util/api/api.tsx';
 import Loading from '../components/Loading.tsx';
 import { FOOD_TAGS } from '../constant/constant.ts';
 import AlertPopup from '../components/UI/AlertPopup.tsx';
@@ -36,7 +37,7 @@ const EditUserInfo = () => {
 
   useEffect(() => {
     const getData = async () => {
-      (await api())
+      await instance
         .get(`/users/mypage/${userId}`)
         .then((res) => {
           setUserData(res.data);
@@ -64,7 +65,7 @@ const EditUserInfo = () => {
   }, [userData]);
 
   const patchData = async () => {
-    (await api())
+    await instance
       .patch(`/users/mypage/${userId}/edit`, {
         image: userImg,
         foodTag: {
@@ -109,7 +110,7 @@ const EditUserInfo = () => {
     const formData = new FormData();
     formData.append('multipartFile', selectedImage);
 
-    const imageResponseUrl = (await api())
+    const imageResponseUrl = await instance
       .post(`${import.meta.env.VITE_APP_API_URL}/users/images/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -121,7 +122,7 @@ const EditUserInfo = () => {
   };
 
   const handleSecede = async () => {
-    (await api())
+    await instance
       .delete(`/users/mypage/${userId}/edit`)
       .then((res) => {
         console.log(res);

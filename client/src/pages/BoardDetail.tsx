@@ -11,7 +11,8 @@ import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
 import Loading from '../components/Loading.tsx';
 import AlertPopup from '../components/UI/AlertPopup.tsx';
 
-import api from '../util/api/api.tsx';
+import instance from '../util/api/instance.ts';
+// import api from '../util/api/api.tsx';
 import { IBoardDetailData, IParticipants } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { showModal } from '../util/common.ts';
@@ -100,7 +101,7 @@ const BoardDetail = () => {
 
   const postApplyData = async () => {
     if (detailData.status !== 'END') {
-      (await api())
+      await instance
         .post(`/board/posts/${postId}/mate`, applyData)
         .then((res) => {
           setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
@@ -122,7 +123,7 @@ const BoardDetail = () => {
   };
 
   const deletePost = async () => {
-    (await api())
+    await instance
       .delete(`/board/posts/${postId}`)
       .then(() => {
         navigate('/board');

@@ -7,7 +7,8 @@ import InputRadio from '../../UI/InputRadio.tsx';
 import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
-import api from '../../../util/api/api.tsx';
+import instance from '../../../util/api/instance.ts';
+// import api from '../../../util/api/api.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IPostInfo } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
@@ -29,7 +30,7 @@ const PostForm = () => {
   });
 
   const postSubmitInfo = async () => {
-    (await api())
+    await instance
       .post(`/board/posts`, info)
       .then((res) => {
         const URI = res.headers.location;
