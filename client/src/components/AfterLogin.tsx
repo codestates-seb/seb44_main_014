@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 
-import authApi from '../util/api/authApi.tsx';
+import api from '../util/api/api.tsx';
 import BoardList from './Board/BoardList.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import MainListArea from './MainListArea.tsx';
@@ -33,7 +33,7 @@ const AfterLogin = () => {
 
   useEffect(() => {
     const getBoarList = async () => {
-      (await authApi)
+      (await api())
         .get(`/home`)
         .then((res) => {
           setLists(res.data);
@@ -68,12 +68,7 @@ const AfterLogin = () => {
         <p>{address}</p>
       </LocationText>
       <BannerSection>
-        <BannerTitle>
-          회원가입 후 게시글이 안 보이신다면 새로고침을 해주세요!
-          <br />
-          현재 해결 중에 있는 부분입니다..🥹
-        </BannerTitle>
-        {/* <BannerTitle>밥친구</BannerTitle> */}
+        <BannerTitle>밥친구</BannerTitle>
       </BannerSection>
       <ListSection>
         <MainListArea
