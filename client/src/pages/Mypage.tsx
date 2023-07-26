@@ -192,7 +192,7 @@ const Mypage = () => {
               </UserContentsContainer>
               <UserContentsContainer className={'InfoContainer'}>
                 <UserInfoTitle>매너 별점</UserInfoTitle>
-                <UserInfoParagraph>{userData.avgStarRate}</UserInfoParagraph>
+                <UserInfoParagraph>{userData.avgStarRate.toFixed(1)}</UserInfoParagraph>
               </UserContentsContainer>
               <UserContentsContainer className={'Tag'}>
                 <UserInfoTitle className={'Tag'}>태그</UserInfoTitle>
