@@ -167,6 +167,8 @@ const Map = styled.section`
     width: 500px;
     height: 500px;
   }
+  border: 1px solid var(--color-gray);
+  border-radius: 0.625rem;
 `;
 const AddressContainer = styled.section`
   max-width: 500px;
