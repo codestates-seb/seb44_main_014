@@ -30,10 +30,6 @@ const Footer = () => {
           |{' '}
           <GithubLink href="https://github.com/tjtmddk720" target="_blank">
             서승아(@tjtmddk720)
-          </GithubLink>{' '}
-          |{' '}
-          <GithubLink href="https://github.com/spring333" target="_blank">
-            이보미(@spring333)
           </GithubLink>
         </FooterContents>
         <FooterContents>Copyright©2023 BabChingu.All rights reserved.</FooterContents>

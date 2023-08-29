@@ -143,6 +143,7 @@ const WriterInfo = styled.div`
 
 const WriterId = styled.span`
   color: var(--color-black);
+  cursor: pointer;
 `;
 
 const WriterScore = styled.span`
