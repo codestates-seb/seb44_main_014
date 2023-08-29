@@ -1,6 +1,5 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-// import { removeCookie, getCookie } from '../../util/cookie/index.ts';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/userSlice.ts';
 import { locationLogout } from '../../store/locationSlice.ts';
@@ -27,16 +26,13 @@ const Logout = ({ setShowToggleMenu }: ISHowToggle) => {
     try {
       await axios.delete(`${import.meta.env.VITE_APP_API_URL}/auth/logout`, {
         headers: {
-          Refresh: localStorage.getItem('login-refresh'),
-          // getCookie('refreshToken')
+          Refresh: localStorage.getItem('refreshToken'),
         },
       });
     } catch (error) {
       console.error('Error during logout:', error);
     }
     localStorage.clear();
-    // removeCookie('accessToken');
-    // removeCookie('refreshToken');
 
     navigate('/'); //로그인 유저가 바뀔 때 발생하는 버그를 막기위해 reload설정
   };
