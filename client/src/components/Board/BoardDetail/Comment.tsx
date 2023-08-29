@@ -7,6 +7,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import AlertPopup from '../../UI/AlertPopup.tsx';
 import ProfilePopup from './ProfilePopup.tsx';
+
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp, showModal } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';

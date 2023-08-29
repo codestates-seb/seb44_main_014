@@ -95,7 +95,7 @@ const BoardDetail = () => {
   };
 
   const applyData = {
-    memberId: userId, //사용자 멤버 아이디
+    memberId: userId,
   };
 
   const postApplyData = async () => {

@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 import UserRateList from '../components/UserRateList.tsx';
 import Loading from '../components/Loading.tsx';
 
@@ -39,6 +40,7 @@ const UserRating = () => {
       </Description>
       <ul>
         {isLoading && <Loading />}
+        {/* 사용자 별점 리스트 */}
         {userLists.map((list, idx) => (
           <UserRateList key={idx} list={list} />
         ))}

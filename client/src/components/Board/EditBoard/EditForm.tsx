@@ -187,6 +187,7 @@ const EditForm = () => {
           ))}
         </TagFlex>
       </InfoDiv>
+      {/* 장보기 선택 시, 음식 태그 선택 비노출 */}
       {info.category !== 'SHOPPING' && (
         <InfoDiv>
           <InfoTitle>음식 태그</InfoTitle>
@@ -213,6 +214,7 @@ const EditForm = () => {
           />
         </div>
       </InfoDiv>
+      {/* 모집 종료 처리된 모임의 경우 모집 상태 비노출 */}
       {!isDisabled && (
         <InfoDiv>
           <InfoTitle>모집 상태 *</InfoTitle>
