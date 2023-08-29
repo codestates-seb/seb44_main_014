@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { IUserState } from '../store/userSlice.ts';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-// import api from '../util/api/api.tsx';
 import instance from '../util/api/instance.ts';
 
 const MoreInfoWritings = () => {

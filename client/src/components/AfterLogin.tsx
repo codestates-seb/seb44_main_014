@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 
 import instance from '../util/api/instance.ts';
-// import api from '../util/api/api.tsx';
 import BoardList from './Board/BoardList.tsx';
 import NoBoardList from './Board/NoBoardList.tsx';
 import MainListArea from './MainListArea.tsx';

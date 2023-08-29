@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
 import instance from '../util/api/instance.ts';
-// import api from '../util/api/api.tsx';
 import { IMateMember } from '../interface/board.ts';
 import Loading from '../components/Loading.tsx';
 

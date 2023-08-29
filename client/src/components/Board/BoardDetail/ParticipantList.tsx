@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { styled } from 'styled-components';
+
 import ProfilePopup from './ProfilePopup.tsx';
+
 import { IParticipants } from '../../../interface/board.ts';
 
 interface IParticipantListProps {

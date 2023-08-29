@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
+
 import Comment from './Comment.tsx';
 
 import instance from '../../../util/api/instance.ts';
-// import api from '../../../util/api/api.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
 
@@ -19,7 +19,7 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
   const memberId = useSelector((state: IUserState) => state.user.memberId);
   const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
   const [commentContent, setCommentContent] = useState({
-    memberId: memberId, // 사용자 멤버 아이디
+    memberId: memberId,
     content: '',
   });
   const comments = commentInfo.sort((a, b) => {

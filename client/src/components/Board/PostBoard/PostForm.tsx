@@ -8,7 +8,6 @@ import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
 
 import instance from '../../../util/api/instance.ts';
-// import api from '../../../util/api/api.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IPostInfo } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
@@ -18,7 +17,7 @@ const PostForm = () => {
   const navigate = useNavigate();
   const userId = useSelector((state: IUserState) => state.user.memberId);
   const [info, setInfo] = useState<IPostInfo>({
-    memberId: userId, // 사용자
+    memberId: userId,
     category: '',
     title: '',
     content: '',
@@ -116,6 +115,7 @@ const PostForm = () => {
           ))}
         </TagFlex>
       </InfoDiv>
+      {/* 장보기 선택 시, 음식 태그 선택 비노출 */}
       {info.category !== 'SHOPPING' && (
         <InfoDiv>
           <InfoTitle>음식 태그</InfoTitle>

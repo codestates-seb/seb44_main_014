@@ -9,7 +9,6 @@ import TagCheckbox from '../../UI/TagCheckbox.tsx';
 import Loading from '../../Loading.tsx';
 
 import instance from '../../../util/api/instance.ts';
-// import api from '../../../util/api/api.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IEditInfo } from '../../../interface/board.ts';
 import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';
@@ -188,6 +187,7 @@ const EditForm = () => {
           ))}
         </TagFlex>
       </InfoDiv>
+      {/* 장보기 선택 시, 음식 태그 선택 비노출 */}
       {info.category !== 'SHOPPING' && (
         <InfoDiv>
           <InfoTitle>음식 태그</InfoTitle>
@@ -214,6 +214,7 @@ const EditForm = () => {
           />
         </div>
       </InfoDiv>
+      {/* 모집 종료 처리된 모임의 경우 모집 상태 비노출 */}
       {!isDisabled && (
         <InfoDiv>
           <InfoTitle>모집 상태 *</InfoTitle>

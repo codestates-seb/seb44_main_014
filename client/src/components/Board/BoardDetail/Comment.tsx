@@ -7,10 +7,10 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import AlertPopup from '../../UI/AlertPopup.tsx';
 import ProfilePopup from './ProfilePopup.tsx';
+
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp, showModal } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
-// import api from '../../../util/api/api.tsx';
 import instance from '../../../util/api/instance.ts';
 
 type CommentInfoProps = {
@@ -144,6 +144,7 @@ const WriterInfo = styled.div`
 
 const WriterId = styled.span`
   color: var(--color-black);
+  cursor: pointer;
 `;
 
 const WriterScore = styled.span`

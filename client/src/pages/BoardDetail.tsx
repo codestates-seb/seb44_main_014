@@ -12,7 +12,6 @@ import Loading from '../components/Loading.tsx';
 import AlertPopup from '../components/UI/AlertPopup.tsx';
 
 import instance from '../util/api/instance.ts';
-// import api from '../util/api/api.tsx';
 import { IBoardDetailData, IParticipants } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { showModal } from '../util/common.ts';
@@ -96,7 +95,7 @@ const BoardDetail = () => {
   };
 
   const applyData = {
-    memberId: userId, //사용자 멤버 아이디
+    memberId: userId,
   };
 
   const postApplyData = async () => {

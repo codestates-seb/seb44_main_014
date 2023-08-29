@@ -41,6 +41,7 @@ const ApplyParticipate = ({
           신청
         </button>
       </ApplyParticipant>
+      {/* 작성자 및 참가자에게만 노출 */}
       {(showParticipant !== 0 || (memberId === userId && mateData.length !== 0)) && (
         <ParticipantIdArea>
           <span>참가자: &nbsp;</span>

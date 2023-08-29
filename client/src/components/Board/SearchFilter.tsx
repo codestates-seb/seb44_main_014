@@ -27,6 +27,7 @@ const SearchFilter = ({ filterInfo, setFilterInfo, setCurrentApi }: IFilterData)
 
   return (
     <SeachSection>
+      {/* 로그인 시 사용자 지정 위치 노출 */}
       {isLoggedIn && (
         <LocationText>
           <p>{address}</p>
@@ -62,6 +63,7 @@ const SearchFilter = ({ filterInfo, setFilterInfo, setCurrentApi }: IFilterData)
               </button>
             ))}
           </TagsRow>
+          {/* 장보기 선택 시, 음식 태그 선택 비노출 */}
           {filterInfo.category !== 'SHOPPING' && (
             <TagsRow>
               {FOOD_TAGS.map((tag) => (

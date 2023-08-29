@@ -68,6 +68,7 @@ const ProfileContainer = styled.div`
     height: 50px;
     margin-right: 1.25rem;
     border-radius: 50%;
+    border: 0.5px solid #cccccc;
     @media screen and (min-width: 1024px) {
       width: 100px;
       height: 100px;

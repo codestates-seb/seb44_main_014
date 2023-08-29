@@ -8,7 +8,6 @@ import { checkedValue, selectOneCheckbox, showModal } from '../util/common.ts';
 import { IUserState, foodTagChange, logout } from '../store/userSlice.ts';
 import { ILocationState, locationLogout } from '../store/locationSlice.ts';
 import instance from '../util/api/instance.ts';
-// import api from '../util/api/api.tsx';
 import Loading from '../components/Loading.tsx';
 import { FOOD_TAGS } from '../constant/constant.ts';
 import AlertPopup from '../components/UI/AlertPopup.tsx';
