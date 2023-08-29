@@ -9,7 +9,6 @@ import TagCheckbox from '../../UI/TagCheckbox.tsx';
 import Loading from '../../Loading.tsx';
 
 import instance from '../../../util/api/instance.ts';
-// import api from '../../../util/api/api.tsx';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IEditInfo } from '../../../interface/board.ts';
 import { checkedValue, selectOneCheckbox } from '../../../util/common.ts';

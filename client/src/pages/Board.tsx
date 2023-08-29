@@ -15,7 +15,6 @@ import NoBoardList from '../components/Board/NoBoardList.tsx';
 import { category, ICategoryState } from '../store/listCategorySlice.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
-// import api from '../util/api/api.tsx';
 import instance from '../util/api/instance.ts';
 
 const Board = () => {

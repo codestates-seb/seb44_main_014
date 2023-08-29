@@ -5,7 +5,6 @@ import { styled } from 'styled-components';
 import Comment from './Comment.tsx';
 
 import instance from '../../../util/api/instance.ts';
-// import api from '../../../util/api/api.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
 

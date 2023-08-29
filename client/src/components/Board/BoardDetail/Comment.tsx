@@ -10,7 +10,6 @@ import ProfilePopup from './ProfilePopup.tsx';
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp, showModal } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
-// import api from '../../../util/api/api.tsx';
 import instance from '../../../util/api/instance.ts';
 
 type CommentInfoProps = {

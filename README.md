@@ -24,7 +24,7 @@
 | :--------: | :--------: | :--------: |
 | <img src="https://github.com/codestates-seb/seb44_main_014/assets/101058141/55b18b88-ed35-4b9d-bfd6-8ea90b98942f" alt="이준석" width="200" height="200"> | <img src="https://github.com/codestates-seb/seb44_main_014/assets/101058141/b84c04bb-ca8e-4d6f-825e-724dc6806283" alt="유지원" width="200" height="200"> | <img src="https://github.com/codestates-seb/seb44_main_014/assets/101058141/280b5145-9830-4550-a5eb-0932aa9dacfc" alt="조성원" width="200" height="200"> |
 | [@LeeJSYS](https://github.com/LeeJSYS) | [@yyjjvv](https://github.com/yyjjvv) | [@thejsw](https://github.com/thejsw) |
-| <p align="left">- USERFLOW <br/>- JWT <br/>- USERINFO  <br/>- LOCATION  <br/>- MYPAGE <br /></p> |<p align="left">- WIREFRAME  <br/>- DESIGN  <br/>- BOARD CRUD  <br/>- COMMENT CRUD  <br/>- USERRATE  <br/>- EDITUSERINFO  <br/></p>  |<p align="left">-UI COMPONENTS  <br/>- DESIGN  <br/>- MYPAGE <br/>- EDITUSER <br/>- MOREINFO <br/></p>|
+| <p align="left">- USERFLOW <br/>- JWT <br/>- USERINFO  <br/>- LOCATION  <br/>- MYPAGE <br /></p> |<p align="left">- WIREFRAME  <br/>- DESIGN  <br/>- BOARD CRUD  <br/>- COMMENT CRUD  <br/>- USERRATE  <br/>- EDITUSERINFO  <br/>- JWT <br/></p>  |<p align="left">-UI COMPONENTS  <br/>- DESIGN  <br/>- MYPAGE <br/>- EDITUSER <br/>- MOREINFO <br/></p>|
 
 ## 3. 사용기술스택
 ### Back-end
