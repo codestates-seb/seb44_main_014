@@ -29,15 +29,13 @@ const PostForm = () => {
   });
 
   const postSubmitInfo = async () => {
-    await instance
-      .post(`/board/posts`, info)
-      .then((res) => {
-        const URI = res.headers.location;
-        navigate(URI);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await instance.post(`/board/posts`, info);
+      const URI = res.headers.location;
+      navigate(URI);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {

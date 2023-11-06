@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 // Components
 import SearchFilter from '../components/Board/SearchFilter.tsx';
 import TabMenu from '../components/Board/TabMenu.tsx';
-import SortButtons from '../components/Board/SortButtons.tsx';
 import BoardList from '../components/Board/BoardList.tsx';
 import Pagination from '../components/Board/Pagination.tsx';
 import Loading from '../components/Loading.tsx';
@@ -22,9 +21,6 @@ const Board = () => {
   const dispatch = useDispatch();
   const isShopping = useSelector((state: ICategoryState) => state.category.value);
   const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
-  // 정렬 active 상태 체크
-  const [newer, setNewer] = useState<boolean>(true);
-  const [mostViewed, setMostViewed] = useState<boolean>(!newer);
   // 리스트 정렬
   const [pageInfo, setPageInfo] = useState<IPageInfo>({
     page: 1,
@@ -54,36 +50,33 @@ const Board = () => {
 
   useEffect(() => {
     const getBoardList = async () => {
-      await instance
-        .get(`/board/search?page=${filterInfo.page}${currentApi}`)
-        .then((res) => {
-          setPageInfo(res.data.pageInfo);
-          setLists(res.data.data);
-          setNewer(true);
-          setMostViewed(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoading(false);
-        });
+      try {
+        const res = await instance.get(`/board/search?page=${filterInfo.page}${currentApi}`);
+        setPageInfo(res.data.pageInfo);
+        setLists(res.data.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
+    };
+    const getNonUserBoardList = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=${filterInfo.page}${currentApi}`
+        );
+        setPageInfo(res.data.pageInfo);
+        setLists(res.data.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
     };
     if (isLoggedIn) {
       getBoardList();
     } else {
-      axios
-        .get(`${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=${filterInfo.page}${currentApi}`)
-        .then((res) => {
-          setPageInfo(res.data.pageInfo);
-          setLists(res.data.data);
-          setNewer(true);
-          setMostViewed(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoading(false);
-        });
+      getNonUserBoardList();
     }
   }, [isLoggedIn, filterInfo, currentApi]);
 
@@ -111,14 +104,6 @@ const Board = () => {
             <ListH2>게시판</ListH2>
             <button onClick={() => handleNavigate()}>글 작성</button>
           </ListTop>
-          <SortButtons
-            newer={newer}
-            setNewer={setNewer}
-            mostViewed={mostViewed}
-            setMostViewed={setMostViewed}
-            lists={lists}
-            setLists={setLists}
-          />
 
           {/* 게시글 리스트 */}
           {isLoading ? (
@@ -164,6 +149,7 @@ const ListsSection = styled.section`
 const ListTop = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2rem;
   button {
     padding: 0.5rem;
     background-color: var(--color-white);
