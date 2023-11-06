@@ -33,16 +33,14 @@ const AfterLogin = () => {
 
   useEffect(() => {
     const getBoarList = async () => {
-      await instance
-        .get(`/home`)
-        .then((res) => {
-          setLists(res.data);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoading(false);
-        });
+      try {
+        const res = await instance.get(`/home`);
+        setLists(res.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
     };
     getBoarList();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -34,14 +34,12 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
 
   const postComment = async () => {
     if (isLoggedIn) {
-      await instance
-        .post(`/board/posts/${postId}/comments`, commentContent)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      try {
+        const res = await instance.post(`/board/posts/${postId}/comments`, commentContent);
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       alert('로그인 후 이용해주세요.');
     }

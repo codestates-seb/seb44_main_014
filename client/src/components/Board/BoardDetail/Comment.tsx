@@ -34,25 +34,22 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
   const newTime = timeStamp(new Date(createdAt));
 
   const patchComment = async () => {
-    await instance
-      .patch(`/board/posts/${postId}/comments/${commentId}`, commentContent)
-      .then((res) => {
-        setCommentContent({ ...commentContent, content: res.data.content });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await instance.patch(`/board/posts/${postId}/comments/${commentId}`, commentContent);
+      setCommentContent({ ...commentContent, content: res.data.content });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const deleteComment = async () => {
-    await instance
-      .delete(`/board/posts/${postId}/comments/${commentId}`)
-      .then(() => {
-        location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await instance.delete(`/board/posts/${postId}/comments/${commentId}`);
+      location.reload();
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
