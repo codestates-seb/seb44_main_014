@@ -68,68 +68,59 @@ const BoardDetail = () => {
   }, []);
 
   const getDetailData = async () => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
-      .then((res) => {
-        const { mate } = res.data;
-        setDetailData(res.data);
-        setUpdateMate({ mate });
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`);
+      const { mate } = res.data;
+      setDetailData(res.data);
+      setUpdateMate({ mate });
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
   };
 
   const getMateData = async () => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate`)
-      .then((res) => {
-        const { mate_member } = res.data;
-        setMateData(mate_member);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/posts/${postId}/mate`);
+      const { mate_member } = res.data;
+      setMateData(mate_member);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const applyData = {
     memberId: userId,
   };
 
-  const postApplyData = () => {
+  const postApplyData = async () => {
     if (detailData.status !== 'END') {
-      instance
-        .post(`/board/posts/${postId}/mate`, applyData)
-        .then((res) => {
-          setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
-          getMateData();
-        })
-        .catch((err) => {
-          console.log(err);
-          if (err.response.status === 409) {
-            alert('이미 참여 신청한 모임입니다.');
-          } else if (err.response.status === 403) {
-            alert('신청 불가한 모임입니다.');
-          } else if (!isLoggedIn) {
-            alert('로그인 후 신청해주세요.');
-          }
-        });
+      try {
+        const res = await instance.post(`/board/posts/${postId}/mate`, applyData);
+        setUpdateMate({ ...updateMate, mate: { findNum: res.data.findNum, mateNum: res.data.mateNum } });
+        getMateData();
+      } catch (err: any) {
+        if (err.response.status === 409) {
+          alert('이미 참여 신청한 모임입니다.');
+        } else if (err.response.status === 403) {
+          alert('신청 불가한 모임입니다.');
+        } else if (!isLoggedIn) {
+          alert('로그인 후 신청해주세요.');
+        }
+      }
     } else {
       alert('모집 종료된 게시물입니다.');
     }
   };
 
-  const deletePost = () => {
-    instance
-      .delete(`/board/posts/${postId}`)
-      .then(() => {
-        navigate('/board');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const deletePost = async () => {
+    try {
+      const res = await instance.delete(`/board/posts/${postId}`);
+      navigate('/board');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   if (isLoading) {
