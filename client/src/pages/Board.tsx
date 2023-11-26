@@ -53,38 +53,38 @@ const Board = () => {
   }, []);
 
   useEffect(() => {
-    const getBoardList = () => {
-      instance
-        .get(`/board/search?page=${filterInfo.page}${currentApi}`)
-        .then((res) => {
-          setPageInfo(res.data.pageInfo);
-          setLists(res.data.data);
-          setNewer(true);
-          setMostViewed(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoading(false);
-        });
+    const getBoardList = async () => {
+      try {
+        const res = await instance.get(`/board/search?page=${filterInfo.page}${currentApi}`);
+        setPageInfo(res.data.pageInfo);
+        setLists(res.data.data);
+        setNewer(true);
+        setMostViewed(false);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
+    };
+    const getNonUserBoardList = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=${filterInfo.page}${currentApi}`
+        );
+        setPageInfo(res.data.pageInfo);
+        setLists(res.data.data);
+        setNewer(true);
+        setMostViewed(false);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
     };
     if (isLoggedIn) {
       getBoardList();
     } else {
-      axios
-        .get(`${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=${filterInfo.page}${currentApi}`)
-        .then((res) => {
-          setPageInfo(res.data.pageInfo);
-          setLists(res.data.data);
-          setNewer(true);
-          setMostViewed(false);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoading(false);
-        });
-      // getNonUserBoardList();
+      getNonUserBoardList();
     }
   }, [isLoggedIn, filterInfo, currentApi]);
 

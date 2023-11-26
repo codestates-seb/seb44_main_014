@@ -32,17 +32,15 @@ const AfterLogin = () => {
   const customTagListTitle = FOOD_TAGS.filter((tag) => tag.id === userFoodTag)[0].text;
 
   useEffect(() => {
-    const getBoarList = () => {
-      instance
-        .get(`/home`)
-        .then((res) => {
-          setLists(res.data);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsLoading(false);
-        });
+    const getBoarList = async () => {
+      try {
+        const res = await instance.get(`/home`);
+        setLists(res.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
     };
     getBoarList();
     // eslint-disable-next-line react-hooks/exhaustive-deps

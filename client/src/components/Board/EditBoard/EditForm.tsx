@@ -33,9 +33,9 @@ const EditForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`)
-      .then((res) => {
+    const getFormInfo = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/board/posts/${postId}`);
         const { category, content, mate, postTag, status, title, member } = res.data;
         const data = {
           category,
@@ -52,11 +52,12 @@ const EditForm = () => {
         }
         setInfo(data);
         setIsLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.log(err);
         setIsLoading(false);
-      });
+      }
+    };
+    getFormInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -87,19 +88,17 @@ const EditForm = () => {
     }
   }, [info]);
 
-  const patchSubmitInfo = () => {
-    instance
-      .patch(`/board/posts/${postId}/edit`, info)
-      .then(() => {
-        if (info.status === 'END' && !isDisabled) {
-          navigate(`/board/post/${postId}/mate`);
-        } else {
-          navigate(`/board/posts/${postId}`);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const patchSubmitInfo = async () => {
+    try {
+      const res = await instance.patch(`/board/posts/${postId}/edit`, info);
+      if (info.status === 'END' && !isDisabled) {
+        navigate(`/board/post/${postId}/mate`);
+      } else {
+        navigate(`/board/posts/${postId}`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleCategoryType = (e: React.MouseEvent<HTMLInputElement>) => {
