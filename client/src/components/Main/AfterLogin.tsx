@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 
-import instance from '../util/api/instance.ts';
-import BoardList from './Board/BoardList.tsx';
-import NoBoardList from './Board/NoBoardList.tsx';
+import instance from '../../util/api/instance.ts';
+import BoardList from '../Board/BoardList.tsx';
+import NoBoardList from '../Board/NoBoardList.tsx';
 import MainListArea from './MainListArea.tsx';
 
-import { category } from '../store/listCategorySlice.ts';
-import { IBoardList } from '../interface/board.ts';
-import { ILocationState } from '../store/locationSlice.ts';
-import { IUserState } from '../store/userSlice.ts';
-import { FOOD_TAGS } from '../constant/constant.ts';
+import { category } from '../../store/listCategorySlice.ts';
+import { IBoardList } from '../../interface/board.ts';
+import { ILocationState } from '../../store/locationSlice.ts';
+import { IUserState } from '../../store/userSlice.ts';
+import { FOOD_TAGS } from '../../constant/constant.ts';
 
 const AfterLogin = () => {
   const navigate = useNavigate();
@@ -22,10 +22,8 @@ const AfterLogin = () => {
   const address = useSelector((state: ILocationState) => state.location.address);
   const foodTag = useSelector((state: IUserState) => state.user.foodTagId);
 
-  let userFoodTag: number;
-  if (!foodTag) {
-    userFoodTag = 1;
-  } else {
+  let userFoodTag = 1; // 사용자 맞춤 태그가 없을 시, default는 한식
+  if (foodTag) {
     userFoodTag = foodTag;
   }
 

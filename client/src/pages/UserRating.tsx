@@ -1,12 +1,13 @@
+// packages
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-
-import UserRateList from '../components/UserRateList.tsx';
-import Loading from '../components/Loading.tsx';
+// custom files
+import UserRateList from '../components/UserRate/UserRateList.tsx';
+import Loading from '../components/UI/Loading.tsx';
 
 const UserRating = () => {
   const navigate = useNavigate();

@@ -1,6 +1,9 @@
+// packages
 import { useSelector } from 'react-redux';
-import AfterLogin from '../components/AfterLogin.tsx';
-import Introduction from '../components/Introduction.tsx';
+// components
+import AfterLogin from '../components/Main/AfterLogin.tsx';
+import Introduction from '../components/Main/Introduction.tsx';
+// custom files
 import { IUserState } from '../store/userSlice.ts';
 
 const Main = () => {

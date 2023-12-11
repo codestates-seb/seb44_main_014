@@ -1,4 +1,5 @@
-import Introduction from '../components/Introduction.tsx';
+//components
+import Introduction from '../components/Main/Introduction.tsx';
 
 const BobFriendIntro = () => {
   return <Introduction />;

@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { IUserState } from '../store/userSlice.ts';
 import instance from '../util/api/instance.ts';
 import { IMateMember } from '../interface/board.ts';
-import Loading from '../components/Loading.tsx';
+import Loading from '../components/UI/Loading.tsx';
 
 interface Post {
   postId: number;
