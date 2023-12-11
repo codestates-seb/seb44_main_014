@@ -5,6 +5,7 @@ import { faStar, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
 
 import { timeStamp } from '../../util/common.ts';
 import { IBoardList } from '../../interface/board.ts';
+import { GENDER_TAGS, FOOD_TAGS, STATUS } from '../../constant/constant.ts';
 
 type BoardListProps = {
   list: IBoardList;
@@ -16,39 +17,28 @@ interface IStyledProps {
 
 const BoardList = ({ list }: BoardListProps) => {
   const { genderTagId, foodTagId } = list.postTag;
-  let genderTag: string;
-  if (genderTagId === 1) {
-    genderTag = '# 여자만';
-  } else if (genderTagId === 2) {
-    genderTag = '# 남자만';
-  } else {
-    genderTag = '# 남녀노소';
+
+  let genderTag = '';
+  for (const gender of GENDER_TAGS) {
+    if (genderTagId === gender.id) {
+      genderTag = gender.text;
+    }
   }
 
-  let foodTag: string;
-  if (foodTagId === 1) {
-    foodTag = '# 한식';
-  } else if (foodTagId === 2) {
-    foodTag = '# 중식';
-  } else if (foodTagId === 3) {
-    foodTag = '# 양식';
-  } else if (foodTagId === 4) {
-    foodTag = '# 일식';
-  } else {
-    foodTag = '# 기타';
+  let foodTag = '';
+  for (const food of FOOD_TAGS) {
+    if (foodTagId === food.id) {
+      foodTag = food.text;
+    }
   }
 
-  let statusText: string;
-  let statusColor: string;
-  if (list.status === 'END') {
-    statusText = '모집 종료';
-    statusColor = '#EE3D16';
-  } else if (list.status === 'COMPLETE') {
-    statusText = '모집 완료';
-    statusColor = '#FFD233';
-  } else {
-    statusText = '모집 중';
-    statusColor = '#28CA6B';
+  let statusText = '';
+  let statusColor = '';
+  for (const state of STATUS) {
+    if (list.status === state.status) {
+      statusText = state.text;
+      statusColor = state.color;
+    }
   }
 
   const createdAt = timeStamp(new Date(list.createdAt));
