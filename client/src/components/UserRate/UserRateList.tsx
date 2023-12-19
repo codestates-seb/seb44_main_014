@@ -1,12 +1,12 @@
+// packages
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { styled } from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { checkedValue } from '../util/common.ts';
+//components
+import Star from './Star.tsx';
 
-interface IStarRate {
+export interface IStarRate {
   rateMemberId: number;
   starRate: number;
 }
@@ -38,13 +38,11 @@ const UserRateList = ({ list }: IMateInfo) => {
       });
   };
 
-  const handleRateValue = (e: React.MouseEvent<HTMLInputElement>) => {
-    setUserRateInfo({ ...userRateInfo, starRate: Number(checkedValue(e)) });
-  };
-
   const handleDisableBtn = () => {
     (document.getElementById(`btnSubmit${list.memberId}`) as HTMLButtonElement).disabled = true;
   };
+
+  const stars = [1, 2, 3, 4, 5];
 
   return (
     <StarRateList>
@@ -53,61 +51,15 @@ const UserRateList = ({ list }: IMateInfo) => {
         {isSubmitted && <TextComplete>제출이 완료되었습니다.</TextComplete>}
         {!isSubmitted && (
           <div className="rating-group">
-            <label aria-label="1 star" htmlFor="starRate10">
-              <FontAwesomeIcon icon={faStar} />
-            </label>
-            <input
-              type="radio"
-              className="rating__input"
-              name={`starRate${list.memberId}`}
-              id="starRate10"
-              value="1"
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-            />
-            <label aria-label="2 stars" htmlFor="starRate20">
-              <FontAwesomeIcon icon={faStar} />
-            </label>
-            <input
-              type="radio"
-              className="rating__input"
-              name={`starRate${list.memberId}`}
-              id="starRate20"
-              value="2"
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-            />
-            <label aria-label="3 stars" htmlFor="starRate30">
-              <FontAwesomeIcon icon={faStar} />
-            </label>
-            <input
-              type="radio"
-              className="rating__input"
-              name={`starRate${list.memberId}`}
-              id="starRate30"
-              value="3"
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-            />
-            <label aria-label="4 stars" htmlFor="starRate40">
-              <FontAwesomeIcon icon={faStar} />
-            </label>
-            <input
-              type="radio"
-              className="rating__input"
-              name={`starRate${list.memberId}`}
-              id="starRate40"
-              value="4"
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-            />
-            <label aria-label="5 stars" htmlFor="starRate50">
-              <FontAwesomeIcon icon={faStar} />
-            </label>
-            <input
-              type="radio"
-              className="rating__input"
-              name={`starRate${list.memberId}`}
-              id="starRate50"
-              value="5"
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => handleRateValue(e)}
-            />
+            {stars.map((num) => (
+              <Star
+                key={num}
+                num={num}
+                userRateInfo={userRateInfo}
+                setUserRateInfo={setUserRateInfo}
+                name={list.memberId}
+              />
+            ))}
           </div>
         )}
         <ButtonSave
@@ -143,13 +95,6 @@ const StarRateList = styled.li`
     padding: 0 0.4rem;
     font-size: 2.5rem;
   }
-
-  /* add padding and positioning to half star labels */
-  /* .rating__label--half {
-    padding-right: 0;
-    margin-right: -1.3em;
-    z-index: 2;
-  } */
 
   /* set default star color */
   svg {

@@ -1,13 +1,14 @@
+// packages
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-
+// components
 import AlertPopup from '../../UI/AlertPopup.tsx';
 import ProfilePopup from './ProfilePopup.tsx';
-
+// custom files
 import { IComments } from '../../../interface/board.ts';
 import { timeStamp, showModal } from '../../../util/common.ts';
 import { IUserState } from '../../../store/userSlice.ts';
@@ -35,8 +36,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 
   const patchComment = async () => {
     try {
-      const res = await instance.patch(`/board/posts/${postId}/comments/${commentId}`, commentContent);
-      setCommentContent({ ...commentContent, content: res.data.content });
+      await instance.patch(`/board/posts/${postId}/comments/${commentId}`, commentContent);
     } catch (err) {
       console.log(err);
     }
@@ -44,7 +44,7 @@ const Comment = ({ commentInfo }: CommentInfoProps) => {
 
   const deleteComment = async () => {
     try {
-      const res = await instance.delete(`/board/posts/${postId}/comments/${commentId}`);
+      await instance.delete(`/board/posts/${postId}/comments/${commentId}`);
       location.reload();
     } catch (err) {
       console.log(err);

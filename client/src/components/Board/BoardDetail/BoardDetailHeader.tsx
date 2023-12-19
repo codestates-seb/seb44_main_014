@@ -1,10 +1,13 @@
+// packages
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faEye, faComment } from '@fortawesome/free-solid-svg-icons';
-
+// custom files
 import { IBoardDetailData } from '../../../interface/board.ts';
 import { timeStamp } from '../../../util/common.ts';
+import { GENDER_TAGS, FOOD_TAGS, STATUS } from '../../../constant/constant.ts';
 
 type BoardInfoProps = {
   boardInfo: IBoardDetailData;
@@ -14,43 +17,31 @@ interface IStyledProps {
   $statusColor: string;
 }
 
-const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
+const BoardDetailHeader = memo(({ boardInfo }: BoardInfoProps) => {
   const navigate = useNavigate();
   const { title, status, postTag, viewCount, commentCount, createdAt } = boardInfo;
 
-  let newGenderTag: string;
-  if (postTag.genderTagId === 1) {
-    newGenderTag = '# 여자만';
-  } else if (postTag.genderTagId === 2) {
-    newGenderTag = '# 남자만';
-  } else {
-    newGenderTag = '# 남녀노소';
+  let newGenderTag = '';
+  for (const gender of GENDER_TAGS) {
+    if (postTag.genderTagId === gender.id) {
+      newGenderTag = gender.text;
+    }
   }
 
-  let newFoodTag: string;
-  if (postTag.foodTagId === 1) {
-    newFoodTag = '# 한식';
-  } else if (postTag.foodTagId === 2) {
-    newFoodTag = '# 중식';
-  } else if (postTag.foodTagId === 3) {
-    newFoodTag = '# 양식';
-  } else if (postTag.foodTagId === 4) {
-    newFoodTag = '# 일식';
-  } else {
-    newFoodTag = '# 기타';
+  let newFoodTag = '';
+  for (const food of FOOD_TAGS) {
+    if (postTag.foodTagId === food.id) {
+      newFoodTag = food.text;
+    }
   }
 
-  let statusText: string;
-  let statusColor: string;
-  if (status === 'END') {
-    statusText = '모집 종료';
-    statusColor = '#EE3D16';
-  } else if (status === 'COMPLETE') {
-    statusText = '모집 완료';
-    statusColor = '#FFD233';
-  } else {
-    statusText = '모집 중';
-    statusColor = '#28CA6B';
+  let statusText = '';
+  let statusColor = '';
+  for (const state of STATUS) {
+    if (status === state.status) {
+      statusText = state.text;
+      statusColor = state.color;
+    }
   }
 
   const newTime = timeStamp(new Date(createdAt));
@@ -81,7 +72,7 @@ const BoardDetailHeader = ({ boardInfo }: BoardInfoProps) => {
       </DetailInfoArea>
     </DetailHeader>
   );
-};
+});
 
 const DetailHeader = styled.div`
   @media screen and (min-width: 1024px) {

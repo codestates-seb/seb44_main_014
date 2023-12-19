@@ -1,17 +1,18 @@
+// packages
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { styled } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-// Components
+// components
 import SearchFilter from '../components/Board/SearchFilter.tsx';
 import TabMenu from '../components/Board/TabMenu.tsx';
 import SortButtons from '../components/Board/SortButtons.tsx';
 import BoardList from '../components/Board/BoardList.tsx';
 import Pagination from '../components/Board/Pagination.tsx';
-import Loading from '../components/Loading.tsx';
+import Loading from '../components/UI/Loading.tsx';
 import NoBoardList from '../components/Board/NoBoardList.tsx';
-
+//custom files
 import { category, ICategoryState } from '../store/listCategorySlice.ts';
 import { IUserState } from '../store/userSlice.ts';
 import { IBoardList, IFilterInfo, IPageInfo } from '../interface/board.ts';
@@ -53,14 +54,17 @@ const Board = () => {
   }, []);
 
   useEffect(() => {
-    const getBoardList = async () => {
+    const basicSetting = (res: any) => {
+      setPageInfo(res.data.pageInfo);
+      setLists(res.data.data);
+      setNewer(true);
+      setMostViewed(false);
+      setIsLoading(false);
+    };
+    const getUserBoardList = async () => {
       try {
         const res = await instance.get(`/board/search?page=${filterInfo.page}${currentApi}`);
-        setPageInfo(res.data.pageInfo);
-        setLists(res.data.data);
-        setNewer(true);
-        setMostViewed(false);
-        setIsLoading(false);
+        basicSetting(res);
       } catch (err) {
         console.log(err);
         setIsLoading(false);
@@ -71,18 +75,14 @@ const Board = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_APP_API_URL}/board/search/notlogin?page=${filterInfo.page}${currentApi}`
         );
-        setPageInfo(res.data.pageInfo);
-        setLists(res.data.data);
-        setNewer(true);
-        setMostViewed(false);
-        setIsLoading(false);
+        basicSetting(res);
       } catch (err) {
         console.log(err);
         setIsLoading(false);
       }
     };
     if (isLoggedIn) {
-      getBoardList();
+      getUserBoardList();
     } else {
       getNonUserBoardList();
     }

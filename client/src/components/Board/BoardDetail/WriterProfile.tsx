@@ -1,6 +1,10 @@
+// packages
+import { memo } from 'react';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+//custom files
+import { Gender } from '../../../enum/gender.ts';
 
 type ProfileInfoProps = {
   profileInfo: {
@@ -17,14 +21,14 @@ interface IStyledProps {
   $isActive: boolean;
 }
 
-const WriterProfile = ({ profileInfo }: ProfileInfoProps) => {
+const WriterProfile = memo(({ profileInfo }: ProfileInfoProps) => {
   const { name, gender, image, avgStarRate, eatStatus } = profileInfo;
 
   let userGender: string;
   if (gender === 'FEMALE') {
-    userGender = '여성';
+    userGender = Gender.FEMALE;
   } else {
-    userGender = '남성';
+    userGender = Gender.MALE;
   }
 
   let profileImage: string;
@@ -51,7 +55,7 @@ const WriterProfile = ({ profileInfo }: ProfileInfoProps) => {
       </ProfileInfo>
     </ProfileContainer>
   );
-};
+});
 
 const ProfileContainer = styled.div`
   display: flex;

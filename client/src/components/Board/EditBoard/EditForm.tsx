@@ -1,13 +1,14 @@
+// packages
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import axios from 'axios';
-
+// components
 import InputRadio from '../../UI/InputRadio.tsx';
 import TextEditor from '../../TextEditor/TextEditor.tsx';
 import TagCheckbox from '../../UI/TagCheckbox.tsx';
-import Loading from '../../Loading.tsx';
-
+import Loading from '../../UI/Loading.tsx';
+// custom files
 import instance from '../../../util/api/instance.ts';
 import { GENDER_TAGS, FOOD_TAGS } from '../../../constant/constant.ts';
 import { IEditInfo } from '../../../interface/board.ts';
@@ -90,7 +91,7 @@ const EditForm = () => {
 
   const patchSubmitInfo = async () => {
     try {
-      const res = await instance.patch(`/board/posts/${postId}/edit`, info);
+      await instance.patch(`/board/posts/${postId}/edit`, info);
       if (info.status === 'END' && !isDisabled) {
         navigate(`/board/post/${postId}/mate`);
       } else {

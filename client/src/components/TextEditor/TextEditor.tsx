@@ -1,10 +1,11 @@
+// packages
 import * as React from 'react';
 import { styled } from 'styled-components';
 import axios from 'axios';
-
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { RangeStatic } from 'quill';
+// custom files
 import { IEditInfo } from '../../interface/board.ts';
 
 interface IEditor {
@@ -80,9 +81,6 @@ const TextEditor = ({ info, setInfo }: IEditor) => {
         onChange={(content) => {
           setInfo({ ...info, content: content });
         }}
-        // onChange={(content, delta, source, editor) => {
-        //   setInfo({ ...info, content: editor.getHTML() });
-        // }}
       />
     </CustomReactQuill>
   );

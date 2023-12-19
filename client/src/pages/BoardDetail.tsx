@@ -1,3 +1,4 @@
+// packages
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -8,9 +9,9 @@ import BoardDetailHeader from '../components/Board/BoardDetail/BoardDetailHeader
 import ApplyParticipate from '../components/Board/BoardDetail/ApplyParticipate.tsx';
 import WriterProfile from '../components/Board/BoardDetail/WriterProfile.tsx';
 import BoardComment from '../components/Board/BoardDetail/BoardComment.tsx';
-import Loading from '../components/Loading.tsx';
+import Loading from '../components/UI/Loading.tsx';
 import AlertPopup from '../components/UI/AlertPopup.tsx';
-
+// custom files
 import instance from '../util/api/instance.ts';
 import { IBoardDetailData, IParticipants } from '../interface/board.ts';
 import { IUserState } from '../store/userSlice.ts';
@@ -116,7 +117,7 @@ const BoardDetail = () => {
 
   const deletePost = async () => {
     try {
-      const res = await instance.delete(`/board/posts/${postId}`);
+      await instance.delete(`/board/posts/${postId}`);
       navigate('/board');
     } catch (err) {
       console.log(err);

@@ -11,3 +11,9 @@ export const FOOD_TAGS = [
   { id: 4, text: '# 일식' },
   { id: 5, text: '# 기타' },
 ];
+
+export const STATUS = [
+  { status: 'RECRUITING', text: '모집 중', color: '#28CA6B' },
+  { status: 'COMPLETE', text: '모집 완료', color: '#FFD233' },
+  { status: 'END', text: '모집 종료', color: '#EE3D16' },
+];

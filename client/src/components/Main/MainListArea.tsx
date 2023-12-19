@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import Loading from './Loading.tsx';
+import Loading from '../UI/Loading.tsx';
 
 interface IMainListProps {
   children: React.ReactNode;

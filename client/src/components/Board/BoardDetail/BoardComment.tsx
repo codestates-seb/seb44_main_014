@@ -1,10 +1,11 @@
-import { useState } from 'react';
+// packages
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { styled } from 'styled-components';
-
+// components
 import Comment from './Comment.tsx';
-
+// custom files
 import instance from '../../../util/api/instance.ts';
 import { IComments } from '../../../interface/board.ts';
 import { IUserState } from '../../../store/userSlice.ts';
@@ -16,12 +17,9 @@ type CommentInfoProps = {
 const BoardComment = ({ commentInfo }: CommentInfoProps) => {
   const params = useParams();
   const postId = Number(params.postId);
+  const comment = useRef('');
   const memberId = useSelector((state: IUserState) => state.user.memberId);
   const isLoggedIn = useSelector((state: IUserState) => state.user.isLogin);
-  const [commentContent, setCommentContent] = useState({
-    memberId: memberId,
-    content: '',
-  });
   const comments = commentInfo.sort((a, b) => {
     if (a.createdAt > b.createdAt) {
       return -1;
@@ -35,7 +33,10 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
   const postComment = async () => {
     if (isLoggedIn) {
       try {
-        const res = await instance.post(`/board/posts/${postId}/comments`, commentContent);
+        await instance.post(`/board/posts/${postId}/comments`, {
+          memberId: memberId,
+          content: comment.current,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -52,9 +53,9 @@ const BoardComment = ({ commentInfo }: CommentInfoProps) => {
           <CommentButton type="submit">작성</CommentButton>
         </CommentTopArea>
         <textarea
-          value={commentContent.content}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setCommentContent({ ...commentContent, content: (e.target as HTMLTextAreaElement).value });
+            comment.current = e.target.value;
+            console.log(comment.current);
           }}
           placeholder="댓글을 작성해주세요."
           max-length={100}

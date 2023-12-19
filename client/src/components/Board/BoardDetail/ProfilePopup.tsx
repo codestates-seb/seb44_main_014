@@ -1,8 +1,11 @@
+// packages
 import * as React from 'react';
 import { styled } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { IParticipants } from '../../../interface/board.ts';
+//custom files
+import { Gender } from '../../../enum/gender.ts';
 
 interface IProfilePopupProps {
   className: string;
@@ -19,9 +22,9 @@ const ProfilePopup = ({ className, userInfo, handleShowProfile }: IProfilePopupP
 
   let userGender: string;
   if (gender === 'FEMALE') {
-    userGender = '여성';
+    userGender = Gender.FEMALE;
   } else {
-    userGender = '남성';
+    userGender = Gender.MALE;
   }
 
   let profileImage: string;
